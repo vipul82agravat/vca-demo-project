@@ -1,0 +1,252 @@
+{% extends "master_layout.html" %}
+
+{% block title %}{% endblock %}
+
+{% block head %}
+{{ parent() }}
+
+ <style type="text/css">
+   .divider-text {
+   position: relative;
+   text-align: center;
+   margin-top: 15px;
+   margin-bottom: 15px;
+   }
+   .divider-text span {
+   padding: 7px;
+   font-size: 12px;
+   position: relative;
+   z-index: 2;
+   }
+   .divider-text:after {
+   content: "";
+   position: absolute;
+   width: 100%;
+   border-bottom: 1px solid #ddd;
+   top: 55%;
+   left: 0;
+   z-index: 1;
+   }
+   .btn-facebook {
+   background-color: #405D9D;
+   color: #fff;
+   }
+   .btn-twitter {
+   background-color: #42AEEC;
+   color: #fff;
+   }
+   ul, li {
+   margin:0;
+   padding:0;
+   list-style-type:none;
+   }
+   #pswd_info {
+   position:absolute;
+   right:55px;
+   width:250px;
+   padding:15px;
+   background:#fefefe;
+   font-size:.875em;
+   border-radius:5px;
+   box-shadow:0 1px 3px #ccc;
+   border:1px solid #ddd;
+   }
+   .invalid {
+   background:url(../images/invalid.png) no-repeat 0 50%;
+   padding-left:22px;
+   line-height:24px;
+   color:#ec3f41;
+   }
+   .valid {
+   background:url(../images/valid.png) no-repeat 0 50%;
+   padding-left:22px;
+   line-height:24px;
+   color:#3a7d34;
+   }
+   #pswd_info {
+   display:none;
+   }
+ </style>
+
+  <script type="text/javascript">
+         //call when  sumbit button is click
+             $('#password').keyup(function(){
+                 var password = $(this).val();
+                 $('#pswd_info').show();
+
+                 if (password.length < 8 ) {
+                 $('#length').removeClass('valid').addClass('invalid');
+                 }else {
+                     $('#length').removeClass('invalid').addClass('valid');
+                 }
+                 if (password.match(/[0-9]/) ) {
+                 $('#number').removeClass('invalid').addClass('valid');
+                 }else {
+                   $('#number').removeClass('valid').addClass('invalid');
+                 }
+                 if (password.match(/[a-z]/) ) {
+                 $('#letter').removeClass('invalid').addClass('valid');
+                 }else {
+                   $('#letter').removeClass('valid').addClass('invalid');
+                 }
+                 if (password.match(/[A-Z]/) ) {
+                 $('#capital').removeClass('invalid').addClass('valid');
+                 }else {
+                   $('#capital').removeClass('valid').addClass('invalid');
+                 }
+            });
+
+
+         function Validation(){
+
+             var stat=1;
+             var name=$('#name').val();
+             var email=$('#email').val();
+             var password=$('#password').val();
+             var c_password=$('#c_password').val();
+
+             $('#usercheck').hide();
+             $('#emailcheck').hide();
+             $('#passwordcheck').hide();
+
+             $('#name').css('border-color', 'green');
+             $('#email').css('border-color', 'green');
+             $('#password').css('border-color', 'green');
+             $('#c_password').css('border-color', 'green');
+
+             if(name==""){
+                $('#name').css('border-color', 'red');
+                 $("#usercheck").html("***Username is missing");
+                 $('#usercheck').show();
+                 stat=0;
+             }
+             if(email==""){
+                 $('#email').css('border-color', 'red');
+                 $("#emailcheck").html("***Email is missing");
+                 $('#emailcheck').show();
+                 stat=0;
+             }else{
+                 var regEmail=/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/g;
+                 if(!regEmail.test(email)){
+                     $('#email').css('border-color', 'red');
+                     $("#emailcheck").html("***Please enter a valid e-mail address");
+                     $('#emailcheck').show();
+                     stat=0;
+                 }
+             }
+             if(password==""){
+                 $('#password').css('border-color', 'red');
+                 $("#passwordcheck").html("***Password is missing");
+                 $('#passwordcheck').show();
+                 stat=0;
+             }else{
+                 if(password.length < 8){
+                     $("#passwordcheck").html("***Password length must be grater then 8 characters");
+                     $('#passwordcheck').show();
+                 }
+             }
+             if(c_password==""){
+                 $('#c_password').css('border-color', 'red');
+                 $("#cpasswordcheck").html("***Confrm Password is missing");
+                 $('#cpasswordcheck').show();
+                 stat=0;
+             }
+             if(c_password!='' && c_password!=password){
+                     $("#passwordcheck").html("***Password and confirm Password must be same!");
+                     $('#passwordcheck').show();
+                     $('#cpasswordcheck').hide();
+                     stat=0;
+             }
+             if(stat==0){
+                 return false;
+             }
+             $('#name').keyup(function(){
+             alert('dd');
+             });
+
+         }
+    </script>
+
+{% endblock %}
+
+{% block container %}
+
+<h5 id="usercheck" style="color: red; display:none">
+</h5>
+<h5 id="emailcheck" style="color: red; display:none">
+</h5>
+<h5 id="passwordcheck" style="color: red; display:none">
+</h5>
+<h5 id="cpasswordcheck" style="color: red; display:none">
+</h5>
+
+<hr>
+<br>
+<p class="text-center">VCA Demo Project</p>
+<hr>
+
+<div id="pswd_info">
+   <h4>Password must meet the following requirements:</h4>
+   <ul>
+      <li id="letter" class="invalid">At least <strong>one letter</strong></li>
+      <li id="capital" class="invalid">At least <strong>one capital letter</strong></li>
+      <li id="number" class="invalid">At least <strong>one number</strong></li>
+      <li id="length" class="invalid">Be at least <strong>8 characters</strong></li>
+   </ul>
+</div>
+
+<div class="card bg-light">
+   <article class="card-body mx-auto" style="max-width: 400px;">
+      <h4 class="card-title mt-3 text-center">Create Account</h4>
+      <!-- 	<p class="text-center">Get started with your free account</p> -->
+      <form onsubmit="return Validation()" enctype="multipart/form-data">
+         <div class="form-group input-group">
+            <div class="input-group-prepend">
+               <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+            </div>
+            <input name="full_name" class="form-control" placeholder="Full name" id="name" type="text">
+         </div>
+
+         <!-- form-group// -->
+         <div class="form-group input-group">
+            <div class="input-group-prepend">
+               <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
+            </div>
+            <input name="" class="form-control" placeholder="Email address" id="email" type="text">
+         </div>
+
+         <div class="form-group input-group">
+            <div class="input-group-prepend">
+               <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+            </div>
+            <input class="form-control" placeholder="Create password" id="password" type="password">
+         </div>
+
+         <!-- form-group// -->
+         <div class="form-group input-group">
+            <div class="input-group-prepend">
+               <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+            </div>
+            <input class="form-control" placeholder="Repeat password" id="c_password" type="password">
+         </div>
+
+         <!-- form-group// -->
+         <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-block"> Create Account  </button>
+         </div>
+
+         <!-- form-group// -->
+         <p class="text-center">Have an account? <a href="/views/user-login.php">Log In</a> </p>
+      </form>
+   </article>
+</div>
+<!-- card.// -->
+{% endblock %}
+
+
+{% block left_teaser %}
+<h1>Index1</h1>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
