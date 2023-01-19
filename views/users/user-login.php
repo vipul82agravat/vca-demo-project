@@ -2,9 +2,8 @@
 
 require_once __DIR__.'/bootstrap.php';
 
- $parameters = [
+$parameters = [
  'my_var' => 'Hello world !!!'
  ];
-
  // Render our view
  echo $twig->render('login.html.twig', $parameters);

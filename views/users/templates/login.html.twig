@@ -46,7 +46,7 @@
 <div class="card bg-light">
    <article class="card-body mx-auto" style="max-width: 400px;">
       <h4 class="card-title mt-3 text-center"> Account Login</h4>
-      <form action="../Controller/UserLoginController.php"  method="post" onsubmit="return Validation()">
+      <form action="../../Controller/UserLoginController.php"  method="post" onsubmit="return Validation()">
          <div class="form-group input-group">
             <div class="input-group-prepend">
                <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
@@ -65,8 +65,8 @@
             <button type="submit" class="btn btn-primary btn-block"> Login</button>
          </div>
          <!-- form-group// -->
-         <p class="text-center">Have an no account? <a href="/views/user-registration.php">Create New Account</a></p>
-         <p class="text-center">Forget your account Password? <a href="/views/user-forgot-password.php">Forgot Password</a></p>
+         <p class="text-center">Have an no account? <a href="/views/users/user-registration.php">Create New Account</a></p>
+         <p class="text-center">Forget your account Password? <a href="/views/users/user-forgot-password.php">Forgot Password</a></p>
       </form>
       <script type="text/javascript">
          function Validation(){
