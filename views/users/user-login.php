@@ -1,9 +1,23 @@
 <?php
+$bootstrap_file=$_SERVER['DOCUMENT_ROOT'].'/views/bootstrap.php';;
+require_once $bootstrap_file;
 
-require_once __DIR__.'/bootstrap.php';
+    if(isset($_GET['message']) and $_GET['message']!="")
+    {
+       $message=$_GET['message'];
+       $status=1;
+       $is_error=1;
 
-$parameters = [
- 'my_var' => 'Hello world !!!'
- ];
+    }else{
+        $message="";
+        $status=0;
+        $is_error=0;
+    }
+    $parameters = [
+        'is_error' => $is_error,
+        'status' =>$email,
+        'message'=>$message,
+    ];
+
  // Render our view
- echo $twig->render('login.html.twig', $parameters);
+ echo $twig->render('/users/login.html.twig',$parameters);

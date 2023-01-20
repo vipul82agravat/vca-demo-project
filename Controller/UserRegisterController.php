@@ -2,6 +2,7 @@
 use Helper\Master\HelperClass as Helpercls;
 include_once('../Helper/HelperClass.php');
 
+
 class UserRegisterController extends Helpercls{
 
     /*
@@ -59,6 +60,7 @@ class UserRegisterController extends Helpercls{
         }
     }
 
+
     $Registrationdetails=$UserRegister->userRegistration();
     $values=$Registrationdetails['values'];
     $column=$Registrationdetails['column'];
@@ -77,6 +79,39 @@ class UserRegisterController extends Helpercls{
 
     $UserRegisterResponse=$UserRegister->store($table,$column,$values);
     if($UserRegisterResponse['status']==1){
+            $email=$_POST['email'];
+            $userdata='type=Active&email='.$email;
+            $userdata=base64_encode($userdata);
+            $links="http://vca.demoproject.aum/views/users/user-index?user-data=".$userdata;
+            $subject="User confirmation email For activate the account";
+            $message="
+                    <html>
+                    <head>
+                    <title>User Password Reset email</title>
+                    </head>
+                    <body>
+                    <p>Hello $email,</p>
+            
+                    <p>Thank you for joining [VCA DEMO].</p>
+            
+                    <p>We’d like to confirm that your account was created successfully. To access [VCA DEMO] click the link below.</p>
+                     <p><a href='$links'>Active Account</a></p>
+                    <p>If you experience any issues logging into your account, reach out to us at [vca@demo.com].</p>
+                    <p>Best,</p>
+                    <p>The [VCA DEMO] team</p>
+                   </body>
+                    </html>
+                    ";
+
+
+        /*
+       *sendMail  is used to send the mail to the user to helper class function to send mathod
+       * $email -email address to send the mail
+       * $name -name of user to send the mail
+       * $sbject -set the subject of mail send  lile password resert,account created etc.....
+       * $message -it body contect of mail to send to the user to action perpose
+       */
+        $userRegisterEamilResponse=$UserRegister->sendMail($email,$name,$message,$subject);
         header('Location:../views/users/user-index.php?message='.$UserRegisterResponse['message']);
     }else{
         header('Location:../views/users/user-registration.php?message='.$UserRegisterResponse['message']);

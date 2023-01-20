@@ -1,6 +1,13 @@
 <?php
 namespace Helper\Master;
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+//Load Composer's autoloader
+require 'vendor/autoload.php';
+
 define('HOST','localhost');
 define('USER_NAME','newuser');
 define('USER_PASSWORD','password');
@@ -121,6 +128,7 @@ class HelperClass {
             try{
                 $connection=$this->connection;
                 $query='SELECT * FROM '.$table.' '.$data;
+
                 $responseData=mysqli_query($connection,$query);
 
                 if (mysqli_num_rows($responseData) > 0) {
@@ -140,7 +148,7 @@ class HelperClass {
                 return $e."error on save time";
             }
         }
-            public function UpdateDetails($table,$data,$id){
+        public function UpdateDetails($table,$data,$id){
             try{
 
                 $response= $this->sqlconnection();
@@ -154,6 +162,31 @@ class HelperClass {
                 return $arr=['status'=>1,
                             'message'=>'Records Updated Successfully'
                             ];
+
+            }
+            catch(Exception $e){
+                return $e."error on update time";
+            }
+        }
+        public function passwordUpdate($table,$data,$condition){
+            try{
+
+                $response= $this->sqlconnection();
+                $this->connection=$response['connection'];
+                $connection=$this->connection;
+
+                $query='UPDATE '.$table.' SET '. $data .'  WHERE '.$condition;
+                $update=mysqli_query($connection,$query);
+
+                if($update){
+                    return $arr=['status'=>1,
+                        'message'=>'Records Updated Successfully'
+                    ];
+                }else{
+                    return $arr=['status'=>0,
+                    'message'=>'Records is not Updated'
+                ];
+                }
 
             }
             catch(Exception $e){
@@ -217,7 +250,6 @@ class HelperClass {
 
                 $connection=$this->connection;
                 $query='UPDATE '.$table.' SET '. $data .'  WHERE id='.$id;
-
                 $update=mysqli_query($connection,$query);
                 if($update){
                     return $arr=['status'=>1,
@@ -283,12 +315,14 @@ class HelperClass {
                 return $e."error on update time";
             }
         }
-         public function employeeCheckInOutStatus($table){
+         public function resetPasswordLinksStatus($email,$token){
+
             try {
                // session_start();
-               $user_id=$_SESSION['user_id'];
+                $table="password_reset_temp";
                $date=date('y-m-d');
-               $data="`emp_id` = ".$user_id." AND `emp_date` = '".$date."'";
+
+               $data="`email` = '".$email."'AND `expDate` >= '".$date."' AND `token` = '".$token."'";
 
                $response= $this->sqlconnection();
                $this->connection=$response['connection'];
@@ -296,35 +330,25 @@ class HelperClass {
 
               $query='SELECT * FROM '.$table.' WHERE '.$data;
 
-                    $res=mysqli_query($connection,$query);
+                    $passwordTmpResponse=mysqli_query($connection,$query);
 
 //
 
-                    if (mysqli_num_rows($res) == 0) {
-                        $row = mysqli_fetch_assoc($res);
+                    if (mysqli_num_rows($passwordTmpResponse) == 0) {
 
-                        $type='checkin';
-                        $arr=['status'=>1,
-                                'message'=>'Check In Successfully',
-                                'data'=>$type,
+                        $passworLinksarr=['status'=>0,
+                                'message'=>'Token is not match with this user',
+                                ];
+
+
+                    }else if(mysqli_num_rows($passwordTmpResponse) > 0 ){
+
+                            $passworLinksarr=['status'=>1,
+                                'message'=>'User Request Found Successfully',
                             ];
 
-
-                    }else if(mysqli_num_rows($res)==1 and mysqli_num_rows($res) < 2){
-                        $type='checkout';
-
-                        $arr=['status'=>1,
-                                'message'=>'Check Out Successfully',
-                                'data'=>$type,
-                            ];
-
-                    }else{
-                         $arr=['status'=>0,
-                                'message'=>'Already checkout',
-                                'data'=>$type,
-                            ];
                     }
-                    return $arr;
+                   return $passworLinksarr;
 
             }
             catch(Exception $e){
@@ -462,6 +486,43 @@ class HelperClass {
             catch(Exception $e){
                 return $e.'mysql_error';
 
+            }
+        }
+        /*
+         * Send mail for user mail address for event or activty
+         */
+        public function sendMail($email,$name,$message,$subject){
+            //Create an instance; passing `true` enables exceptions
+
+            $mail = new PHPMailer(true);
+
+            try {
+                //Server settings
+                $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+                $mail->isSMTP();                                            //Send using SMTP
+                $mail->Host       = 'smtp.mailtrap.io';                     //Set the SMTP server to send through
+                $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+                $mail->Username   = '4bcdff21785e96';                     //SMTP username
+                $mail->Password   = '1a801316744641';                               //SMTP password
+                $mail->SMTPSecure = 'TLS';//PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+                $mail->Port       = 2525;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+
+                //Recipients
+                $mail->setFrom($email, 'Vca Demo');
+                $mail->addAddress($email, $name);     //Add a recipient
+
+                $mail->isHTML(true);                                  //Set email format to HTML
+                $mail->Subject = $subject;
+                $mail->Body    = $message;
+                $mail->AltBody = 'Mail Send';
+
+                $mail->send();
+
+                return $mailresponse=['status'=>1,
+                                      'message'=>'Eamil Message has been sent'
+                                     ];
+            } catch (Exception $e) {
+                //echo "Email Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
             }
         }
 }

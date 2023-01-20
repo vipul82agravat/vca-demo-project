@@ -21,7 +21,7 @@ class UserLoginController extends Helpercls {
         $password=md5($_POST['password']);
         $username=$email;
         $this->username=$username;
-        $data="WHERE email='$username'
+        $data="WHERE  email='$username'
                      AND password='" . $password . "'";
          return $data;
 
@@ -54,7 +54,10 @@ class UserLoginController extends Helpercls {
 
                   if (mysqli_num_rows($responseData) > 0) {
                         $row = mysqli_fetch_assoc($responseData);
-
+                        if($row['status']==0){
+                            header('Location:../views/users/user-login.php?message=You need to Active You Account First Plase check you Mail Box');
+                            exit;
+                        }
                         $username=$row['name'];
                         $id=$row['id'];
                         $_SESSION['user_id'] = $id;
