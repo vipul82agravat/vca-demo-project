@@ -1,0 +1,127 @@
+{% extends "master_layout.html" %}
+
+{% block title %}{% endblock %}
+
+{% block head %}
+{{ parent() }}
+    <style type="text/css">
+   .divider-text {
+   position: relative;
+   text-align: center;
+   margin-top: 15px;
+   margin-bottom: 15px;
+   }
+   .divider-text span {
+   padding: 7px;
+   font-size: 12px;
+   position: relative;
+   z-index: 2;
+   }
+   .divider-text:after {
+   content: "";
+   position: absolute;
+   width: 100%;
+   border-bottom: 1px solid #ddd;
+   top: 55%;
+   left: 0;
+   z-index: 1;
+   }
+   .btn-facebook {
+   background-color: #405D9D;
+   color: #fff;
+   }
+   .btn-twitter {
+   background-color: #42AEEC;
+   color: #fff;
+   }
+</style>
+{% endblock %}
+{% block container %}
+<hr>
+   {%  if(is_error==1) %}
+     <p style="color: green">{{ message }}</p>
+   {%  endif %}
+<h5 id="emailcheck" style="color: red; display:none"></h5>
+<h5 id="passwordcheck" style="color: red; display:none"></h5>
+<br>
+<p class="text-center">VCA Demo Project</p>
+<hr>
+<div class="card bg-light">
+   <article class="card-body mx-auto" style="max-width: 400px;">
+      <h4 class="card-title mt-3 text-center"> Account Login</h4>
+      <form action="../../Controller/UserLoginController.php"  method="post" onsubmit="return Validation()">
+         <div class="form-group input-group">
+            <div class="input-group-prepend">
+               <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
+            </div>
+            <input name="email" class="form-control" placeholder="Email address" id="email" type="text">
+         </div>
+         <!-- form-group// -->
+         <div class="form-group input-group">
+            <div class="input-group-prepend">
+               <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+            </div>
+            <input class="form-control" name="password" placeholder="Enter password" id="password" type="password">
+         </div>
+         <!-- form-group// -->
+         <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-block"> Login</button>
+         </div>
+         <!-- form-group// -->
+         <p class="text-center">Have an no account? <a href="/views/users/user-registration.php">Create New Account</a></p>
+         <p class="text-center">Forget your account Password? <a href="/views/users/user-forgot-password.php">Forgot Password</a></p>
+      </form>
+      <script type="text/javascript">
+         function Validation(){
+
+                     var stat=1;
+                     var email=$('#email').val();
+                     var password=$('#password').val();
+
+                     $('#emailcheck').hide();
+                     $('#passwordcheck').hide();
+                     $('#email').css('border-color', 'green');
+                     $('#password').css('border-color', 'green');
+
+                     if(email==""){
+                         $('#email').css('border-color', 'red');
+                         $("#emailcheck").html("***Email is missing");
+                         $('#emailcheck').show();
+                         stat=0;
+                     }else{
+                         var regEmail=/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/g;
+                         if(!regEmail.test(email)){
+                             $('#email').css('border-color', 'red');
+                             $("#emailcheck").html("***Please enter a valid e-mail address");
+                             $('#emailcheck').show();
+                             stat=0;
+                         }
+                     }
+                     if(password==""){
+                         $('#password').css('border-color', 'red');
+                         $("#passwordcheck").html("***Password is missing");
+                         $('#passwordcheck').show();
+                         stat=0;
+                     }else{
+                         if(password.length < 8){
+                             stat=0;
+                             $('#password').css('border-color', 'red');
+                             $("#passwordcheck").html("***Password length must be grater then 8 characters");
+                             $('#passwordcheck').show();
+                         }
+                     }
+                     if(stat==0){
+                         return false;
+                     }
+
+         }
+      </script>
+   </article>
+</div>
+<!-- card.// -->
+{% endblock %}
+{% block left_teaser %}
+<h1>Index1</h1>
+{% endblock %}
+{% block footer %}
+{% endblock %}

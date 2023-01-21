@@ -10,6 +10,14 @@ require_once $bootstrap_file;
 $message="Welcome to Admin Protal.";
 $status=1;
 $is_error=0;
+
+
+/*
+ * Check if user is redirect form email links at that time user is inActive and not access to panel so first time is must be active the account form email links
+ * check the user is valid
+ * if user use valid so active the user and login to that account automatically login with user id
+ *
+ */
 if(isset($_GET['user-data']) and $_GET['user-data']!=""){
 
     $userdata=base64_decode($_GET['user-data']);
@@ -43,7 +51,7 @@ if(isset($_GET['user-data']) and $_GET['user-data']!=""){
 
 }
 /*
- * AuthUser method is chekck access the page before validate the Auth class have seesion is exits or nor
+ * AuthUser method is chekck access the page before validate the Auth user have seesion is exits or nor
  * if session is  not  extis then  is not authorized then it will redirect to login page
  * if user session is valid and authorized then it will access the admin panel
  * call the static class for checking
@@ -66,6 +74,5 @@ $parameters = [
     'status' =>$email,
     'message'=>$message,
 ];
-
  // Render our view
  echo $twig->render('/users/user-index.html.twig',$parameters);

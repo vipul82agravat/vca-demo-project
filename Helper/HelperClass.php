@@ -148,7 +148,7 @@ class HelperClass {
                 return $e."error on save time";
             }
         }
-        public function UpdateDetails($table,$data,$id){
+        public function update($table,$data,$id){
             try{
 
                 $response= $this->sqlconnection();
@@ -194,7 +194,7 @@ class HelperClass {
             }
         }
 
-        public function DeleteDetails($table,$id){
+        public function delete($table,$id){
 
             try{
 

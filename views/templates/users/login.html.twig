@@ -38,7 +38,7 @@
 {% endblock %}
 {% block container %}
 <hr>
-   {%  if(is_error==1) %}
+   {%  if(status==1) %}
      <p style="color: green">{{ message }}</p>
    {%  endif %}
 <h5 id="emailcheck" style="color: red; display:none"></h5>

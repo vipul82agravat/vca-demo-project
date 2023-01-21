@@ -1,0 +1,123 @@
+{% extends "master_layout.html" %}
+
+{% block title %}{% endblock %}
+
+{% block head %}
+{{ parent() }}
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>ASPL HRM Registration | DEMO</title>
+    <meta name="generator" content="Bootply" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link href="css/styles.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .topnav {
+            overflow: hidden;
+            background-color: #333;
+        }
+
+        .topnav a {
+            float: left;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+        }
+
+        .topnav a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .topnav a.active {
+            background-color: darkblue;
+            color: white;
+        }
+        #create:link, #create:visited {
+            background-color: green;
+            color: white;
+            padding: 14px 25px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        #create:hover, #create:active {
+            background-color: green;
+        }
+    </style>
+    <div class="" style="margin-left: 5%;margin-right: 5%;">
+        <div class="topnav">
+            <a class="active" href="../users/user-dashboard.php">Home</a>
+            <a class="3" href="../users/user-index.php">Users</a>
+            <a href="../category/category-index.php">Category</a>
+            <a href="user-index.php">Products</a>
+            <a href="user-index.php">Contact</a>
+            <a href="user-logout.php" style="padding-left: 70%;">   Logout</a>
+        </div>
+    </div>
+</head>
+{% endblock %}
+
+{% block tableset %}
+<form name="insert" action="../../Controller/Category/CategoryController.php" method="post" enctype="multipart/form-data" id="myForm">
+<table width="100%"  border="0">
+    <tr>
+        <th width="26%" height="60" scope="row">Category Name :</th>
+        <input type="hidden" name="category_id" value="{{id}}" class="form-control" required  />
+        <td width="74%"><input type="text" name="category_name" value="{{name}}" class="form-control" required  /></td>
+    </tr>
+    <tr>
+        <th width="26%" height="60" scope="row">Category Image
+        <td width="74%"><input type="file" name="category_img" value="" class="form-control" /></td>
+    </tr>
+
+    <tr>
+        <th height="60" scope="row">Category Status :</th>
+        <td><select name="category_status" class="form-control ">
+            <option value="">Select</option>
+            {% if(status==1) %}
+            <option value="0">InActive</option>
+            <option value="1" selected>Active</option>
+            {% else %}
+            <option value="0" selected>InActive</option>
+            <option value="1">Active</option>
+            {% endif %}
+        </select> </td>
+    </tr>
+    <tr>
+        <th height="60" scope="row" >Category Description :</th>
+        <td><textarea name= category_description class="form-control" >{{description}}
+</textarea></td>
+    </tr><!--  <tr>
+        <th height="60" scope="row">Hobbies :</th>
+        <td><input type="checkbox" name="hobbies" value="Read" required /> Read  &nbsp;
+        <input type="checkbox" name="hobbies" value="traveling" required /> Traveling</td>
+      </tr>-->
+    <tr>
+        <th height="60" scope="row">&nbsp;</th>
+        <td><input type="submit" value="Update" name="submit" class="btn-primary" /></td>
+    </tr>
+</table>
+</form>
+<!-- card.// -->
+{% endblock %}
+
+
+{% block left_teaser %}
+<h1>Index1</h1>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}

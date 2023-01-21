@@ -1,0 +1,152 @@
+{% extends "master_layout.html" %}
+
+{% block title %}{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+
+    <style>
+        /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+        .row.content {height: 550px}
+
+        /* Set gray background color and 100% height */
+        .sidenav {
+            background-color: #f1f1f1;
+            height: 100%;
+        }
+        .well {
+            background-color: beige;
+
+        }
+
+        /* On small screens, set height to 'auto' for the grid */
+        @media screen and (max-width: 767px) {
+            .row.content {height: auto;}
+        }
+    </style>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .topnav {
+            overflow: hidden;
+            background-color: #333;
+        }
+
+        .topnav a {
+            float: left;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+        }
+
+        .topnav a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .topnav a.active {
+            background-color: darkblue;
+            color: white;
+        }
+    </style>
+    <div class="" style="margin-left: 5%;margin-right: 5%;">
+        <div class="topnav">
+            <a class="active" href="user-dashboard.php">Home</a>
+            <a class="3" href="user-index.php">Users</a>
+            <a href="user-index.php">Products</a>
+            <a href="user-index.php">Contact</a>
+            <a href="user-logout.php" style="padding-left: 75%;">Log-out</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block tableset %}
+
+
+
+    <div class="container-fluid">
+        <div class="row content">
+            <div class="col-sm-3 sidenav hidden-xs">
+                <div class="card">
+                    <img src="img.jpg" alt="John" style="width:100%">
+                    <h1>John Doe</h1>
+                    <p class="title">CEO & Founder, Example</p>
+                    <p>Harvard University</p>
+                    <a href="#"><i class="fa fa-dribbble"></i></a>
+                    <a href="#"><i class="fa fa-twitter"></i></a>
+                    <a href="#"><i class="fa fa-linkedin"></i></a>
+                    <a href="#"><i class="fa fa-facebook"></i></a>
+                    <p><button>Contact</button></p>
+                </div>
+            </div>
+            <br>
+
+            <div class="col-sm-9">
+                <div class="well">
+                    <h4>Dashboard</h4>
+                    <p>Some text..</p>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="well">
+                            <h4>Users </h4>
+                            <p>1 Million</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="well">
+                            <h4>Products</h4>
+                            <p>100 Million</p>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="well">
+                            <h4>ActiveUser</h4>
+                            <p>1 Million</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="well">
+                            <h4>ActiveProduct</h4>
+                            <p>100 Million</p>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="well">
+                            <h4>InActive User</h4>
+                            <p>1 Million</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="well">
+                            <h4>InActive Products</h4>
+                            <p>100 Million</p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block left_teaser %}
+    <h1>Index1</h1>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
