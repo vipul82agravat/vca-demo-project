@@ -74,5 +74,6 @@ $parameters = [
     'status' =>$email,
     'message'=>$message,
 ];
+
  // Render our view
- echo $twig->render('/users/user-index.html.twig',$parameters);
+ echo $twig->render('/users/user-dashboard.html.twig',$parameters);

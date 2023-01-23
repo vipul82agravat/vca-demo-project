@@ -91,6 +91,29 @@ class HelperClass {
             }
         }
         /*
+         * ShowConditionalBaseDetails is used to get the data base Conditional like user_id=1, name = test etc...
+         * $table - name og table to get the data form table
+         * $data is set the Condition when call this function
+         * process data base on Condition and given the response
+         */
+        public function ShowConditionalBaseDetails($table,$data){
+            try{
+
+                $connection=$this->connection;
+                $query='SELECT * FROM '.$table. $data;
+                $res=mysqli_query($connection,$query);
+
+                return $arr=['status'=>1,
+                    'message'=>'Records List Successfully',
+                    'data'=>$res,
+                ];
+
+            }
+            catch(Exception $e){
+                return $e."error on save time";
+            }
+        }
+        /*
          * Helper Store method use to  save the records base on clounm,values and tabe name in databse table
          *  $table - name of the table which store the records
          * $data - data values get form submit in registration form
@@ -101,6 +124,7 @@ class HelperClass {
             try{
 
                 $connection=$this->connection;
+
                 $query='INSERT INTO '.$table.' ('.$column.') VALUES ('.$values.')';
                 $save=mysqli_query($connection,$query);
                 if($save){

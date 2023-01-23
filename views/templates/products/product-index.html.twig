@@ -62,8 +62,7 @@
             <a class="3" href="../users/user-index.php">Users</a>
             <a href="../category/category-index.php">Category</a>
             <a href="../products/product-index.php">Products</a>
-            <a href="user-index.php">Contact</a>
-            <a href="user-logout.php" style="padding-left: 70%;">   Logout</a>
+            <a href="../users/user-logout.php" style="padding-left: 70%;">   Logout</a>
         </div>
     </div>
 
@@ -74,12 +73,18 @@
         <p style="color: green">{{ message }}</p>
     {%  endif %}
 
-    <a href="category-add.php" id="create" target="_blank">AddCategory</a>
+    <a href="product-add.php" id="create" target="_blank">AddProducts</a>
     <br><br><br>
        <table id="tableID" class="display nowrap">
         <thead>
         <tr>
-            <th>Name</th>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Location</th>
+            <th>CompanyName</th>
+            <th>State</th>
+            <th>city</th>
+            <th>address</th>
             <th>status</th>
             <th>Description</th>
             <th>Action</th>
@@ -89,13 +94,19 @@
         <tbody>
         {% for key, user in row %}
 
-             <tr>
-            <td>{{ user.name }}</td>
-            <td>{{ user.status }}</td>
-            <td>{{ user.description }}</td>
-            <td><a href="category-edit.php?id=1">Edit</a> |<a href="category-view.php?id=1">View</a> |<a href="category-delete.php?id=1">Delete</a> </td>
+                     <tr>
+                        <td>{{ user.title }}</td>
+                         <td>{{ user.category_id }}</td>
+                        <td>{{ user.location }}</td>
+                         <td>{{ user.company_name }}</td>
+                        <td>{{ user.state }}</td>
+                        <td>{{ user.city }}</td>
+                        <td>{{ user.address }}</td>
+                         <td>{{ user.status }}</td>
+                         <td>{{ user.description }}</td>
+                        <td><a href="product-edit.php?id=1">Edit</a> |<a href="product-view.php?id=1">View</a> |<a href="product-delete.php?id=1">Delete</a> </td>
 
-        </tr>
+                     </tr>
         {% endfor %}
 
         </tbody>

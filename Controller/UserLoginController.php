@@ -47,7 +47,7 @@ class UserLoginController extends Helpercls {
       $responseData=$UserLoginresponse['data'];
 
         if (mysqli_num_rows($responseData) > 0) {
-              session_start();
+
              $token = bin2hex(random_bytes(16));
              $_SESSION['username'] = $_POST['email'];
              $_SESSION['token'] = $token;

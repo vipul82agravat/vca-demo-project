@@ -25,27 +25,12 @@ Auth::AuthUser();
  */
 $check_auth = new Helpercls();
 $check_auth->verifyAuthUserToken();
-$id=$_GET['id'];
-$categoyShowData=$check_auth->ShowIdBaseDetails('categories',$id);
-    if (mysqli_num_rows($categoyShowData['data']) > 0) {
-         $row = mysqli_fetch_assoc($categoyShowData['data']);
-           $id= $row['id'];
-           $name= $row['name'];
-           $status= $row['status'];
-           $description= $row['description'];
-
-    }
 
 $parameters = [
     'is_error' => $is_error,
     'status' =>$email,
     'message'=>$message,
-    'id'=>$id,
-    'name'=>$name,
-    'status'=>$status,
-    'description'=>$description,
-    'data'=>$row
 ];
 
  // Render our view
- echo $twig->render('/category/category-edit.html.twig',$parameters);
+ echo $twig->render('/category/category-add.html.twig',$parameters);

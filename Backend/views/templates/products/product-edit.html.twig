@@ -57,43 +57,6 @@
             background-color: green;
         }
     </style>
-    <script>
-        function Validation(){
-
-            stat=1;
-            var name=$('#name').val();
-            var status=$('#status').val();
-
-            $('#name_messge').hide();
-            $('#status_messge').hide();
-
-            $('#name').css('border-color', 'green');
-            $('#status').css('border-color', 'green');;
-
-
-            if(name==""){
-                $('#name').css('border-color', 'red');
-                $("#name_messge").html("***Name is missing");
-                $('#name_messge').show();
-                stat=0;
-
-            }
-
-            if(status==""){
-                $('#status').css('border-color', 'red');
-                $("#status_messge").html("***Status is missing");
-                $('#status_messge').show();
-                stat=0;
-
-            }
-
-            if(stat==0){
-                console.log('aaa'+stat);
-                return false;
-            }
-
-        }
-    </script>
     <div class="" style="margin-left: 5%;margin-right: 5%;">
         <div class="topnav">
             <a class="active" href="../users/user-dashboard.php">Home</a>
@@ -108,26 +71,21 @@
 {% endblock %}
 
 {% block tableset %}
-    <h5 id="status_messge" style="color: red; display:none"></h5>
-    <h5 id="name_messge" style="color: red; display:none"></h5>
-<form name="insert" action="../../Controller/Category/CategoryController.php" method="post" onsubmit="return Validation()" enctype="multipart/form-data" id="myForm">
+<form name="insert" action="../../Controller/Category/CategoryController.php" method="post" enctype="multipart/form-data" id="myForm">
 <table width="100%"  border="0">
     <tr>
         <th width="26%" height="60" scope="row">Category Name :</th>
         <input type="hidden" name="category_id" value="{{id}}" class="form-control" required  />
-        <td width="74%"><input type="text" name="category_name"   id="name"  value="{{name}}" class="form-control"   /></td>
+        <td width="74%"><input type="text" name="category_name" value="{{name}}" class="form-control" required  /></td>
     </tr>
     <tr>
         <th width="26%" height="60" scope="row">Category Image
-
-        <td width="74%">
-            <img src="file:///home/vipula/web/vca-demo-project/public/category/download.jpeg"  styles="margin-left:70%"/>
-            <input type="file" name="category_img" value="" class="form-control" /></td>
+        <td width="74%"><input type="file" name="category_img" value="" class="form-control" /></td>
     </tr>
 
     <tr>
         <th height="60" scope="row">Category Status :</th>
-        <td><select name="category_status"  id="status" class="form-control ">
+        <td><select name="category_status" class="form-control ">
             <option value="">Select</option>
             {% if(status==1) %}
             <option value="0">InActive</option>

@@ -1,0 +1,293 @@
+{% extends "master_layout.html" %}
+
+{% block title %}{% endblock %}
+
+{% block head %}
+{{ parent() }}
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>ASPL HRM Registration | DEMO</title>
+    <meta name="generator" content="Bootply" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link href="css/styles.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .topnav {
+            overflow: hidden;
+            background-color: #333;
+        }
+
+        .topnav a {
+            float: left;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+        }
+
+        .topnav a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .topnav a.active {
+            background-color: darkblue;
+            color: white;
+        }
+        #create:link, #create:visited {
+            background-color: green;
+            color: white;
+            padding: 14px 25px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        #create:hover, #create:active {
+            background-color: green;
+        }
+    </style>
+    <script>
+        function getstate(val) {
+
+            $.ajax({
+                type: "POST",
+                url: "http://vca.demoproject.aum/Controller/GetStateCityController.php",
+                data:'coutry_id='+val,
+                success: function(data){
+                    $("#statelist").html(data);
+                }
+            });
+        }
+        function getcity(val) {
+
+            $.ajax({
+                type: "POST",
+                url: "http://vca.demoproject.aum/Controller/GetStateCityController.php?type=city",
+                data:'state_id='+val,
+                success: function(data){
+                    $("#city").html(data);
+                }
+            });
+        }
+        function Validation(){
+
+            stat=1;
+            var product_category=$('#product_category').val();
+            var title=$('#title').val();
+            var location=$('#location').val();
+            var state=$('#statelist').val();
+            var city=$('#city').val();
+            var address=$('#address').val();
+            var status=$('#status').val();
+
+            $('#title_messge').hide();
+            $('#location_messge').hide();
+            $('#state_messge').hide();
+            $('#city_messge').hide();
+            $('#address_messge').hide();
+            $('#status_messge').hide();
+
+            $('#title').css('border-color', 'green');
+            $('#product_category').css('border-color', 'green');
+            $('#location').css('border-color', 'green');
+            $('#statelist').css('border-color', 'green');;
+            $('#city').css('border-color', 'green');;
+            $('#addres').css('border-color', 'green');
+            $('#status').css('border-color', 'green');;
+
+
+            if(product_category==""){
+                $('#product_category').css('border-color', 'red');
+                $("#category_messge").html("***Category is missing");
+                $('#category_messge').show();
+                stat=0;
+
+            }
+
+            if(title==""){
+                $('#title').css('border-color', 'red');
+                $("#title_messge").html("***Title is missing");
+                $('#title_messge').show();
+                stat=0;
+
+            }
+            if(location==""){
+                $('#location').css('border-color', 'red');
+                $("#location_messge").html("***Location is missing");
+                $('#location_messge').show();
+                stat=0;
+
+            }
+            if(state==""){
+                $('#statelist').css('border-color', 'red');
+                $("#state_messge").html("***State is missing");
+                $('#state_messge').show();
+                stat=0;
+
+            }
+            if(city==""){
+                $('#city').css('border-color', 'red');
+                $("#city_messge").html("***City is missing");
+                $('#city_messge').show();
+                stat=0;
+
+            }
+            if(address==""){
+                $('#name').css('border-color', 'red');
+                $("#usercheck").html("***Address is missing");
+                $('#usercheck').show();
+                stat=0;
+
+            }
+            if(status==""){
+                $('#status').css('border-color', 'red');
+                $("#status_messge").html("***Status is missing");
+                $('#status_messge').show();
+                stat=0;
+
+            }
+
+            if(stat==0){
+                console.log('aaa'+stat);
+                return false;
+            }
+
+        }
+    </script>
+    <div class="" style="margin-left: 5%;margin-right: 5%;">
+        <div class="topnav">
+            <a class="active" href="../users/user-dashboard.php">Home</a>
+            <a class="3" href="../users/user-index.php">Users</a>
+            <a href="../category/category-index.php">Category</a>
+            <a href="../products/product-index.php">Products</a>
+            <a href="../users/user-logout.php" style="padding-left: 70%;">   Logout</a>
+        </div>
+    </div>
+</head>
+{% endblock %}
+
+{% block tableset %}
+        <h5 id="title_messge" style="color: red; display:none">
+        <h5 id="location_messge" style="color: red; display:none">
+            <h5 id="state_messge" style="color: red; display:none">
+            <h5 id="city_messge" style="color: red; display:none">
+             <h5 id="address_messge" style="color: red; display:none">
+             <h5 id="status_messge" style="color: red; display:none">
+             <h5 id="category_messge" style="color: red; display:none">
+
+    </h5>
+<form name="insert" action="../../Controller/Products/ProductsController.php" method="post"  onsubmit="return Validation()" enctype="multipart/form-data" id="myForm">
+<table width="100%"  border="0">
+    <tr>
+
+        <th height="60" scope="row">Product Category :</th>
+        <td><select name="product_category" id="product_category" class="form-control ">
+                <option value="">Select Category</option>
+                {% for value in categories %}
+                    <option value="{{ value.id }}">{{ value.name }}</option>
+
+                {% endfor %}
+            </select> </td>
+    </tr>
+    <tr>
+        <th width="26%" height="60" scope="row">Product Title :</th>
+        <td width="74%"><input type="text" name="product_title" value="" id="title" class="form-control" /></td>
+    </tr>
+    <tr>
+        <th width="26%" height="60" scope="row">Product Location :</th>
+        <td width="74%"><input type="text" name="product_location" value="" id="location" class="form-control"   /></td>
+    </tr>
+    <tr>
+        <th width="26%" height="60" scope="row">PostCode :</th>
+        <td width="74%"><input type="text" name="postcode"  id="postcode" class="form-control"  /></td>
+    </tr>
+    <tr>
+        <th height="60" scope="row">Countries :</th>
+        <td><select name="countries" class="form-control" id="countries" onChange="getstate(this.value);">
+                <option value="">Select Countries</option>
+                {% for value in countries    %}
+                    <option value="{{ value.id  }}">{{ value.name }}</option>
+
+                {% endfor %}
+            </select> </td>
+    </tr>
+    <tr>
+        <th height="60" scope="row">State :</th>
+        <td><select name="state" class="form-control " id="statelist" onChange="getcity(this.value);">
+                <option value="">Select State</option>
+                {% for value in states %}
+                    <option value="{{ value.id  }}">{{ value.name }}</option>
+
+                {% endfor %}
+            </select> </td>
+    </tr>
+    <tr>
+        <th height="60" scope="row"> City :</th>
+        <td><select name="city"  id="city"  class="form-control ">
+                <option value="">Select City</option>
+                {% for value in cities %}
+                    <option value="{{ value.id  }}">{{ value.name }}</option>
+
+                {% endfor %}
+            </select> </td>
+    </tr>
+
+       <tr>
+        <th width="26%" height="60" scope="row">Product Company :</th>
+        <td width="74%"><input type="text" name="product_compnay" id="product_compnay" class="form-control"  /></td>
+    </tr>
+
+    <tr>
+        <th height="60" scope="row" >Product Address :</th>
+        <td><textarea name= product_address  id="address" class="form-control" >
+    </textarea></td>
+    <tr>
+        <th width="26%" height="60" scope="row">Product Image
+        <td width="74%"><input type="file" name="product_img" value="" class="form-control" /></td>
+    </tr>
+
+    <tr>
+        <th height="60" scope="row">Product Status :</th>
+        <td><select name="product_status" id="status" class="form-control ">
+            <option value="">Select</option>
+            <option value="1" selected>Active</option>
+            <option value="0" >InActive</option>
+        </select> </td>
+    </tr>
+    <tr>
+        <th height="60" scope="row" >Product Description :</th>
+        <td><textarea name= product_description id="description" class="form-control" >
+    </textarea></td>
+
+    </tr><!--  <tr>
+        <th height="60" scope="row">Hobbies :</th>
+        <td><input type="checkbox" name="hobbies" value="Read" required /> Read  &nbsp;
+        <input type="checkbox" name="hobbies" value="traveling" required /> Traveling</td>
+      </tr>-->
+    <tr>
+        <th height="60" scope="row">&nbsp;</th>
+        <td><input type="submit" value="Submit" name="submit" class="btn-primary" /></td>
+    </tr>
+</table>
+</form>
+<!-- card.// -->
+{% endblock %}
+
+
+{% block left_teaser %}
+<h1>Index1</h1>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}

@@ -43,8 +43,7 @@ $parameters = [
     'id'=>$id,
     'name'=>$name,
     'status'=>$status,
-    'description'=>$description,
-    'data'=>$row
+    'description'=>$description
 ];
 
  // Render our view

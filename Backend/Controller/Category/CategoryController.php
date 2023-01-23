@@ -13,30 +13,15 @@ class CategoryController extends Helpercls {
      categoriesQueryData Details  return the string  for data value and clounm list for save category Details
     */
     public function categoriesQueryData(){
-        session_start();
-        $fileName = basename($_FILES["category_img"]["name"]);
-        $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
-        $allowTypes = array('jpg','png','jpeg','gif');
-        $imgContent ='';
-
-        $uploads_dir =$_SERVER['DOCUMENT_ROOT']."/public/category/";
-        $fileDestination = $uploads_dir.$fileName;
-        //echo $fileDestination;exit;
-        if(in_array($fileType, $allowTypes)){
-            $tmp_name = $_FILES['category_img']['tmp_name'];
-            $imgContent = addslashes(file_get_contents($tmp_name));
-            move_uploaded_file($tmp_name,$fileDestination);
-
-        }
 
         $category_name=$_POST['category_name'];
         $category_status=$_POST['category_status'];
         $img='';//$_POST['img'];
-        $user_id=$_SESSION['user_id'];
+        $user_id=1;
         $category_description=$_POST['category_description'];
 
-        $column='name,status,user_id,img,img_path,description';
-        $data="'".$category_name."','".$category_status."','".$user_id."','".$imgContent."','".$fileName."','".$category_description."'";
+        $column='name,status,user_id,description';
+        $data="'".$category_name."','".$category_status."','".$user_id."','".$category_description."'";
 
         $categoryDetails=['column'=>$column,
             'values'=>$data];
@@ -53,21 +38,8 @@ class CategoryController extends Helpercls {
         $user_id=1;
         $category_description=$_POST['category_description'];
 
-        $fileName = basename($_FILES["category_img"]["name"]);
-        $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
-        $allowTypes = array('jpg','png','jpeg','gif');
-        $imgContent ='';
-        $uploads_dir =$_SERVER['DOCUMENT_ROOT']."/public/category/";
-        $fileDestination = $uploads_dir.$fileName;
-        //echo $fileDestination;exit;
-        if(in_array($fileType, $allowTypes)){
-            $tmp_name = $_FILES['category_img']['tmp_name'];
-            $imgContent = addslashes(file_get_contents($tmp_name));
-            move_uploaded_file($tmp_name,$fileDestination);
-
-        }
-        $column='name,status,user_id,img,img_path,description';
-        $dataQuery="name = '".$category_name."', status = '".$category_status."', img = '".$imgContent."', img_path = '".$fileName."', description = '".$category_description."'";
+        $column='name,status,user_id,description';
+        $dataQuery="name = '".$category_name."', status = '".$category_status."', description = '".$category_description."'";
 
         $categoryDetails=['dataQuery'=>$dataQuery];
 

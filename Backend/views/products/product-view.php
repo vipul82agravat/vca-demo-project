@@ -43,9 +43,8 @@ $parameters = [
     'id'=>$id,
     'name'=>$name,
     'status'=>$status,
-    'description'=>$description,
-    'data'=>$row
+    'description'=>$description
 ];
 
  // Render our view
- echo $twig->render('/category/category-edit.html.twig',$parameters);
+ echo $twig->render('/products/product-view.html.twig',$parameters);

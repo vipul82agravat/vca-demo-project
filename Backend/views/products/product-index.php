@@ -7,6 +7,7 @@ include_once('../../Helper/HelperClass.php');
 $bootstrap_file=$_SERVER['DOCUMENT_ROOT'].'/views/bootstrap.php';;
 require_once $bootstrap_file;
 
+
 /*
  * AuthUser method is chekck access the page before validate the Auth user have seesion is exits or nor
  * if session is  not  extis then  is not authorized then it will redirect to login page
@@ -25,27 +26,31 @@ Auth::AuthUser();
  */
 $check_auth = new Helpercls();
 $check_auth->verifyAuthUserToken();
-$id=$_GET['id'];
-$categoyShowData=$check_auth->ShowIdBaseDetails('categories',$id);
-    if (mysqli_num_rows($categoyShowData['data']) > 0) {
-         $row = mysqli_fetch_assoc($categoyShowData['data']);
-           $id= $row['id'];
-           $name= $row['name'];
-           $status= $row['status'];
-           $description= $row['description'];
+$categoyData=$check_auth->ShowDetails('categories');
 
-    }
+ if (mysqli_num_rows($categoyData['data']) > 0) {
 
+        $i=0;
+        $result=array();
+        while ($row = mysqli_fetch_array($categoyData['data'])) {
+
+                $result[$i]['name']=$row['name'];
+                $result[$i]['user_id']=$row['user_id'];
+                $result[$i]['status']=$row['status'];
+                $result[$i]['description']=$row['description'];
+                $i++;
+
+        }
+
+
+
+
+}
 $parameters = [
     'is_error' => $is_error,
     'status' =>$email,
     'message'=>$message,
-    'id'=>$id,
-    'name'=>$name,
-    'status'=>$status,
-    'description'=>$description,
-    'data'=>$row
+    'row'=>$result
 ];
-
  // Render our view
- echo $twig->render('/category/category-edit.html.twig',$parameters);
+ echo $twig->render('/products/product-index.html.twig',$parameters);

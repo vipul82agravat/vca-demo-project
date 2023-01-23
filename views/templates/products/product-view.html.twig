@@ -1,0 +1,224 @@
+{% extends "master_layout.html" %}
+
+{% block title %}{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>ASPL HRM Registration | DEMO</title>
+        <meta name="generator" content="Bootply" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <!--[if lt IE 9]>
+        <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+        <link href="css/styles.css" rel="stylesheet">
+        <style>
+            body {
+                margin: 0;
+                font-family: Arial, Helvetica, sans-serif;
+            }
+
+            .topnav {
+                overflow: hidden;
+                background-color: #333;
+            }
+
+            .topnav a {
+                float: left;
+                color: #f2f2f2;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+                font-size: 17px;
+            }
+
+            .topnav a:hover {
+                background-color: #ddd;
+                color: black;
+            }
+
+            .topnav a.active {
+                background-color: darkblue;
+                color: white;
+            }
+            #create:link, #create:visited {
+                background-color: green;
+                color: white;
+                padding: 14px 25px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+            }
+
+            #create:hover, #create:active {
+                background-color: green;
+            }
+        </style>
+        <script>
+            function getstate(val) {
+
+                $.ajax({
+                    type: "POST",
+                    url: "http://vca.demoproject.aum/Controller/GetStateCityController.php",
+                    data:'coutry_id='+val,
+                    success: function(data){
+                        $("#statelist").html(data);
+                    }
+                });
+            }
+            function getcity(val) {
+
+                $.ajax({
+                    type: "POST",
+                    url: "http://vca.demoproject.aum/Controller/GetStateCityController.php?type=city",
+                    data:'state_id='+val,
+                    success: function(data){
+                        $("#city").html(data);
+                    }
+                });
+            }
+        </script>
+        <div class="" style="margin-left: 5%;margin-right: 5%;">
+            <div class="topnav">
+                <a class="active" href="../users/user-dashboard.php">Home</a>
+                <a class="3" href="../users/user-index.php">Users</a>
+                <a href="../category/category-index.php">Category</a>
+                <a href="../products/product-index.php">Products</a>
+                <a href="../users/user-logout.php" style="padding-left: 70%;">   Logout</a>
+            </div>
+        </div>
+    </head>
+{% endblock %}
+
+{% block tableset %}
+    <form name="insert" action="../../Controller/Products/ProductsController.php" method="post" enctype="multipart/form-data" id="myForm">
+        <table width="100%"  border="0">
+            <tr>
+
+                <th height="60" scope="row">Product Category :</th>
+                    <td><select name="product_category" class="form-control " readonly>
+                        <option value="">Select Category</option>
+                        {% for value in categories %}
+                            {% if(value.id == data.category_id) %}
+                                <option value="{{ value.id }}" selected>{{ value.name }}</option>
+                            {% else %}
+                                <option value="{{ value.id }}">{{ value.name }}</option>
+                            {% endif %}
+
+                        {% endfor %}
+                    </select> </td>
+            </tr>
+            <tr>
+                <input type="hidden" name="product_id" value="{{ data.id }}" class="form-control" required  />
+                <th width="26%" height="60" scope="row">Product Title :</th>
+                <td width="74%"><input type="text" name="product_title" value="{{ data.title }}" readonly class="form-control" required  /></td>
+            </tr>
+            <tr>
+                <th width="26%" height="60" scope="row">Product Location :</th>
+                <td width="74%"><input type="text" name="product_location" value="{{ data.location }}" readonly class="form-control" required  /></td>
+            </tr>
+            <tr>
+                <th width="26%" height="60" scope="row">PostCode :</th>
+                <td width="74%"><input type="text" name="postcode" class="form-control" readonly value="{{ data.postcode }}"  /></td>
+            </tr>
+            <tr>
+                <th height="60" scope="row">Countries :</th>
+                <td><select name="countries" class="form-control"  readonly onChange="getstate(this.value);">
+                        <option value="">Select Countries</option>
+                        {% for value in countries    %}
+                            {% if(value.id == data.countries) %}
+                                <option value="{{ value.id }}" selected>{{ value.name }}</option>
+                            {% else %}
+                                <option value="{{ value.id }}">{{ value.name }}</option>
+                            {% endif %}
+
+                        {% endfor %}
+                    </select> </td>
+            </tr>
+            <tr>
+                <th height="60" scope="row">State :</th>
+                <td><select name="state" class="form-control " id="statelist" readonly onChange="getcity(this.value);">
+                        <option value="">Select State</option>
+                        {% for value in states %}
+                            {% if(value.id == data.state) %}
+                                <option value="{{ value.id }}" selected>{{ value.name }}</option>
+                            {% else %}
+                                <option value="{{ value.id }}">{{ value.name }}</option>
+                            {% endif %}
+
+                        {% endfor %}
+                    </select> </td>
+            </tr>
+            <tr>
+                <th height="60" scope="row"> City :</th>
+                <td><select name="city"  id="city"  readonly class="form-control ">
+                        <option value="">Select City</option>
+                        {% for value in cities %}
+
+                            {% if(value.id == data.city) %}
+                                <option value="{{ value.id }}" selected>{{ value.name }}</option>
+                            {% else %}
+                                <option value="{{ value.id }}">{{ value.name }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select> </td>
+            </tr>
+
+            <tr>
+                <th width="26%" height="60" scope="row">Product Company :</th>
+                <td width="74%"><input type="text" name="product_compnay" value="{{ data.company_name }}" readonly class="form-control" required  /></td>
+            </tr>
+
+            <tr>
+                <th height="60" scope="row" >Product Address :</th>
+                <td><textarea name= product_address class="form-control"  readonly>{{ data.address }}
+    </textarea></td>
+            <tr>
+                <th width="26%" height="60" scope="row">Product Image
+                <td width="74%">
+
+                </td>
+            </tr>
+
+            <tr>
+                <th height="60" scope="row">Product Status :</th>
+                <td><select name="product_status"  class="form-control " readonly>
+                        <option value="">Select</option>
+                        {% if(data.status==1) %}
+                            <option value="0">InActive</option>
+                            <option value="1" selected>Active</option>
+                        {% else %}
+                            <option value="0" selected>InActive</option>
+                            <option value="1">Active</option>
+                        {% endif %}
+                    </select> </td>
+            </tr>
+            <tr>
+                <th height="60" scope="row" >Product Description :</th>
+                <td><textarea name= product_description class="form-control"  readonly>{{ data.description }}
+    </textarea></td>
+
+            </tr><!--  <tr>
+        <th height="60" scope="row">Hobbies :</th>
+        <td><input type="checkbox" name="hobbies" value="Read" required /> Read  &nbsp;
+        <input type="checkbox" name="hobbies" value="traveling" required /> Traveling</td>
+      </tr>-->
+            <tr>
+                <th height="60" scope="row">&nbsp;</th>
+{#                <td><input type="submit" value="Update  " name="submit" class="btn-primary" /></td>#}
+            </tr>
+        </table>
+    </form>
+    <!-- card.// -->
+{% endblock %}
+
+
+{% block left_teaser %}
+    <h1>Index1</h1>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
