@@ -7,27 +7,27 @@ include_once('../../Helper/HelperClass.php');
 $bootstrap_file=$_SERVER['DOCUMENT_ROOT'].'/views/bootstrap.php';;
 require_once $bootstrap_file;
 
-/*
- * AuthUser method is chekck access the page before validate the Auth user have seesion is exits or nor
- * if session is  not  extis then  is not authorized then it will redirect to login page
- * if user session is valid and authorized then it will access the admin panel
- * call the static class for checking
- */
+    /*
+     * AuthUser method is chekck access the page before validate the Auth user have seesion is exits or nor
+     * if session is  not  extis then  is not authorized then it will redirect to login page
+     * if user session is valid and authorized then it will access the admin panel
+     * call the static class for checking
+     */
 
-Auth::AuthUser();
+    Auth::AuthUser();
 
-/*
- * verifyAuthUserToken method is chekck access the page before validate the user is authorized or not
- * it is validate the user id
- * * it is validate the user token
- * if user is not authorized then it will redirect to login page
- * if user is valid and authorized then it will access the admin panel
- */
-$HelperObject = new Helpercls();
-$HelperObject->verifyAuthUserToken();
-$countries=$HelperObject->ShowDetails('countries');
-$states=$HelperObject->ShowDetails('states');
-$cities=$HelperObject->ShowDetails('cities');
+    /*
+     * verifyAuthUserToken method is chekck access the page before validate the user is authorized or not
+     * it is validate the user id
+     * * it is validate the user token
+     * if user is not authorized then it will redirect to login page
+     * if user is valid and authorized then it will access the admin panel
+     */
+    $masterObject = new Helpercls();
+    $masterObject->verifyAuthUserToken();
+    $countries=$masterObject->ShowDetails('countries');
+    $states=$masterObject->ShowDetails('states');
+    $cities=$masterObject->ShowDetails('cities');
 
     $id=1;
     $table='categories';
@@ -38,7 +38,8 @@ $cities=$HelperObject->ShowDetails('cities');
     $table - name of table for get the category data
     $data the condition of get data base in user id
     */
-    $categoriesData=$HelperObject->ShowConditionalBaseDetails($table,$data);
+$loginUserRole=$masterObject->userRoleCheck(Auth::AuthUserId());
+    $categoriesData=$masterObject->ShowConditionalBaseDetails($table,$data);
 
         $categoriesDataresult=array();
         if (mysqli_num_rows($categoriesData['data']) >= 0) {
@@ -125,7 +126,8 @@ $cities=$HelperObject->ShowDetails('cities');
         'categories'=>$categoriesDataresult,
         'countries'=>$countriesDataresult,
         'states'=>$statesDataresult,
-        'cities'=>$citiesDataresult
+        'cities'=>$citiesDataresult,
+        'user_role'=>$loginUserRole,
     ];
      // Render our view
  echo $twig->render('/products/product-add.html.twig',$parameters);

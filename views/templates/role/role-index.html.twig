@@ -14,12 +14,7 @@
                 "https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js">
         </script>
 
-    {%  if(user_role==1) %}
-        {% set menuitem = 'users/menu.html.twig' %}
-    {% else %}
-        {% set menuitem = 'users/admin-menu.html.twig' %}
-    {%  endif %}
-
+    {% set menuitem = 'users/menu.html.twig' %}
     {% include menuitem %}
 
 
@@ -30,15 +25,15 @@
         <p style="color: green">{{ message }}</p>
     {%  endif %}
 
-    <a href="user-registration.php" id="create" target="_blank">AddUsers</a>
+    <a href="role-add.php" id="create" target="_blank">AddRole</a>
     <br><br><br>
        <table id="tableID" class="display nowrap">
         <thead>
         <tr>
             <th>ID</th>
             <th>Name</th>
-            <th>Email</th>
             <th>Status</th>
+            <th>Description</th>
             <th>Action</th>
 
         </tr>
@@ -46,15 +41,16 @@
         <tbody>
         {% for key, user in row %}
 
-            <tr>
-                <td>{{ user.id }}</td>
-                <td>{{ user.name }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.status }}</td>
-                <td><a href="user-edit.php?id={{ user.id }}">Edit</a> |<a href="user-view.php?id={{ user.id }}">View</a> |<a href="user-delete.php?id={{ user.id }}">Delete</a> </td>
+             <tr>
+              <td>{{ user.id }}</td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.status }}</td>
+            <td>{{ user.description }}</td>
+            <td><a href="role-edit.php?id={{ user.id }}">Edit</a> |<a href="role-view.php?id={{ user.id }}">View</a> |<a href="role-delete.php?id={{ user.id }}">Delete</a> </td>
 
-            </tr>
+        </tr>
         {% endfor %}
+
         </tbody>
     </table>
     <script>

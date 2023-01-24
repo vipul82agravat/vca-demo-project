@@ -57,22 +57,96 @@ if(isset($_GET['user-data']) and $_GET['user-data']!=""){
  * call the static class for checking
  */
 
-Auth::AuthUser();
+    Auth::AuthUser();
 
-/*
- * verifyAuthUserToken method is chekck access the page before validate the user is authorized or not
- * it is validate the user id
- * * it is validate the user token
- * if user is not authorized then it will redirect to login page
- * if user is valid and authorized then it will access the admin panel
- */
-$check_auth = new Helpercls();
-$check_auth->verifyAuthUserToken();
+    /*
+     * verifyAuthUserToken method is chekck access the page before validate the user is authorized or not
+     * it is validate the user id
+     * * it is validate the user token
+     * if user is not authorized then it will redirect to login page
+     * if user is valid and authorized then it will access the admin panel
+     */
+    $masterObject = new Helpercls();
+    $masterObject->verifyAuthUserToken();
+
+    $loginUserRole=$masterObject->userRoleCheck(Auth::AuthUserId());
+
+    $userData=$masterObject->ShowDetails('users');
+    $totalUser=mysqli_num_rows($userData['data']);
+
+
+    $table='users';
+    $status="'1'";
+    $data=' WHERE status ='.$status;
+
+    /*Get the User data base on user auth data
+    $id user login id it return all  user added category
+    $table - name of table for get the category data
+    $data the condition of get data base in user id
+    */
+    $useActiverData=$masterObject->ShowConditionalBaseDetails($table,$data);
+    $activeUser=mysqli_num_rows($useActiverData['data']);
+
+    $status="'0'";
+    $data=' WHERE status ='.$status;
+    $useInActiverData=$masterObject->ShowConditionalBaseDetails($table,$data);
+    $inActiveUser=mysqli_num_rows($useInActiverData['data']);
+
+
+    $productData=$masterObject->ShowDetails('products');
+    $totalProduct=mysqli_num_rows($productData['data']);
+
+    $id=Auth::AuthUserId();
+    $table='products';
+    $status="'1'";
+    if($loginUserRole==1){
+        $data=' WHERE status='.$status;
+
+    }else{
+    $data=' WHERE status='.$status.' and user_id ='.$id;
+    }
+
+    $productActiverData=$masterObject->ShowConditionalBaseDetails($table,$data);
+    $activeProduct=mysqli_num_rows($productActiverData['data']);
+
+    $status="'0'";
+    if($loginUserRole==1){
+        $data=' WHERE status='.$status;
+
+    }else{
+        $data=' WHERE status='.$status.' and user_id ='.$id;
+    }
+    $productInActiverData=$masterObject->ShowConditionalBaseDetails($table,$data);
+    $inActiveProduct=mysqli_num_rows($productInActiverData['data']);
+
+
+    $id=Auth::AuthUserId();
+    $userShowData=$masterObject->ShowIdBaseDetails('users',$id);
+    if (mysqli_num_rows($userShowData['data']) > 0) {
+        $row = mysqli_fetch_assoc($userShowData['data']);
+    }
+
+    $loginUserRole=$masterObject->userRoleCheck(Auth::AuthUserId());
+    $userRoleShowData=$masterObject->ShowIdBaseDetails('role',$loginUserRole);
+    $role_name="";
+    if (mysqli_num_rows($userRoleShowData['data']) > 0) {
+        $role = mysqli_fetch_assoc($userRoleShowData['data']);
+        $role_name=$role['name'];
+    }
 
 $parameters = [
     'is_error' => $is_error,
-    'status' =>$email,
     'message'=>$message,
+    'totalUser'=>$totalUser,
+    'activeUser'=>$activeUser,
+    'inActiveUser'=>$inActiveUser,
+    'totalProduct'=>$totalProduct,
+    'activeProduct'=>$activeProduct,
+    'inActiveProduct'=>$inActiveProduct,
+    'data'=>$row,
+    'status'=>($row['status']==1) ? "Active" : "InActive",
+    'role'=>$role_name,
+    'id'=>$id
 ];
 
  // Render our view

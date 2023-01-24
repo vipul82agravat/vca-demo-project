@@ -1,5 +1,4 @@
 <?php
-
 use Helper\Master\HelperClass as Helpercls;
 use Helper\Auth\AuthCheck as Auth;
 include_once('../../Helper/HelperClass.php');
@@ -26,12 +25,41 @@ Auth::AuthUser();
 $masterObject = new Helpercls();
 $masterObject->verifyAuthUserToken();
 $loginUserRole=$masterObject->userRoleCheck(Auth::AuthUserId());
+
+
+$id=$_GET['id'];
+$userRole=$masterObject->userRoleCheck($id);
+
+$userShowData=$masterObject->ShowIdBaseDetails('users',$id);
+if (mysqli_num_rows($userShowData['data']) > 0) {
+    $row = mysqli_fetch_assoc($userShowData['data']);
+}
+
+$userData=$masterObject->ShowDetails('role');
+
+if (mysqli_num_rows($userData['data']) > 0) {
+
+    $i=0;
+    $role_result=array();
+    while ($row1 = mysqli_fetch_array($userData['data'])) {
+        $role_result[$i]['id']=$row1['id'];
+        $role_result[$i]['name']=$row1['name'];
+        $role_result[$i]['status_code']=$row1['status_code'];
+        $role_result[$i]['status']=$row1['status'];
+        $i++;
+
+    }
+}
+
 $parameters = [
     'is_error' => $is_error,
     'status' =>$email,
     'message'=>$message,
-    'user_role'=>$loginUserRole,
-];
+    'data'=>$row,
+    'role_data'=>$role_result,
+    'user_role'=>$userRole,
+    'login_user_role'=>$loginUserRole
 
+];
  // Render our view
- echo $twig->render('/category/category-add.html.twig',$parameters);
+ echo $twig->render('/users/user-view.html.twig',$parameters);

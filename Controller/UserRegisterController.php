@@ -1,5 +1,6 @@
 <?php
 use Helper\Master\HelperClass as Helpercls;
+use Helper\Auth\AuthCheck as Auth;
 include_once('../Helper/HelperClass.php');
 
 
@@ -11,15 +12,16 @@ class UserRegisterController extends Helpercls{
     public $table='users';
 
     /*
-     userRegistration Details  return the string  for data value and clounm list for save Registration Details
+     userRegistration Details  return the string  for data value and clounm list for user Registration Details
     */
     public function userRegistration(){
 
-        $fname=$_POST['full_name'];
+        $fname=$_POST['name'];
         $email=$_POST['email'];
         $password=md5($_POST['password']);
-        $column='name,email,password';
-        $data="'".$fname."','".$email."','".$password."'";
+        $permission='{"role":"admin"}';
+        $column='name,email,password,permission';
+        $data="'".$fname."','".$email."','".$password."','".$permission."'";
         $registrationDetails=['column'=>$column,
             'values'=>$data];
 
@@ -34,6 +36,24 @@ class UserRegisterController extends Helpercls{
         $email=$_POST['emailId'];
         $useremaildata="WHERE email='$email'";
         return $useremaildata;
+    }
+
+    /*
+     * this userUpdateQueryDetails is  user to return the update query string
+     * and return the details of update data
+     * set the new value in table base on this string return
+     */
+    public function userUpdateQueryDetails(){
+
+        $name=$_POST['name'];
+        $status=$_POST['status'];
+
+        $dataQuery="name = '".$name."', status = '".$status."'";
+
+        $userDetails=['dataQuery'=>$dataQuery];
+
+        return $userDetails;
+
     }
 
 
@@ -60,25 +80,89 @@ class UserRegisterController extends Helpercls{
         }
     }
 
+    /*
+     * this block is call when try to upate user information
+     * this block is check is user id is there then call the update userUpdateQueryDetails  function to get the query
+     *  retuirn the query   stting and pass to update the process
+     * return reponse of update user data in table
+     */
+    if(isset($_POST['user_id']) and $_POST['user_id']!=""){
+        $id=$_POST['user_id'];
+        $useuUpdaterQuery=$UserRegister->userUpdateQueryDetails();
+        $dataQuery=$useuUpdaterQuery['dataQuery'];
+
+        /*
+       * call the helper class Update method for update the records in table
+       * $table - name of the table which store the records
+       * $dataQuery - update Query form submit
+       *
+       * response
+       *  it will return the response when given parameters
+       *  status 1 it means Records Update Successfully'
+       *  status 0 it means  Records Not Update Successfully'
+       */
+        $userUpdateResponse=$UserRegister->update($table,$dataQuery,$id);
+
+
+        if($userUpdateResponse['status']==1){
+
+            if(isset($_POST['role_id']) and $_POST['role_id']!=""){
+
+                $table='role_users';
+                $data=' WHERE user_id ='.$_POST['user_id'];
+
+                /*Get the category data base on user auth data
+                $id user login id it return all  user added category
+                $table - name of table for get the category data
+                $data the condition of get data base in user id
+                */
+                $userRoleDetails=$UserRegister->ShowConditionalBaseDetails($table,$data);
+                if (mysqli_num_rows($userRoleDetails['data']) >= 0) {
+
+                    $row = mysqli_fetch_assoc($userRoleDetails['data']);
+                    $id=$row['id'];
+                    $dataQuery="role_id = '".$_POST['role_id']."'";
+                    $userRoleUpdateResponse=$UserRegister->update($table,$dataQuery,$id);
+
+                }else{
+
+                    $role_column='user_id,role_id';
+                    $role_values="'".$_POST['user_id']."','".$_POST['role_id']."'";
+
+                    $roleUpdateRegisterResponse=$UserRegister->store($table,$role_column,$role_values);
+                }
+            }
+
+            header('Location:../../views/users/user-index.php?message='.$userUpdateResponse['message']);
+        }else{
+            header('Location:../../views/users/user-index.php?message='.$userUpdateResponse['message']);
+        }
+
+        exit;
+    }
 
     $Registrationdetails=$UserRegister->userRegistration();
     $values=$Registrationdetails['values'];
     $column=$Registrationdetails['column'];
 
-/*
- * call the helper class Store method for save the records in table
- * $table - name of the table which store the records
- * $data - data values get form submit in registration form
- * $clounm -is set the clounm name of table which insert the records base on clounm
- *
- * response
- *  it will return the response when given parameters
- *  status 1 it means Records Save Successfully'
- *  status 0 it means  Records Not Save Successfully'
- */
+    /*
+     * call the helper class Store method for save the records in table
+     * $table - name of the table which store the records
+     * $data - data values get form submit in registration form
+     * $clounm -is set the clounm name of table which insert the records base on clounm
+     *
+     * response
+     *  it will return the response when given parameters
+     *  status 1 it means Records Save Successfully'
+     *  status 0 it means  Records Not Save Successfully'
+     */
 
     $UserRegisterResponse=$UserRegister->store($table,$column,$values);
+
     if($UserRegisterResponse['status']==1){
+
+
+
             $email=$_POST['email'];
             $userdata='type=Active&email='.$email;
             $userdata=base64_encode($userdata);

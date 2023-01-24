@@ -23,26 +23,14 @@ Auth::AuthUser();
  * if user is not authorized then it will redirect to login page
  * if user is valid and authorized then it will access the admin panel
  */
-
-
 $masterObject = new Helpercls();
 $masterObject->verifyAuthUserToken();
 $id=$_GET['id'];
+$roleDeleteData=$masterObject->delete('role',$id);
 
-/*
- *  delete is used ti delete dataform table
- *  $table name of table you wont to delete data
- * $id which records you need to delete set the recotds id
- *  return the response of delete records
- *  1 delete susscfully
- * 0 Not delete
- */
+    if($roleDeleteData['status']==1){
 
-$productDeleteData=$masterObject->delete('products',$id);
-
-    if($productDeleteData['status']==1){
-
-            header('Location:../../views/products/product-index.php?message='.$productDeleteData['message']);
+            header('Location:../../views/role/role-index.php?message='.$roleDeleteData['message']);
     }else{
-            header('Location:../../views/products/product-index.php?message='.$productDeleteData['message']);
+            header('Location:../../views/role/role-index.php?message='.$roleDeleteData['message']);
     }

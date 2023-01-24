@@ -23,26 +23,14 @@ Auth::AuthUser();
  * if user is not authorized then it will redirect to login page
  * if user is valid and authorized then it will access the admin panel
  */
+$check_auth = new Helpercls();
+$check_auth->verifyAuthUserToken();
 
+$parameters = [
+    'is_error' => $is_error,
+    'status' =>$email,
+    'message'=>$message,
+];
 
-$masterObject = new Helpercls();
-$masterObject->verifyAuthUserToken();
-$id=$_GET['id'];
-
-/*
- *  delete is used ti delete dataform table
- *  $table name of table you wont to delete data
- * $id which records you need to delete set the recotds id
- *  return the response of delete records
- *  1 delete susscfully
- * 0 Not delete
- */
-
-$productDeleteData=$masterObject->delete('products',$id);
-
-    if($productDeleteData['status']==1){
-
-            header('Location:../../views/products/product-index.php?message='.$productDeleteData['message']);
-    }else{
-            header('Location:../../views/products/product-index.php?message='.$productDeleteData['message']);
-    }
+ // Render our view
+ echo $twig->render('/role/role-add.html.twig',$parameters);

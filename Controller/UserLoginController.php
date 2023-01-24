@@ -47,7 +47,7 @@ class UserLoginController extends Helpercls {
       $responseData=$UserLoginresponse['data'];
 
         if (mysqli_num_rows($responseData) > 0) {
-
+            session_start();
              $token = bin2hex(random_bytes(16));
              $_SESSION['username'] = $_POST['email'];
              $_SESSION['token'] = $token;
@@ -62,6 +62,7 @@ class UserLoginController extends Helpercls {
                         $id=$row['id'];
                         $_SESSION['user_id'] = $id;
                         $_SESSION['username'] = $username;
+
                   }
 
                   $tokendata="auth_token =  '".$token."'";
@@ -74,6 +75,7 @@ class UserLoginController extends Helpercls {
                     * this funcion call shen user is try to login
                     */
                   $tokenResponse=$userLogin->updateUserSessionToken($table,$tokendata,$id);
+
              header('Location:../views/users/user-index.php?message=Welcome User '.$username);
 
         }

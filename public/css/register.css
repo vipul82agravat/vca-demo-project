@@ -1,0 +1,63 @@
+ <style type="text/css">
+   .divider-text {
+   position: relative;
+   text-align: center;
+   margin-top: 15px;
+   margin-bottom: 15px;
+   }
+   .divider-text span {
+   padding: 7px;
+   font-size: 12px;
+   position: relative;
+   z-index: 2;
+   }
+   .divider-text:after {
+   content: "";
+   position: absolute;
+   width: 100%;
+   border-bottom: 1px solid #ddd;
+   top: 55%;
+   left: 0;
+   z-index: 1;
+   }
+   .btn-facebook {
+   background-color: #405D9D;
+   color: #fff;
+   }
+   .btn-twitter {
+   background-color: #42AEEC;
+   color: #fff;
+   }
+   ul, li {
+   margin:0;
+   padding:0;
+   list-style-type:none;
+   }
+   #pswd_info {
+   position:absolute;
+   right:55px;
+   width:250px;
+   padding:15px;
+   background:#fefefe;
+   font-size:.875em;
+   border-radius:5px;
+   box-shadow:0 1px 3px #ccc;
+   border:1px solid #ddd;
+   }
+   .invalid {
+   background:url(../images/invalid.png) no-repeat 0 50%;
+   padding-left:22px;
+   line-height:24px;
+   color:#ec3f41;
+   }
+   .valid {
+   background:url(../images/valid.png) no-repeat 0 50%;
+   padding-left:22px;
+   line-height:24px;
+   color:#3a7d34;
+   }
+   #pswd_info {
+   display:none;
+   }
+ </style>
+

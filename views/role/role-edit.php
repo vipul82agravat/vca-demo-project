@@ -23,26 +23,30 @@ Auth::AuthUser();
  * if user is not authorized then it will redirect to login page
  * if user is valid and authorized then it will access the admin panel
  */
-
-
-$masterObject = new Helpercls();
-$masterObject->verifyAuthUserToken();
+$check_auth = new Helpercls();
+$check_auth->verifyAuthUserToken();
 $id=$_GET['id'];
+$roleShowData=$check_auth->ShowIdBaseDetails('role',$id);
+    if (mysqli_num_rows($roleShowData['data']) > 0) {
+         $row = mysqli_fetch_assoc($roleShowData['data']);
+           $id= $row['id'];
+           $name= $row['name'];
+           $status= $row['status'];
+           $status_code= $row['status_code'];
+            $description= $row['description'];
 
-/*
- *  delete is used ti delete dataform table
- *  $table name of table you wont to delete data
- * $id which records you need to delete set the recotds id
- *  return the response of delete records
- *  1 delete susscfully
- * 0 Not delete
- */
-
-$productDeleteData=$masterObject->delete('products',$id);
-
-    if($productDeleteData['status']==1){
-
-            header('Location:../../views/products/product-index.php?message='.$productDeleteData['message']);
-    }else{
-            header('Location:../../views/products/product-index.php?message='.$productDeleteData['message']);
     }
+
+$parameters = [
+    'is_error' => $is_error,
+    'status' =>$email,
+    'message'=>$message,
+    'id'=>$id,
+    'name'=>$name,
+    'status'=>$status,
+    'status_code'=>$status_code,
+    'description'=>$description,
+    'data'=>$row
+];
+ // Render our view
+ echo $twig->render('/role/role-edit.html.twig',$parameters);

@@ -217,7 +217,14 @@ class HelperClass {
                 return $e."error on update time";
             }
         }
-
+        /*
+        *  delete is used ti delete dataform table
+        *  $table name of table you wont to delete data
+        * $id which records you need to delete set the recotds id
+        *  return the response of delete records
+        *  1 delete susscfully
+        * 0 Not delete
+        */
         public function delete($table,$id){
 
             try{
@@ -380,7 +387,32 @@ class HelperClass {
 
             }
         }
+        /*
+        * check userRoleCheck  this function what is the role of given user id
+        * it return the number or  id  of role
+        * $id user id pass in mathod paramters
+         * return the id of user defuul id set as 2, 2= admin
+        */
+        public  function  userRoleCheck($id){
 
+                $table='role_users';
+                $data=' WHERE user_id ='.$id;
+
+                /*Get the category data base on user auth data
+                $id user login id it return all  user added category
+                $table - name of table for get the category data
+                $data the condition of get data base in user id
+                */
+                $getUserData=$this->ShowConditionalBaseDetails($table,$data);
+                $role_id=2;
+                if (mysqli_num_rows($getUserData['data']) > 0) {
+                    $row = mysqli_fetch_assoc($getUserData['data']);
+                    $role_id=$row['role_id'];
+
+                }
+                return $role_id;
+
+        }
         public function leftJoinData($table1,$table2,$tab1key,$tab2key,$data,$selectData){
             try {
 
@@ -442,6 +474,41 @@ class HelperClass {
 
             }
         }
+        /*
+         * getProductDetails function used to get the product details with join data base on category,state,city
+         * $data pass and where condidtion if require
+         * $selectData select clounm list in response it pass alias name
+         * it return the resonsedata base on all three table
+         */
+        public function getProductDetails($data,$selectData){
+        try {
+
+            $connection=$this->connection;
+            $query="SELECT $selectData FROM `categories` RIGHT JOIN  products ON products.category_id=categories.id LEFT JOIN  states ON products.state=states.id LEFT JOIN  cities ON products.city=cities.id".$data;
+            $res=mysqli_query($connection,$query);
+            if(mysqli_num_rows($res) >1 ){
+
+                return $arr=['status'=>1,
+                    'message'=>'Records List Successfully',
+                    'data'=>$res,
+                ];
+
+            }else{
+
+                return $arr=['status'=>0,
+                    'message'=>'Records Not Found',
+                    'data'=>$res,
+                ];
+
+            }
+
+
+        }
+        catch(Exception $e){
+            return $e.'mysql_error';
+
+        }
+    }
         public function crossJoinData($table1,$table2,$tab1key,$tab2key,$data,$selectData){
             try {
 
@@ -570,6 +637,22 @@ namespace Helper\Auth;
                 exit();
 
             }
+        }
+        /*
+         * AuthUserId return current login user id  or auth user
+         */
+        static function AuthUserId(){
+            session_start();
+            if(isset($_SESSION['username']) and $_SESSION['user_id']!=null){
+
+               return $_SESSION['user_id'];
+            }
+        }
+        /*
+       * AuthUserId return current login user id  or auth user
+       */
+        static function AuthRole(){
+           return 1;
         }
     }
 ?>

@@ -24,9 +24,29 @@ Auth::AuthUser();
  * if user is not authorized then it will redirect to login page
  * if user is valid and authorized then it will access the admin panel
  */
-$check_auth = new Helpercls();
-$check_auth->verifyAuthUserToken();
-$categoyData=$check_auth->ShowDetails('categories');
+$masterObject = new Helpercls();
+$masterObject->verifyAuthUserToken();
+$loginUserRole=$masterObject->userRoleCheck(Auth::AuthUserId());
+/*
+ * check userRoleCheck  this function what is the role of given user id
+ * it return the number or  id  of role
+ * $id user id pass in mathod paramters
+ */
+$loginUserRole=$masterObject->userRoleCheck(Auth::AuthUserId());
+
+    $id=Auth::AuthUserId();
+    $table='categories';
+    $data="";
+    if(Auth::AuthRole()!=1){
+        $data=' WHERE user_id ='.$id;
+    }
+/*Get the category data base on user auth data
+$id user login id it return all  user added category
+$table - name of table for get the category data
+$data the condition of get data base in user id
+*/
+
+$categoyData=$masterObject->ShowConditionalBaseDetails($table,$data);
 
  if (mysqli_num_rows($categoyData['data']) > 0) {
 
@@ -34,9 +54,10 @@ $categoyData=$check_auth->ShowDetails('categories');
         $result=array();
         while ($row = mysqli_fetch_array($categoyData['data'])) {
 
+                $result[$i]['id']=$row['id'];
                 $result[$i]['name']=$row['name'];
                 $result[$i]['user_id']=$row['user_id'];
-                $result[$i]['status']=$row['status'];
+                $result[$i]['status']=$row['status']==1 ? "Active" : "InActive";
                 $result[$i]['description']=$row['description'];
                 $i++;
 
@@ -50,7 +71,8 @@ $parameters = [
     'is_error' => $is_error,
     'status' =>$email,
     'message'=>$message,
-    'row'=>$result
+    'row'=>$result,
+    'user_role'=>$loginUserRole
 ];
  // Render our view
  echo $twig->render('/category/category-index.html.twig',$parameters);

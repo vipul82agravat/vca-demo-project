@@ -13,6 +13,7 @@ class CategoryController extends Helpercls {
      categoriesQueryData Details  return the string  for data value and clounm list for save category Details
     */
     public function categoriesQueryData(){
+
         session_start();
         $fileName = basename($_FILES["category_img"]["name"]);
         $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
@@ -44,13 +45,15 @@ class CategoryController extends Helpercls {
         return $categoryDetails;
 
     }
-
+    /*
+   categoriesUpdateQueryData Details  return the string  for data value and clounm list for update category Details
+  */
     public function categoriesUpdateQueryData(){
 
         $category_name=$_POST['category_name'];
         $category_status=$_POST['category_status'];
         $img='';//$_POST['img'];
-        $user_id=1;
+        $user_id=$_SESSION['user_id'];
         $category_description=$_POST['category_description'];
 
         $fileName = basename($_FILES["category_img"]["name"]);
