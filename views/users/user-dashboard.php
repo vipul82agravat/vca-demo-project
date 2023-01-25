@@ -92,8 +92,14 @@ if(isset($_GET['user-data']) and $_GET['user-data']!=""){
     $useInActiverData=$masterObject->ShowConditionalBaseDetails($table,$data);
     $inActiveUser=mysqli_num_rows($useInActiverData['data']);
 
+    if($loginUserRole==1){
+        $data="";
 
-    $productData=$masterObject->ShowDetails('products');
+    }else{
+        $id=Auth::AuthUserId();
+        $data=' WHERE  user_id ='.$id;
+    }
+    $productData=$masterObject->ShowConditionalBaseDetails('products',$data);
     $totalProduct=mysqli_num_rows($productData['data']);
 
     $id=Auth::AuthUserId();
@@ -146,6 +152,7 @@ $parameters = [
     'data'=>$row,
     'status'=>($row['status']==1) ? "Active" : "InActive",
     'role'=>$role_name,
+    'user_role'=>$loginUserRole,
     'id'=>$id
 ];
 

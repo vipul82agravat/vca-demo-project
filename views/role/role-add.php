@@ -23,8 +23,8 @@ Auth::AuthUser();
  * if user is not authorized then it will redirect to login page
  * if user is valid and authorized then it will access the admin panel
  */
-$check_auth = new Helpercls();
-$check_auth->verifyAuthUserToken();
+$masterObject = new Helpercls();
+$masterObject->verifyAuthUserToken();
 
 $parameters = [
     'is_error' => $is_error,

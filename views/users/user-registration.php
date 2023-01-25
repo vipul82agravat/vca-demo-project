@@ -4,7 +4,7 @@ require_once $bootstrap_file;
 
 session_start();
 $parameters = [
-    'status' =>$_SESSION['username'] ? 1 : 0,
+    'login_status' =>$_SESSION['username'] ? 1 : 0,
 
 ];
  // Render our view

@@ -13,10 +13,12 @@ require_once $bootstrap_file;
         $status=0;
         $is_error=0;
     }
+    session_start();
     $parameters = [
         'is_error' => $is_error,
-        'status' =>$email,
+        'status' =>$status,
         'message'=>$message,
+        'login_status' =>$_SESSION['username'] ? 1 : 0,
     ];
 
  // Render our view

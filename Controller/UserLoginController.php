@@ -55,7 +55,7 @@ class UserLoginController extends Helpercls {
                   if (mysqli_num_rows($responseData) > 0) {
                         $row = mysqli_fetch_assoc($responseData);
                         if($row['status']==0){
-                            header('Location:../views/users/user-login.php?message=You need to Active You Account First Plase check you Mail Box');
+                            header('Location:../views/users/user-login.php?message=You need to Active You Account First Please check you Mail Box');
                             exit;
                         }
                         $username=$row['name'];
@@ -76,11 +76,11 @@ class UserLoginController extends Helpercls {
                     */
                   $tokenResponse=$userLogin->updateUserSessionToken($table,$tokendata,$id);
 
-             header('Location:../views/users/user-index.php?message=Welcome User '.$username);
+             header('Location:../views/users/user-dashboard.php?message=Welcome User '.$username);
 
         }
         else{
-              header('Location:../views/users/user-login.php?message=Login details not match');
+              header('Location:../views/users/user-login.php?message=Login Details  are not Match Please Create Account First..');
         }
 
 

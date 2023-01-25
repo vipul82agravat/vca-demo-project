@@ -69,7 +69,14 @@
     {% endblock %}
 
 {% block tableset %}
+    {%  if(login_user_role==1) %}
     <a href="user-index.php" id="create" target="_blank">Back</a>
+    {% else %}
+        <a href="user-dashboard.php" id="create" target="_blank">Back</a>
+
+    {%  endif %}
+
+
     <h5 id="status_messge" style="color: red; display:none"></h5>
     <h5 id="name_messge" style="color: red; display:none"></h5>
     <form action="../../Controller/UserRegisterController.php"  method="post" onsubmit="return Validation()" enctype="multipart/form-data">
@@ -86,7 +93,13 @@
 
     <tr>
         <th height="60" scope="row">User Status :</th>
-        <td><select name="status"  id="status" class="form-control ">
+        <td>
+            {%  if(login_user_role==1) %}
+            <select name="status"  id="status" class="form-control ">
+            {% else %}
+                <select name="status"  id="status" class="form-control " readonly="">
+
+            {% endif %}
             <option value="">Select</option>
             {% if(data.status==1) %}
                 <option value="1" selected>Active</option>

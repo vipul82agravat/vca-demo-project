@@ -27,10 +27,23 @@
     {%  if(is_error==1) %}
         <p style="color: green">{{ message }}</p>
     {%  endif %}
+    <div class="row">
+        <div class="col-sm-6">
+            <a href="category-add.php" id="create" target="_blank">AddCategory</a>
+        </div>
+        <div class="col-sm-6" style="margin-left: 70%;">
+            <form name="" action="../../Controller/Category/CategoryController.php" method="post">
+                StartDate: <input type="date" name="start_date" value={{ start_date }} minlength="6"  required />
+                EndDate: <input type="date" name="end_date"  value={{ end_date }} = minlength="6"  required />
+                <input type="hidden" name="type"  value="category_date_filter" minlength="6" class="form-control" required />
+                <input type="submit" value="Search" name="submit" class="btn-primary" />
+            </form>
+        </div>
 
-    <a href="category-add.php" id="create" target="_blank">AddCategory</a>
-    <br><br><br>
-       <table id="tableID" class="display nowrap">
+    </div>
+    <br>
+
+    <table id="tableID" class="display nowrap">
         <thead>
         <tr>
             <th>ID</th>

@@ -23,11 +23,11 @@ Auth::AuthUser();
  * if user is not authorized then it will redirect to login page
  * if user is valid and authorized then it will access the admin panel
  */
-$HelperObject = new Helpercls();
-$HelperObject->verifyAuthUserToken();
-$countries=$HelperObject->ShowDetails('countries');
-$states=$HelperObject->ShowDetails('states');
-$cities=$HelperObject->ShowDetails('cities');
+$masterObject = new Helpercls();
+$masterObject->verifyAuthUserToken();
+$countries=$masterObject->ShowDetails('countries');
+$states=$masterObject->ShowDetails('states');
+$cities=$masterObject->ShowDetails('cities');
 
 $id=1;
 $table='categories';
@@ -38,7 +38,7 @@ $id user login id it return all  user added category
 $table - name of table for get the category data
 $data the condition of get data base in user id
 */
-$categoriesData=$HelperObject->ShowConditionalBaseDetails($table,$data);
+$categoriesData=$masterObject->ShowConditionalBaseDetails($table,$data);
 
 $categoriesDataresult=array();
 if (mysqli_num_rows($categoriesData['data']) >= 0) {
@@ -121,11 +121,13 @@ if (mysqli_num_rows($cities['data']) >= 0) {
 
 $id=$_GET['id'];
 $row="";
-$ProductShowData=$HelperObject->ShowIdBaseDetails('products',$id);
+$ProductShowData=$masterObject->ShowIdBaseDetails('products',$id);
 if (mysqli_num_rows($ProductShowData['data']) > 0) {
     $row = mysqli_fetch_assoc($ProductShowData['data']);
 
 }
+
+$loginUserRole=$masterObject->userRoleCheck(Auth::AuthUserId());
 
 $parameters = [
     'is_error' => $is_error,
@@ -135,7 +137,8 @@ $parameters = [
     'countries'=>$countriesDataresult,
     'states'=>$statesDataresult,
     'cities'=>$citiesDataresult,
-    'data'=>$row
+    'data'=>$row,
+    'user_role'=>$loginUserRole
 ];
 
 // Render our view

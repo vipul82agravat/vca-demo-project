@@ -79,6 +79,12 @@ class RoleController extends Helpercls {
         exit;
 
     }
+    if(isset($_POST['type']) and $_POST['type']!="" and $_POST['type']=="role_date_filter"){
+        $start_date=$_POST['start_date'];
+        $end_date=$_POST['end_date'];
+
+        header('Location:../../views/role/role-index.php?start_date='.$start_date.'&end_date='.$end_date);
+    }
     //print_r($_POST);EXIT;
     $roledetails=$roleObj->roleQueryData();
     $column=$roledetails['column'];

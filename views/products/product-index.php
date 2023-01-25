@@ -28,23 +28,33 @@ include_once('../../Helper/HelperClass.php');
     $masterObject->verifyAuthUserToken();
 
     $loginUserRole=$masterObject->userRoleCheck(Auth::AuthUserId());
-
     $id=Auth::AuthUserId();
+
     $table='products';
     $data="";
-    if($loginUserRole!=1){
-        $data=' WHERE products.user_id ='.$id;
+    if(isset($_GET['start_date']) and  $_GET['start_date'] !=""){
+        $start_date=$_GET['start_date'];
+        $end_date=$_GET['end_date'];
+        $data=" WHERE products.create_at BETWEEN '".$start_date."' AND '".$end_date."'";
+
     }
+    if($loginUserRole!=1){
+        if(isset($_GET['start_date']) and  $_GET['start_date'] !=""){
+            $start_date=$_GET['start_date'];
+            $end_date=$_GET['end_date'];
+            $data=" WHERE products.create_at BETWEEN '".$start_date."' AND '".$end_date."' AND products.user_id =".$id;
+        }else{
+            $data=" WHERE products.user_id =".$id;
+        }
+
+    }
+    //echo $data; exit;
+
     /*Get the category data base on user auth data
     $id user login id it return all  user added category
     $table - name of table for get the category data
     $data the condition of get data base in user id
     */
-    $table1="categories";
-    $table2="products";
-    $table3="states";
-    $table2="states";
-    $table2="products";
     $selectData="products.id as product_id,products.title as title,products.location as location,products.postcode as postcode,products.company_name as company_name,products.address as address,products.status as status,products.description as description,products.img as image,products.img_path as img_path,products.create_at as create_date,products.updated_at as update_date  ,categories.name as catgory_name,states.name as states_name,cities.city as city_name";
     //    $productData=$masterObject->rightJoinData($table1,$table2,'id','category_id',$data,$selectData);
     /*
@@ -54,6 +64,7 @@ include_once('../../Helper/HelperClass.php');
     * it return the resonsedata base on all three table
     */
     $productData=$masterObject->getProductDetails($data,$selectData);
+
 //
 //    $productData=$masterObject->ShowConditionalBaseDetails($table,$data);
 
@@ -92,7 +103,10 @@ include_once('../../Helper/HelperClass.php');
         'is_error' => $is_error,
         'status' =>1,
         'message'=>$message,
-        'row'=>$result
+        'row'=>$result,
+        'user_role'=>$loginUserRole,
+        'start_date'=>($start_date) ? $start_date : "",
+        'end_date'=>($end_date) ? $end_date : ""
     ];
 
      // Render our view

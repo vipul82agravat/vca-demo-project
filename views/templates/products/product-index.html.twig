@@ -27,9 +27,21 @@
     {%  if(is_error==1) %}
         <p style="color: green">{{ message }}</p>
     {%  endif %}
+    <div class="row">
+        <div class="col-sm-6">
+            <a href="product-add.php" id="create" target="_blank">AddProducts</a>
+        </div>
+        <div class="col-sm-6" style="margin-left: 70%;">
+            <form name="" action="../../Controller/Products/ProductsController.php" method="post">
+            StartDate: <input type="date" name="start_date" value={{ start_date }} minlength="6"  required />
+            EndDate: <input type="date" name="end_date"  value={{ end_date }} = minlength="6"  required />
+            <input type="hidden" name="type"  value="product_date_filter" minlength="6" class="form-control" required />
+            <input type="submit" value="Search" name="submit" class="btn-primary" />
+            </form>
+        </div>
 
-    <a href="product-add.php" id="create" target="_blank">AddProducts</a>
-    <br><br><br>
+    </div>
+    <br>
        <table id="tableID" class="display nowrap">
         <thead>
         <tr>

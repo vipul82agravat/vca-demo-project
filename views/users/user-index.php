@@ -6,49 +6,7 @@ include_once('../../Helper/HelperClass.php');
 
 $bootstrap_file=$_SERVER['DOCUMENT_ROOT'].'/views/bootstrap.php';;
 require_once $bootstrap_file;
-
-$message="Welcome to Admin Protal.";
 $login_status=1;
-
-/*
- * Check if user is redirect form email links at that time user is inActive and not access to panel so first time is must be active the account form email links
- * check the user is valid
- * if user use valid so active the user and login to that account automatically login with user id
- *
- */
-if(isset($_GET['user-data']) and $_GET['user-data']!=""){
-
-    $userdata=base64_decode($_GET['user-data']);
-    $userDetails=explode('&',$userdata);
-    $type=explode('=',$userDetails[0])[1];
-    $email=explode('=',$userDetails[1])[1];
-
-    if($type=='Active'){
-
-        $table="users";
-        $data="WHERE email='".$email."'";
-
-        $masterObject = new Helpercls();
-        $checkEmailReponse=$masterObject->userEmailExists($table,$data);
-
-        $row = mysqli_fetch_assoc($checkEmailReponse['data']);
-
-            session_start();
-            $token = bin2hex(random_bytes(16));
-            $_SESSION['token'] = $token;
-            $username=$row['name'];
-            $id=$row['id'];
-            $_SESSION['user_id'] = $id;
-            $_SESSION['username'] = $username;
-            $status=1;
-            $tokendata="status =  '".$status."', auth_token =  '".$token."'";
-            $tokenResponse=$masterObject->updateUserSessionToken($table,$tokendata,$id);
-            $message="Welcome to Admin Protal now your account was successfully activated.";
-            $login_status=1;
-
-    }
-
-}
     /*
      * AuthUser method is chekck access the page before validate the Auth user have seesion is exits or nor
      * if session is  not  extis then  is not authorized then it will redirect to login page
@@ -68,12 +26,18 @@ if(isset($_GET['user-data']) and $_GET['user-data']!=""){
     $masterObject = new Helpercls();
     $masterObject->verifyAuthUserToken();
     $loginUserRole=$masterObject->userRoleCheck(Auth::AuthUserId());
+    $data=null;
+    if(isset($_GET['start_date']) and  $_GET['start_date'] !=""){
+        $start_date=$_GET['start_date'];
+        $end_date=$_GET['end_date'];
+        $data=" WHERE users.create_at BETWEEN '".$start_date."' AND '".$end_date."'";
 
+    }
     $table1="users";
     $table2="role_users";
-    $selectData="users.id as user_id,users.name as name,users.status as status,users.email as email,role_users.role_id as role_id";
-    $userData=$masterObject->leftJoinData($table1,$table2,'id','user_id',$data=null,$selectData);
 
+    $selectData="users.id as user_id,users.name as name,users.status as status,users.email as email,role_users.role_id as role_id";
+    $userData=$masterObject->leftJoinData($table1,$table2,'id','user_id',$data,$selectData);
 
     if (mysqli_num_rows($userData['data']) > 0) {
 
@@ -95,7 +59,9 @@ if(isset($_GET['user-data']) and $_GET['user-data']!=""){
         'status' =>$login_status,
         'message'=>$message,
         'row'=>$result,
-        'user_role'=>$loginUserRole
+        'user_role'=>$loginUserRole,
+        'start_date'=>($start_date) ? $start_date : "",
+        'end_date'=>($end_date) ? $end_date : ""
 
     ];
         // Render our view

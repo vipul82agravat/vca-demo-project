@@ -30,8 +30,22 @@
         <p style="color: green">{{ message }}</p>
     {%  endif %}
 
-    <a href="user-registration.php" id="create" target="_blank">AddUsers</a>
-    <br><br><br>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <a href="user-registration.php" id="create" target="_blank">AddUsers</a>
+        </div>
+        <div class="col-sm-6" style="margin-left: 70%;">
+            <form name="" action="../../Controller/UserRegisterController.php" method="post">
+                StartDate: <input type="date" name="start_date" value={{ start_date }} minlength="6"  required />
+                EndDate: <input type="date" name="end_date"  value={{ end_date }} = minlength="6"  required />
+                <input type="hidden" name="type"  value="user_date_filter" minlength="6" class="form-control" required />
+                <input type="submit" value="Search" name="submit" class="btn-primary" />
+            </form>
+        </div>
+
+    </div>
+    <br>
        <table id="tableID" class="display nowrap">
         <thead>
         <tr>

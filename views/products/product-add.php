@@ -29,16 +29,15 @@ require_once $bootstrap_file;
     $states=$masterObject->ShowDetails('states');
     $cities=$masterObject->ShowDetails('cities');
 
-    $id=1;
+    $id=Auth::AuthUserId();
     $table='categories';
-    $data=' WHERE user_id ='.$id;
+    $data=" WHERE status='1' and user_id =".$id;
 
     /*Get the category data base on user auth data
     $id user login id it return all  user added category
     $table - name of table for get the category data
     $data the condition of get data base in user id
     */
-$loginUserRole=$masterObject->userRoleCheck(Auth::AuthUserId());
     $categoriesData=$masterObject->ShowConditionalBaseDetails($table,$data);
 
         $categoriesDataresult=array();
@@ -119,15 +118,17 @@ $loginUserRole=$masterObject->userRoleCheck(Auth::AuthUserId());
         }
 
     }
+    $loginUserRole=$masterObject->userRoleCheck(Auth::AuthUserId());
+
     $parameters = [
-        'is_error' => $is_error,
-        'status' =>$email,
-        'message'=>$message,
-        'categories'=>$categoriesDataresult,
-        'countries'=>$countriesDataresult,
-        'states'=>$statesDataresult,
-        'cities'=>$citiesDataresult,
-        'user_role'=>$loginUserRole,
-    ];
+            'is_error' => $is_error,
+            'status' =>$email,
+            'message'=>$message,
+            'categories'=>$categoriesDataresult,
+            'countries'=>$countriesDataresult,
+            'states'=>$statesDataresult,
+            'cities'=>$citiesDataresult,
+            'user_role'=>$loginUserRole,
+        ];
      // Render our view
  echo $twig->render('/products/product-add.html.twig',$parameters);

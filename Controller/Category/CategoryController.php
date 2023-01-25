@@ -20,12 +20,14 @@ class CategoryController extends Helpercls {
         $allowTypes = array('jpg','png','jpeg','gif');
         $imgContent ='';
 
-        $uploads_dir =$_SERVER['DOCUMENT_ROOT']."/public/category/";
+        $uploads_dir =$_SERVER['DOCUMENT_ROOT']."/public/image/category/";
         $fileDestination = $uploads_dir.$fileName;
+
         //echo $fileDestination;exit;
         if(in_array($fileType, $allowTypes)){
             $tmp_name = $_FILES['category_img']['tmp_name'];
-            $imgContent = addslashes(file_get_contents($tmp_name));
+            $imgContent = '';//addslashes(file_get_contents($tmp_name));
+
             move_uploaded_file($tmp_name,$fileDestination);
 
         }
@@ -62,13 +64,15 @@ class CategoryController extends Helpercls {
         $imgContent ='';
         $uploads_dir =$_SERVER['DOCUMENT_ROOT']."/public/category/";
         $fileDestination = $uploads_dir.$fileName;
-        //echo $fileDestination;exit;
+
         if(in_array($fileType, $allowTypes)){
             $tmp_name = $_FILES['category_img']['tmp_name'];
             $imgContent = addslashes(file_get_contents($tmp_name));
             move_uploaded_file($tmp_name,$fileDestination);
 
         }
+//        echo $tmp_name;
+        //echo $fileDestination;exit;
         $column='name,status,user_id,img,img_path,description';
         $dataQuery="name = '".$category_name."', status = '".$category_status."', img = '".$imgContent."', img_path = '".$fileName."', description = '".$category_description."'";
 
@@ -81,13 +85,13 @@ class CategoryController extends Helpercls {
 }
 
 
-    $CategoriesObj = new CategoryController;
-    $table=$CategoriesObj->table;
+    $categoriesObj = new CategoryController;
+    $table=$categoriesObj->table;
 
     if(isset($_POST['category_id']) and $_POST['category_id']!=""){
 
         $id=$_POST['category_id'];
-        $CategoryUpdatedetails=$CategoriesObj->categoriesUpdateQueryData();
+        $CategoryUpdatedetails=$categoriesObj->categoriesUpdateQueryData();
         $dataQuery=$CategoryUpdatedetails['dataQuery'];
         /*
         * call the helper class Update method for update the records in table
@@ -100,7 +104,7 @@ class CategoryController extends Helpercls {
         *  status 0 it means  Records Not Update Successfully'
         */
 
-        $CategoryUpdateResponse=$CategoriesObj->update($table,$dataQuery,$id);
+        $CategoryUpdateResponse=$categoriesObj->update($table,$dataQuery,$id);
 
 
         if($CategoryUpdateResponse['status']==1){
@@ -113,9 +117,25 @@ class CategoryController extends Helpercls {
         exit;
 
     }
-    $Categorydetails=$CategoriesObj->categoriesQueryData();
-    $values=$Categorydetails['values'];
-    $column=$Categorydetails['column'];
+    /*
+    * chgeck the type in post request this means type of serach and call this form ajax request for serach the prodcut
+    * $_POST['serach_text']; get the string fors serach the check the  getProductDetails with like condtion
+    * return the result is found
+    * if recrods is found at that time crate html div in loop and greate the final html code
+    * and return this code on ajax reponse and set in view page
+    */
+
+    if(isset($_POST['type']) and $_POST['type']!="" and $_POST['type']=="category_date_filter"){
+        $start_date=$_POST['start_date'];
+        $end_date=$_POST['end_date'];
+
+        header('Location:../../views/category/category-index.php?start_date='.$start_date.'&end_date='.$end_date);
+        exit;
+    }
+    $categoryDetails=$categoriesObj->categoriesQueryData();
+    //print_r($categoryDetails);exit;
+    $values=$categoryDetails['values'];
+    $column=$categoryDetails['column'];
 
     /*
     * call the helper class Store method for save the records in table
@@ -129,7 +149,7 @@ class CategoryController extends Helpercls {
     *  status 0 it means  Records Not Save Successfully'
     */
 
-    $CategoryStoreResponse=$CategoriesObj->store($table,$column,$values);
+    $CategoryStoreResponse=$categoriesObj->store($table,$column,$values);
 
     if($CategoryStoreResponse['status']==1){
 

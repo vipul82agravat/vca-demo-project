@@ -132,8 +132,12 @@ class UserRegisterController extends Helpercls{
                     $roleUpdateRegisterResponse=$UserRegister->store($table,$role_column,$role_values);
                 }
             }
-
+            $loginUserRole=$UserRegister->userRoleCheck(Auth::AuthUserId());
+            if($loginUserRole==1){
             header('Location:../../views/users/user-index.php?message='.$userUpdateResponse['message']);
+            }else{
+                header('Location:../../views/users/user-dashboard.php?message='.$userUpdateResponse['message']);
+            }
         }else{
             header('Location:../../views/users/user-index.php?message='.$userUpdateResponse['message']);
         }
@@ -144,7 +148,21 @@ class UserRegisterController extends Helpercls{
     $Registrationdetails=$UserRegister->userRegistration();
     $values=$Registrationdetails['values'];
     $column=$Registrationdetails['column'];
+    /*
+    * chgeck the type in post request this means type of serach and call this form ajax request for serach the prodcut
+    * $_POST['serach_text']; get the string fors serach the check the  getProductDetails with like condtion
+    * return the result is found
+    * if recrods is found at that time crate html div in loop and greate the final html code
+    * and return this code on ajax reponse and set in view page
+    */
 
+    if(isset($_POST['type']) and $_POST['type']!="" and $_POST['type']=="user_date_filter"){
+        $start_date=$_POST['start_date'];
+        $end_date=$_POST['end_date'];
+
+        header('Location:../../views/users/user-index.php?start_date='.$start_date.'&end_date='.$end_date);
+        exit;
+    }
     /*
      * call the helper class Store method for save the records in table
      * $table - name of the table which store the records
@@ -166,7 +184,7 @@ class UserRegisterController extends Helpercls{
             $email=$_POST['email'];
             $userdata='type=Active&email='.$email;
             $userdata=base64_encode($userdata);
-            $links="http://vca.demoproject.aum/views/users/user-index?user-data=".$userdata;
+            $links="http://vca.demoproject.aum/views/users/user-dashboard?user-data=".$userdata;
             $subject="User confirmation email For activate the account";
             $message="
                     <html>

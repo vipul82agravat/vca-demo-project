@@ -45,7 +45,7 @@
                 <div class="card">
                     <img src="img.jpg" alt="" style="width:100%">
                     <br>
-                    <h1>{{ data.name }}</h1>        0   0
+                    <h1>{{ data.name }}</h1>
 {#                    <p class="title">CEO & Founder, Example</p>#}
                     <p>Name::{{ data.name }}</p>
                     <p>Email::  {{ data.email }}</p>
@@ -67,7 +67,9 @@
                     <p>Wellcome to vca Demo.</p>
                 </div>
                 <div class="row">
-                    <div class="col-sm-6">
+
+                    {%  if(user_role==1) %}
+                        <div class="col-sm-6">
                         <a href="user-index.php">
                             <div class="well">
                             <h4>Users </h4>
@@ -75,6 +77,7 @@
                         </div>
                         </a>
                     </div>
+                    {%  endif %}
                     <div class="col-sm-6">
                         <a href="../products/product-index.php">
                         <div class="well">
@@ -86,12 +89,14 @@
 
                 </div>
                 <div class="row">
+                    {%  if(user_role==1) %}
                     <div class="col-sm-6">
                         <div class="well" style="background-color: greenyellow">
                             <h4>ActiveUser</h4>
                             <p>{{ activeUser }}</p>
                         </div>
                     </div>
+                    {%  endif %}
                     <div class="col-sm-6">
                         <div class="well" style="background-color: greenyellow">
                             <h4>ActiveProduct</h4>
@@ -101,12 +106,14 @@
 
                 </div>
                 <div class="row">
+                    {%  if(user_role==1) %}
                     <div class="col-sm-6">
                         <div class="well" style="background-color: red">
                             <h4>InActive User</h4>
                             <p>{{ inActiveUser }}</p>
                         </div>
                     </div>
+                    {%  endif %}
                     <div class="col-sm-6">
                         <div class="well" style="background-color: red">
                             <h4>InActive Products</h4>

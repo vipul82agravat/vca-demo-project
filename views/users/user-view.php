@@ -35,13 +35,20 @@ if (mysqli_num_rows($userShowData['data']) > 0) {
     $row = mysqli_fetch_assoc($userShowData['data']);
 }
 
-$userData=$masterObject->ShowDetails('role');
+$table='role';
+$data=" WHERE status='1'";
 
-if (mysqli_num_rows($userData['data']) > 0) {
+/*Get the category data base on user auth data
+$id user login id it return all  user added category
+$table - name of table for get the category data
+$data the condition of get data base in user id
+*/
+$roleData=$masterObject->ShowConditionalBaseDetails($table,$data);
+if (mysqli_num_rows($roleData['data']) > 0) {
 
     $i=0;
     $role_result=array();
-    while ($row1 = mysqli_fetch_array($userData['data'])) {
+    while ($row1 = mysqli_fetch_array($roleData['data'])) {
         $role_result[$i]['id']=$row1['id'];
         $role_result[$i]['name']=$row1['name'];
         $role_result[$i]['status_code']=$row1['status_code'];

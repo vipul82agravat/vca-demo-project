@@ -37,8 +37,21 @@ $loginUserRole=$masterObject->userRoleCheck(Auth::AuthUserId());
     $id=Auth::AuthUserId();
     $table='categories';
     $data="";
-    if(Auth::AuthRole()!=1){
-        $data=' WHERE user_id ='.$id;
+    if(isset($_GET['start_date']) and  $_GET['start_date'] !=""){
+        $start_date=$_GET['start_date'];
+        $end_date=$_GET['end_date'];
+        $data=" WHERE categories.create_at BETWEEN '".$start_date."' AND '".$end_date."'";
+
+    }
+    if($loginUserRole!=1){
+        if(isset($_GET['start_date']) and  $_GET['start_date'] !=""){
+            $start_date=$_GET['start_date'];
+            $end_date=$_GET['end_date'];
+            $data=" WHERE categories.create_at BETWEEN '".$start_date."' AND '".$end_date."' AND categories.user_id =".$id;
+        }else{
+            $data=" WHERE categories.user_id =".$id;
+        }
+
     }
 /*Get the category data base on user auth data
 $id user login id it return all  user added category
@@ -62,17 +75,15 @@ $categoyData=$masterObject->ShowConditionalBaseDetails($table,$data);
                 $i++;
 
         }
-
-
-
-
 }
 $parameters = [
     'is_error' => $is_error,
     'status' =>$email,
     'message'=>$message,
     'row'=>$result,
-    'user_role'=>$loginUserRole
+    'user_role'=>$loginUserRole,
+    'start_date'=>($start_date) ? $start_date : "",
+    'end_date'=>($end_date) ? $end_date : ""
 ];
  // Render our view
  echo $twig->render('/category/category-index.html.twig',$parameters);

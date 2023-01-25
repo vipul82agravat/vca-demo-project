@@ -24,20 +24,25 @@ Auth::AuthUser();
  * if user is not authorized then it will redirect to login page
  * if user is valid and authorized then it will access the admin panel
  */
-$HelperObject = new Helpercls();
-$HelperObject->verifyAuthUserToken();
+$masterObject = new Helpercls();
+$masterObject->verifyAuthUserToken();
 
     $id=Auth::AuthUserId();
     $table='role';
     $data="";
+    if(isset($_GET['start_date']) and  $_GET['start_date'] !=""){
+        $start_date=$_GET['start_date'];
+        $end_date=$_GET['end_date'];
+        $data=" WHERE role.create_at BETWEEN '".$start_date."' AND '".$end_date."'";
 
+    }
 /*Get the category data base on user auth data
 $id user login id it return all  user added category
 $table - name of table for get the category data
 $data the condition of get data base in user id
 */
 
-$categoyData=$HelperObject->ShowConditionalBaseDetails($table,$data);
+$categoyData=$masterObject->ShowConditionalBaseDetails($table,$data);
 
  if (mysqli_num_rows($categoyData['data']) > 0) {
 
@@ -62,7 +67,9 @@ $parameters = [
     'is_error' => $is_error,
     'status' =>$email,
     'message'=>$message,
-    'row'=>$result
+    'row'=>$result,
+    'start_date'=>($start_date) ? $start_date : "",
+    'end_date'=>($end_date) ? $end_date : ""
 ];
  // Render our view
  echo $twig->render('/role/role-index.html.twig',$parameters);

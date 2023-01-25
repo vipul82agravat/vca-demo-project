@@ -94,10 +94,11 @@ class ProductsController extends Helpercls {
     }
 
 }
-
     $ProductsObj = new ProductsController;
     $table=$ProductsObj->table;
-
+    /*
+     * check if product_id is set it at that time update record using productsUpdateQueryData
+     */
     if(isset($_POST['product_id']) and $_POST['product_id']!=""){
 
         $id=$_POST['product_id'];
@@ -126,7 +127,71 @@ class ProductsController extends Helpercls {
         exit;
 
     }
-    //print_r($_POST);EXIT;
+    /*
+     * chgeck the type in post request this means type of serach and call this form ajax request for serach the prodcut
+     * $_POST['serach_text']; get the string fors serach the check the  getProductDetails with like condtion
+     * return the result is found
+     * if recrods is found at that time crate html div in loop and greate the final html code
+     * and return this code on ajax reponse and set in view page
+     */
+
+    if(isset($_POST['type']) and $_POST['type']!="" and $_POST['type']=="serach"){
+
+        $serach_text=$_POST['search_text'];
+        $selectData="products.id as product_id,products.title as title,products.location as location,products.postcode as postcode,products.company_name as company_name,products.address as address,products.status as status,products.description as description,products.img as image,products.img_path as img_path,products.create_at as create_date,products.updated_at as update_date  ,categories.name as catgory_name,states.name as states_name,cities.city as city_name";
+        $data=" WHERE products.title LIKE '%$serach_text%'";
+
+        $ProductsUpdateResponse=$ProductsObj->getProductDetails($data,$selectData);
+
+        $html="Result Not Found...";
+        if (mysqli_num_rows($ProductsUpdateResponse['data']) > 0) {
+
+            $html='<div class="row product_list">';
+            while ($row = mysqli_fetch_array($ProductsUpdateResponse['data'])) {
+
+                    $title=$row['title'];
+                    $id=$row['product_id'];
+                    $catgory_name=$row['catgory_name'];
+                    $state=$row['states_name'];
+                    $city=$row['city_name'];
+                    $postcode=$row['postcode'];
+                    $company_name=$row['company_name'];
+                    $address=$row['address'];
+                    $description=$row['description'];
+                    $img_path=$row['img_path'];
+                    $image=$row['image'];
+//
+                $html.='
+                <div class="col-sm-7"><img class="img-thumbnail" src="http://www.jquery-az.com/html/images/banana.jpg" alt="user avatar"></div>
+                <div class="col-sm-5"><h3>'.$title.'</h3>
+                    <p class="w3-opacity">Company Name:: '.$catgory_name.'</p>
+                    <p>Description::'.$description.'</p>
+                    <p>Address::'.$address.'-'.$state.'-'.$city.'-'.$postcode.'</p>
+                    <a href="user-products-view.php?id='.$id.'" id="create" class="btn btn-primary" target="_blank">ViewDetails</a></div>
+                <hr>
+                ';
+            }
+            $html.="</div>";
+        }
+
+        echo $html;
+        exit;
+    }
+    /*
+    * chgeck the type in post request this means type of serach and call this form ajax request for serach the prodcut
+    * $_POST['serach_text']; get the string fors serach the check the  getProductDetails with like condtion
+    * return the result is found
+    * if recrods is found at that time crate html div in loop and greate the final html code
+    * and return this code on ajax reponse and set in view page
+    */
+
+    if(isset($_POST['type']) and $_POST['type']!="" and $_POST['type']=="product_date_filter"){
+        $start_date=$_POST['start_date'];
+        $end_date=$_POST['end_date'];
+
+        header('Location:../../views/products/product-index.php?start_date='.$start_date.'&end_date='.$end_date);
+    }
+
     $Productdetails=$ProductsObj->productsQueryData();
     $values=$Productdetails['values'];
     $column=$Productdetails['column'];
