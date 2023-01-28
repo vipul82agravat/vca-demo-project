@@ -8,10 +8,10 @@ $bootstrap_file=$_SERVER['DOCUMENT_ROOT'].'/views/bootstrap.php';;
 require_once $bootstrap_file;
 
 /*
- * AuthUser method is chekck access the page before validate the Auth user have seesion is exits or nor
+ * AuthUser method is check access the page before validate the Auth user have seesion is exits or nor (login or not)
  * if session is  not  extis then  is not authorized then it will redirect to login page
  * if user session is valid and authorized then it will access the admin panel
- * call the static class for checking
+ * call the static Auth class for checking
  */
 
 Auth::AuthUser();
@@ -26,9 +26,9 @@ Auth::AuthUser();
 $masterObject = new Helpercls();
 $masterObject->verifyAuthUserToken();
 $id=$_GET['id'];
-$categoyShowData=$masterObject->ShowIdBaseDetails('role',$id);
-    if (mysqli_num_rows($categoyShowData['data']) > 0) {
-         $row = mysqli_fetch_assoc($categoyShowData['data']);
+$roleShowData=$masterObject->ShowIdBaseDetails('role',$id);
+    if (mysqli_num_rows($roleShowData['data']) > 0) {
+         $row = mysqli_fetch_assoc($roleShowData['data']);
            $id= $row['id'];
            $name= $row['name'];
            $status= $row['status'];
@@ -38,8 +38,8 @@ $categoyShowData=$masterObject->ShowIdBaseDetails('role',$id);
     }
 
 $parameters = [
-    'is_error' => $is_error,
-    'message'=>$message,
+    'is_error' => $_GET['is_error'],
+    'message'=>$_GET['message'],
     'id'=>$id,
     'name'=>$name,
     'status'=>$status,

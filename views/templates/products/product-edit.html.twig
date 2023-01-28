@@ -4,283 +4,159 @@
 
 {% block head %}
     {{ parent() }}
-    <head>
-        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-        <meta charset="utf-8">
-        <title>ASPL HRM Registration | DEMO</title>
-        <meta name="generator" content="Bootply" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-        <link href="css/bootstrap.min.css" rel="stylesheet">
-        <!--[if lt IE 9]>
-        <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
-        <link href="css/styles.css" rel="stylesheet">
-        <script>
-            function getstate(val) {
+    <script src="http://vca.demoproject.aum/public/js/products.js"></script>
 
-                $.ajax({
-                    type: "POST",
-                    url: "http://vca.demoproject.aum/Controller/GetStateCityController.php",
-                    data:'coutry_id='+val,
-                    success: function(data){
-                        $("#statelist").html(data);
-                    }
-                });
-            }
-            function getcity(val) {
+    {%  if(user_role==1) %}
+        {% set menuitem = 'users/menu.html.twig' %}
+    {% else %}
+        {% set menuitem = 'users/admin-menu.html.twig' %}
+    {%  endif %}
 
-                $.ajax({
-                    type: "POST",
-                    url: "http://vca.demoproject.aum/Controller/GetStateCityController.php?type=city",
-                    data:'state_id='+val,
-                    success: function(data){
-                        $("#city").html(data);
-                    }
-                });
-            }
-            function Validation(){
-
-                stat=1;
-                var product_category=$('#product_category').val();
-                var title=$('#title').val();
-                var location=$('#location').val();
-                var countries=$('#countries').val();
-                var state=$('#statelist').val();
-                var city=$('#city').val();
-                var address=$('#address').val();
-                var status=$('#status').val();
-
-                $('#title_messge').hide();
-                $('#location_messge').hide();
-                $('#state_messge').hide();
-                $('#countries_messge').hide();
-                $('#city_messge').hide();
-                $('#address_messge').hide();
-                $('#status_messge').hide();
-
-                $('#title').css('border-color', 'green');
-                $('#product_category').css('border-color', 'green');
-                $('#location').css('border-color', 'green');
-                $('#statelist').css('border-color', 'green');
-                $('#countries').css('border-color', 'green');;
-                $('#city').css('border-color', 'green');;
-                $('#addres').css('border-color', 'green');
-                $('#status').css('border-color', 'green');;
-
-
-                if(product_category==""){
-                    $('#product_category').css('border-color', 'red');
-                    $("#category_messge").html("***Category is missing");
-                    $('#category_messge').show();
-                    stat=0;
-
-                }
-
-                if(title==""){
-                    $('#title').css('border-color', 'red');
-                    $("#title_messge").html("***Title is missing");
-                    $('#title_messge').show();
-                    stat=0;
-
-                }
-                if(location==""){
-                    $('#location').css('border-color', 'red');
-                    $("#location_messge").html("***Location is missing");
-                    $('#location_messge').show();
-                    stat=0;
-
-                }
-                if(countries==""){
-                    $('#countries').css('border-color', 'red');
-                    $("#state_messge").html("***State is missing");
-                    $('#state_messge').show();
-                    stat=0;
-
-                }
-                if(state==""){
-                    $('#statelist').css('border-color', 'red');
-                    $("#countries_messge").html("***State is missing");
-                    $('#countries_messge').show();
-                    stat=0;
-
-                }
-                if(city==""){
-                    $('#city').css('border-color', 'red');
-                    $("#city_messge").html("***City is missing");
-                    $('#city_messge').show();
-                    stat=0;
-
-                }
-                if(address==""){
-                    $('#name').css('border-color', 'red');
-                    $("#usercheck").html("***Address is missing");
-                    $('#usercheck').show();
-                    stat=0;
-
-                }
-                if(status==""){
-                    $('#status').css('border-color', 'red');
-                    $("#status_messge").html("***Status is missing");
-                    $('#status_messge').show();
-                    stat=0;
-
-                }
-
-                if(stat==0){
-                    console.log('aaa'+stat);
-                    return false;
-                }
-
-            }
-        </script>
-
-        {%  if(user_role==1) %}
-            {% set menuitem = 'users/menu.html.twig' %}
-        {% else %}
-            {% set menuitem = 'users/admin-menu.html.twig' %}
-        {%  endif %}
-
-        {% include menuitem %}
+    {% include menuitem %}
 {% endblock %}
 
 {% block tableset %}
-<a href="product-index.php" id="create" target="_blank">Back</a>
+<a href="product-index.php" id="create">Back</a>
+ <br>
+
+{% if server_error|length >= 1 %}
+    {% for error in server_error %}
+        <p style="color: red">{{error}}</h5> </p>
+    {% endfor %}
+{% endif %}
+
 <h5 id="title_messge" style="color: red; display:none">
     <h5 id="location_messge" style="color: red; display:none">
         <h5 id="state_messge" style="color: red; display:none">
-            <h5 id="countries_messge" style="color: red; display:none">
             <h5 id="city_messge" style="color: red; display:none">
                 <h5 id="address_messge" style="color: red; display:none">
                     <h5 id="status_messge" style="color: red; display:none">
                         <h5 id="category_messge" style="color: red; display:none">
+                            <h5 id="img_messge" style="color: red; display:none">
 
-                        </h5>
-    <form name="insert" action="../../Controller/Products/ProductsController.php" method="post"   onsubmit="return Validation()"  enctype="multipart/form-data" id="myForm">
-        <table width="100%"  border="0">
-            <tr>
 
-                <th height="60" scope="row">Product Category :</th>
-                <td><select name="product_category" class="form-control " id="product_category">
-                        <option value="">Select Category</option>
-                        {% for value in categories %}
-                            {% if(value.id == data.category_id) %}
-                                <option value="{{ value.id }}" selected>{{ value.name }}</option>
-                            {% else %}
-                                <option value="{{ value.id }}">{{ value.name }}</option>
-                            {% endif %}
+                            </h5>
+                            <form name="insert" action="../../Controller/Products/ProductsController.php" method="post"  onsubmit="return Validation()" enctype="multipart/form-data" id="myForm">
+                                <table width="100%"  border="0">
+                                    <tr>
 
-                        {% endfor %}
-                    </select> </td>
-            </tr>
-            <tr>
-                <input type="hidden" name="product_id" value="{{ data.id }}" class="form-control" required  />
-                <th width="26%" height="60" scope="row">Product Title :</th>
-                <td width="74%"><input type="text" name="product_title" value="{{ data.title }}" id="title" class="form-control"   /></td>
-            </tr>
-            <tr>
-                <th width="26%" height="60" scope="row">Product Location :</th>
-                <td width="74%"><input type="text" name="product_location" value="{{ data.location }}" id="location" class="form-control"   /></td>
-            </tr>
-            <tr>
-                <th width="26%" height="60" scope="row">PostCode :</th>
-                <td width="74%"><input type="text" name="postcode" class="form-control" id="postcode" value="{{ data.postcode }}"  /></td>
-            </tr>
-            <tr>
-                <th height="60" scope="row">Countries :</th>
-                <td><select name="countries" class="form-control"  id="countries" onChange="getstate(this.value);">
-                        <option value="">Select Countries</option>
-                        {% for value in countries    %}
-                            {% if(value.id == data.countries) %}
-                                <option value="{{ value.id }}" selected>{{ value.name }}</option>
-                            {% else %}
-                                <option value="{{ value.id }}">{{ value.name }}</option>
-                            {% endif %}
+                                        <th height="60" scope="row">Product Category :</th>
+                                        <td><select name="product_category" id="product_category" class="form-control ">
+                                                <option value="">Select Category</option>
+                                                {% for value in categories %}
+                                                    {% if(value.id == data.category_id) %}
+                                                        <option value="{{ value.id }}" selected>{{ value.name }}</option>
+                                                    {% else %}
+                                                        <option value="{{ value.id }}">{{ value.name }}</option>
+                                                    {% endif %}
 
-                        {% endfor %}
-                    </select> </td>
-            </tr>
-            <tr>
-                <th height="60" scope="row">State :</th>
-                <td><select name="state" class="form-control " id="statelist"  onChange="getcity(this.value);">
-                        <option value="">Select State</option>
-                        {% for value in states %}
-                            {% if(value.id == data.state) %}
-                                <option value="{{ value.id }}" selected>{{ value.name }}</option>
-                            {% else %}
-                                <option value="{{ value.id }}">{{ value.name }}</option>
-                            {% endif %}
+                                                {% endfor %}
+                                            </select> </td>
+                                    </tr>
+                                    <tr><input type="hidden" name="product_id" value="{{ data.id }}" class="form-control" required  />
+                                        <th width="26%" height="60" scope="row">Product Title :</th>
+                                        <td width="74%"><input type="text" name="product_title" value="{{ data.title }}" id="title" class="form-control" /></td>
+                                    </tr>
+                                    <tr>
+                                        <th width="26%" height="60" scope="row">Product Location :</th>
+                                        <td width="74%"><input type="text" name="product_location" value="{{ data.location }}" id="location" class="form-control"   /></td>
+                                    </tr>
+                                    <tr>
+                                        <th width="26%" height="60" scope="row">PostCode :</th>
+                                        <td width="74%"><input type="text" name="postcode"  id="postcode"  value="{{ data.postcode }}" class="form-control"  /></td>
+                                    </tr>
+                                    <tr>
+                                        <th height="60" scope="row">Countries :</th>
+                                        <td><select name="countries" class="form-control" id="countries" onChange="getstate(this.value);">
+                                                <option value="">Select Countries</option>
+                                                {% for value in countries    %}
+                                                    {% if(value.id == data.countries_id) %}
+                                                        <option value="{{ value.id }}" selected>{{ value.name }}</option>
+                                                    {% else %}
+                                                        <option value="{{ value.id }}">{{ value.name }}</option>
+                                                    {% endif %}
 
-                        {% endfor %}
-                    </select> </td>
-            </tr>
-            <tr>
-                <th height="60" scope="row"> City :</th>
-                <td><select name="city"  id="city"   class="form-control ">
-                        <option value="">Select City</option>
-                        {% for value in cities %}
+                                                {% endfor %}
+                                            </select> </td>
+                                    </tr>
+                                    <tr>
+                                        <th height="60" scope="row">State :</th>
+                                        <td><select name="state" class="form-control " id="statelist" onChange="getcity(this.value);">
+                                                <option value="">Select State</option>
+                                                {% for value in states %}
+                                                    {% if(value.id == data.state_id) %}
+                                                        <option value="{{ value.id }}" selected>{{ value.name }}</option>
+                                                    {% else %}
+                                                        <option value="{{ value.id }}">{{ value.name }}</option>
+                                                    {% endif %}
 
-                            {% if(value.id == data.city) %}
-                                <option value="{{ value.id }}" selected>{{ value.name }}</option>
-                            {% else %}
-                                <option value="{{ value.id }}">{{ value.name }}</option>
-                            {% endif %}
-                        {% endfor %}
-                    </select> </td>
-            </tr>
+                                                {% endfor %}
+                                            </select> </td>
+                                    </tr>
+                                    <tr>
+                                        <th height="60" scope="row"> City :</th>
+                                        <td><select name="city"  id="city"  class="form-control ">
+                                                <option value="">Select City</option>
+                                                {% for value in cities %}
 
-            <tr>
-                <th width="26%" height="60" scope="row">Product Company :</th>
-                <td width="74%"><input type="text" name="product_compnay" value="{{ data.company_name }}"  id="product_compnay" class="form-control" /></td>
-            </tr>
+                                                    {% if(value.id == data.city_id) %}
+                                                        <option value="{{ value.id }}" selected>{{ value.name }}</option>
+                                                    {% else %}
+                                                        <option value="{{ value.id }}">{{ value.name }}</option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select> </td>
+                                    </tr>
 
-            <tr>
-                <th height="60" scop
-                    e="row" >Product Address :</th>
-                <td><textarea name= product_address class="form-control"  id="address">{{ data.address }}
-    </textarea></td>
-            <tr>
-                <th width="26%" height="60" scope="row">Product Image
-                <td width="74%">
-                <input type="file" name="product_img" value="" class="form-control" /></td>
+                                    <tr>
+                                        <th width="26%" height="60" scope="row">Product Company :</th>
+                                        <td width="74%"><input type="text" name="product_compnay" id="product_compnay"  value="{{ data.company_name }}" class="form-control"  /></td>
+                                    </tr>
 
-            </tr>
+                                    <tr>
+                                        <th height="60" scope="row" >Product Address :</th>
+                                        <td><textarea name= product_address  id="address" class="form-control" >{{ data.address }}</textarea></td>
+                                    <tr>
+                                        <th width="26%" height="60" scope="row">Product Image
+                                        <td width="74%">
+                                            <img class="img-thumbnail" src="http://vca.demoproject.aum/public/images/products/{{ data.img_path }}" alt="user avatar">
+                                            <input type="file" name="product_img" id="product_img" value="" class="form-control" /></td>
+                                    </tr>
 
-            <tr>
-                <th height="60" scope="row">Product Status :</th>
-                <td><select name="product_status" id="status"  class="form-control " >
-                        <option value="">Select</option>
-                        {% if(data.status==1) %}
-                            <option value="0">InActive</option>
-                            <option value="1" selected>Active</option>
-                        {% else %}
-                            <option value="0" selected>InActive</option>
-                            <option value="1">Active</option>
-                        {% endif %}
-                    </select> </td>
-            </tr>
-            <tr>
-                <th height="60" scope="row" >Product Description :</th>
-                <td><textarea name= product_description class="form-control"   id="product_description">{{ data.description }}
-    </textarea></td>
+                                    <tr>
+                                        <th height="60" scope="row">Product Status :</th>
+                                        <td><select name="product_status" id="status" class="form-control ">
+                                                {% if(data.status==1) %}
+                                                    <option value="0">InActive</option>
+                                                    <option value="1" selected>Active</option>
+                                                {% else %}
+                                                    <option value="0" selected>InActive</option>
+                                                    <option value="1">Active</option>
+                                                {% endif %}
+                                            </select> </td>
+                                    </tr>
+                                    <tr>
+                                        <th height="60" scope="row" >Product Description :</th>
+                                        <td><textarea name= product_description id="description" class="form-control" >{{ data.description }}</textarea></td>
 
-            </tr><!--  <tr>
+                                    </tr><!--  <tr>
         <th height="60" scope="row">Hobbies :</th>
         <td><input type="checkbox" name="hobbies" value="Read" required /> Read  &nbsp;
         <input type="checkbox" name="hobbies" value="traveling" required /> Traveling</td>
       </tr>-->
-            <tr>
-                <th height="60" scope="row">&nbsp;</th>
-                                <td><input type="submit" value="Update  " name="submit" class="btn-primary" /></td>
-            </tr>
-        </table>
-    </form>
-    <!-- card.// -->
-{% endblock %}
+                                    <tr>
+                                        <th height="60" scope="row">&nbsp;</th>
+                                        <td><input type="submit" value="Submit" id="submit_btns" name="submit" class="btn-primary" /></td>
+                                    </tr>
+                                </table>
+                            </form>
+                            <!-- card.// -->
+                            {% endblock %}
 
 
-{% block left_teaser %}
-    <h1>Index1</h1>
-{% endblock %}
+                            {% block left_teaser %}
+                                <h1>Index1</h1>
+                            {% endblock %}
 
-{% block footer %}
-{% endblock %}
+                            {% block footer %}
+                            {% endblock %}

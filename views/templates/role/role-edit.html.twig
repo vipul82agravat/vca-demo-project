@@ -4,60 +4,20 @@
 
 {% block head %}
 {{ parent() }}
-<head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <meta charset="utf-8">
-    <title>ASPL HRM Registration | DEMO</title>
-    <meta name="generator" content="Bootply" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <!--[if lt IE 9]>
-    <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <link href="css/styles.css" rel="stylesheet">
 
-    <script>
-        function Validation(){
+        <script src="http://vca.demoproject.aum/public/js/role.js"></script>
 
-            stat=1;
-            var name=$('#name').val();
-            var status=$('#status').val();
-
-            $('#name_messge').hide();
-            $('#status_messge').hide();
-
-            $('#name').css('border-color', 'green');
-            $('#status').css('border-color', 'green');;
-
-
-            if(name==""){
-                $('#name').css('border-color', 'red');
-                $("#name_messge").html("***Name is missing");
-                $('#name_messge').show();
-                stat=0;
-
-            }
-
-            if(status==""){
-                $('#status').css('border-color', 'red');
-                $("#status_messge").html("***Status is missing");
-                $('#status_messge').show();
-                stat=0;
-
-            }
-
-            if(stat==0){
-                console.log('aaa'+stat);
-                return false;
-            }
-
-        }
-    </script>
         {% set menuitem = 'users/menu.html.twig' %}
         {% include menuitem %}
     {% endblock %}
 {% block tableset %}
     <a href="role-index.php" id="create" target="_blank">Back</a>
+    <br>
+    {% if server_error|length >= 1 %}
+        {% for error in server_error %}
+            <p style="color: red">{{error}}</h5> </p>
+        {% endfor %}
+    {% endif %}
     <h5 id="status_messge" style="color: red; display:none"></h5>
     <h5 id="name_messge" style="color: red; display:none"></h5>
 <form name="insert" action="../../Controller/role/RoleController.php" method="post" onsubmit="return Validation()" enctype="multipart/form-data" id="myForm">

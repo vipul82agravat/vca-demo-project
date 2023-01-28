@@ -26,11 +26,11 @@ Auth::AuthUser();
 $masterObject = new Helpercls();
 $masterObject->verifyAuthUserToken();
 $id=$_GET['id'];
-$categoyDeleteData=$masterObject->delete('users',$id);
+$userDeleteData=$masterObject->delete('users',$id);
 
     if($categoyDeleteData['status']==1){
 
-            header('Location:../../views/users/user-index.php?message='.$categoyDeleteData['message']);
+            header('Location:../../views/users/user-index.php?error=0&message='.$categoyDeleteData['message']);
     }else{
-            header('Location:../../views/users/user-index.php?message='.$categoyDeleteData['message']);
+            header('Location:../../views/users/user-index.php?error=1&message='.$categoyDeleteData['message']);
     }

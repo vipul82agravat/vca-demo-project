@@ -5,7 +5,7 @@ include_once('../Helper/HelperClass.php');
 class UserLoginController extends Helpercls {
 
         /*
-        name of table for save userRegistration Details
+        name of table for get userRegistration Details
         */
       public $table='users';
       public $username;
@@ -13,7 +13,6 @@ class UserLoginController extends Helpercls {
       /*@return
        *Check the user login details if available then use is able to login
        * access the admin panel other wise redirct to login page again
-       *
        */
       public function userLogin(){
 
@@ -42,9 +41,9 @@ class UserLoginController extends Helpercls {
         *  status 1 it means Login Save Successfully'
         *  status 0 it means  Not able to Login'
         */
-      $UserLoginresponse=$userLogin->login($table,$data);
+      $userLoginresponse=$userLogin->login($table,$data);
 
-      $responseData=$UserLoginresponse['data'];
+      $responseData=$userLoginresponse['data'];
 
         if (mysqli_num_rows($responseData) > 0) {
             session_start();
@@ -55,7 +54,7 @@ class UserLoginController extends Helpercls {
                   if (mysqli_num_rows($responseData) > 0) {
                         $row = mysqli_fetch_assoc($responseData);
                         if($row['status']==0){
-                            header('Location:../views/users/user-login.php?message=You need to Active You Account First Please check you Mail Box');
+                            header('Location:../views/users/user-login.php?is_error=1&message=You need to Active You Account First Please check you Mail Box');
                             exit;
                         }
                         $username=$row['name'];
@@ -70,17 +69,17 @@ class UserLoginController extends Helpercls {
                     /*
                     * when user is try to loign with details at that time  updateUserSessionToken method is update the user session token in user table
                     * $table - tabe name to process the data
-                    * $data - it string for auth token information this detail will update
+                    * $tokendata - it string for auth token information this detail will update
                     * $id - this login user id so function check this token  for which user and update token in table
                     * this funcion call shen user is try to login
                     */
                   $tokenResponse=$userLogin->updateUserSessionToken($table,$tokendata,$id);
 
-             header('Location:../views/users/user-dashboard.php?message=Welcome User '.$username);
+             header('Location:../views/users/user-dashboard.php?is_error=0&message=Welcome User '.$username);
 
         }
         else{
-              header('Location:../views/users/user-login.php?message=Login Details  are not Match Please Create Account First..');
+              header('Location:../views/users/user-login.php?is_error=1&message=Login Details  are not Match Please Create Account First..');
         }
 
 

@@ -2,7 +2,7 @@
 use Helper\Master\HelperClass as Helpercls;
 include_once('../../Helper/HelperClass.php');
 
-class RoleController extends Helpercls {
+class  RoleController extends Helpercls {
 
     /*
     name of table for save role Details
@@ -13,6 +13,8 @@ class RoleController extends Helpercls {
      roleQueryData Details  return the string  for data value and clounm list for save role Details
     */
     public function roleQueryData(){
+
+        $this->formValidation();
 
         $role_name=$_POST['role_name'];
         $role_status=$_POST['role_status'];
@@ -33,6 +35,8 @@ class RoleController extends Helpercls {
     */
     public function roleUpdateQueryData(){
 
+        $this->formValidation();
+
         $role_name=$_POST['role_name'];
         $role_status=$_POST['role_status'];
         $status_code=$_POST['status_code'];
@@ -45,12 +49,53 @@ class RoleController extends Helpercls {
         return $roleDetails;
 
     }
+     /*
+    *formValidation(); is used to check the  require feild is not empty if it empty it return the back with error
+    * error is shwoing to user requre feild must be not left blank
+    */
+    public  function  formValidation(){
 
+        $role_name=$_POST['role_name'];
+        $status_code=$_POST['status_code'];
+        $role_status=$_POST['role_status'];
+
+
+        $error_message=[];
+        $is_error=0;
+
+        if(empty($role_name)){
+            $error_message[$is_error]="Please Enter Role Name";
+            $is_error++;
+        }
+        if(empty($status_code)){
+            $error_message[$is_error]="Please Select Role Status";
+            $is_error++;
+        }
+        if(empty($role_status)){
+            $error_message[$is_error]="Please Select Role Code";
+            $is_error++;
+        }
+
+
+        if( $is_error >=1) {
+            $error_string = implode(",", $error_message);
+            header('Location:../../views/role/role-add.php?is_error=0&server_error='.$error_string);
+            exit;
+        }
+        return true;
+
+    }
 }
 
     $roleObj = new RoleController;
     $table=$roleObj->table;
-
+    /*
+     * found th role it means update the role
+     * $get the if of role  in system
+     * update new records in base no id
+     * now data base table is update with new records
+     * check if role is set or not
+     */
     if(isset($_POST['role_id']) and $_POST['role_id']!=""){
 
         $id=$_POST['role_id'];
@@ -71,28 +116,35 @@ class RoleController extends Helpercls {
 
         if($roleUpdateResponse['status']==1){
 
-            header('Location:../../views/role/role-index.php?message='.$roleUpdateResponse['message']);
+            header('Location:../../views/role/role-index.php?is_error=0&message='.$roleUpdateResponse['message']);
         }else{
-            header('Location:../../views/role/role-index.php?message='.$roleUpdateResponse['message']);
+            header('Location:../../views/role/role-index.php?is_error=1&message='.$roleUpdateResponse['message']);
         }
 
         exit;
 
     }
+    /*
+    * check the type in post request this means type of role_date_filter and call this serach the role
+    *check the data ne between start and end date
+    * return the result is found
+    * if recrods is found at that time crate  role details
+    */
     if(isset($_POST['type']) and $_POST['type']!="" and $_POST['type']=="role_date_filter"){
         $start_date=$_POST['start_date'];
         $end_date=$_POST['end_date'];
 
         header('Location:../../views/role/role-index.php?start_date='.$start_date.'&end_date='.$end_date);
     }
-    //print_r($_POST);EXIT;
+
     $roledetails=$roleObj->roleQueryData();
     $column=$roledetails['column'];
     $values=$roledetails['values'];
+
     /*
     * call the helper class Store method for save the records in table
     * $table - name of the table which store the records
-    * $data - data values get form submit in registration form
+    * $data - data values get form submit in role form
     * $clounm -is set the clounm name of table which insert the records base on clounm
     *
     * response
@@ -106,9 +158,9 @@ class RoleController extends Helpercls {
 
             if($roleResponse['status']==1){
 
-                header('Location:../../views/role/role-index.php?message='.$roleResponse['message']);
+                header('Location:../../views/role/role-index.php?is_error=0&message='.$roleResponse['message']);
             }else{
-                header('Location:../../views/role/role-index.php?message='.$roleResponse['message']);
+                header('Location:../../views/role/role-index.php?is_error=1&message='.$roleResponse['message']);
             }
 
 

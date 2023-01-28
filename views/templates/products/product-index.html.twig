@@ -25,7 +25,9 @@
 
 {% block tableset %}
     {%  if(is_error==1) %}
-        <p style="color: green">{{ message }}</p>
+        <p style="color: red">{{ message }}</p>
+     {% else %}
+         <p style="color: green">{{ message }}</p>
     {%  endif %}
     <div class="row">
         <div class="col-sm-6">
@@ -47,14 +49,15 @@
         <tr>
             <th>ID</th>
             <th>Title</th>
+            <th>Image</th>
             <th>Category</th>
             <th>Location</th>
             <th>CompanyName</th>
             <th>State</th>
             <th>city</th>
-            <th>address</th>
+{#            <th>address</th>#}
             <th>status</th>
-            <th>Description</th>
+{#            <th>Description</th>#}
             <th>Action</th>
 
         </tr>
@@ -65,15 +68,16 @@
                      <tr>
                          <td>{{ user.id }}</td>
                         <td>{{ user.title }}</td>
+                         <td style="width: 111px;height: 77px;"><img class="img-thumbnail" src="http://vca.demoproject.aum/public/images/products/{{ user.img_path }}" alt="user avatar"></td>
                          <td>{{ user.catgory_name }}</td>
                         <td>{{ user.location }}</td>
                          <td>{{ user.company_name }}</td>
                         <td>{{ user.state }}</td>
                         <td>{{ user.city }}</td>
-                        <td>{{ user.address }}</td>
+{#                        <td>{{ user.address }}</td>#}
                          <td>{{ user.status }}</td>
-                         <td>{{ user.description }}</td>
-                        <td><a href="product-edit.php?id={{user.id}}">Edit</a> |<a href="product-view.php?id={{user.id}}">View</a> |<a href="product-delete.php?id={{user.id}}">Delete</a> </td>
+{#                         <td>{{ user.description }}</td>#}
+                        <td><a href="product-edit.php?id={{user.id}}">Edit</a> |<a href="product-view.php?id={{user.id}}">View</a> |<a onclick="return confirm('Are you Sure  Want to Delete This Record?')"  href="product-delete.php?id={{user.id}}">Delete</a> </td>
 
                      </tr>
         {% endfor %}

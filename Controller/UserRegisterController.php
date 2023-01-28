@@ -16,6 +16,8 @@ class UserRegisterController extends Helpercls{
     */
     public function userRegistration(){
 
+        $this->formValidation();
+
         $fname=$_POST['name'];
         $email=$_POST['email'];
         $password=md5($_POST['password']);
@@ -45,6 +47,8 @@ class UserRegisterController extends Helpercls{
      */
     public function userUpdateQueryDetails(){
 
+        $this->formValidation();
+
         $name=$_POST['name'];
         $status=$_POST['status'];
 
@@ -55,24 +59,66 @@ class UserRegisterController extends Helpercls{
         return $userDetails;
 
     }
+    /*
+    *formValidation is used to check the  require feild is not empty if it empty it return the back with error
+    * error is shwoing to user requre feild must be not left blank
+    */
+    public  function  formValidation(){
+
+        $fname=$_POST['name'];
+        $email=$_POST['email'];
+        $password=$_POST['password'];
+
+
+        $error_message=[];
+        $is_error=0;
+
+        if(empty($fname)){
+            $error_message[$is_error]="Please Enter UserName";
+            $is_error++;
+        }
+        if(empty($email)){
+            $error_message[$is_error]="Please Enter Email";
+            $is_error++;
+        }
+        if(!empty($email)){
+
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $error_message[$is_error] = "Invalid email format";
+            }
+
+        }else{
+            $error_message[$is_error]="Please Enter Password";
+            $is_error++;
+        }
+
+
+        if( $is_error >=1) {
+            $error_string = implode(",", $error_message);
+            header('Location:../../views/users/user-registration.php?is_error=0&server_error='.$error_string);
+            exit;
+        }
+        return true;
+
+    }
 
 
 }
-    $UserRegister = new UserRegisterController;
-    $table=$UserRegister->table;
+    $userRegister = new UserRegisterController;
+    $table=$userRegister->table;
 
     /*
      * ajax email checking or validation if type found
      */
     if(isset($_POST['type']) and $_POST['type']=='emailcheck'){
 
-        $userEmailDetails=$UserRegister->userEmailCheck();
+        $userEmailDetails=$userRegister->userEmailCheck();
         /*
         userEmailExists   return the respnose is user email is already exists or not
         return stastus 1 already exists
         status 0 not already exists
         */
-        $reponseEmailcheck=$UserRegister->userEmailExists($table,$userEmailDetails);
+        $reponseEmailcheck=$userRegister->userEmailExists($table,$userEmailDetails);
         if($reponseEmailcheck['status']==1){
            echo  $reponseEmailcheck['status']; exit;
         }else{
@@ -88,7 +134,7 @@ class UserRegisterController extends Helpercls{
      */
     if(isset($_POST['user_id']) and $_POST['user_id']!=""){
         $id=$_POST['user_id'];
-        $useuUpdaterQuery=$UserRegister->userUpdateQueryDetails();
+        $useuUpdaterQuery=$userRegister->userUpdateQueryDetails();
         $dataQuery=$useuUpdaterQuery['dataQuery'];
 
         /*
@@ -101,7 +147,7 @@ class UserRegisterController extends Helpercls{
        *  status 1 it means Records Update Successfully'
        *  status 0 it means  Records Not Update Successfully'
        */
-        $userUpdateResponse=$UserRegister->update($table,$dataQuery,$id);
+        $userUpdateResponse=$userRegister->update($table,$dataQuery,$id);
 
 
         if($userUpdateResponse['status']==1){
@@ -111,49 +157,59 @@ class UserRegisterController extends Helpercls{
                 $table='role_users';
                 $data=' WHERE user_id ='.$_POST['user_id'];
 
-                /*Get the category data base on user auth data
-                $id user login id it return all  user added category
-                $table - name of table for get the category data
+                /*Get the role data base on user auth data
+                $table - name of table for get the role data
                 $data the condition of get data base in user id
                 */
-                $userRoleDetails=$UserRegister->ShowConditionalBaseDetails($table,$data);
-                if (mysqli_num_rows($userRoleDetails['data']) >= 0) {
+                $userRoleDetails=$userRegister->ShowConditionalBaseDetails($table,$data);
+
+                if (mysqli_num_rows($userRoleDetails['data']) != 0) {
 
                     $row = mysqli_fetch_assoc($userRoleDetails['data']);
                     $id=$row['id'];
                     $dataQuery="role_id = '".$_POST['role_id']."'";
-                    $userRoleUpdateResponse=$UserRegister->update($table,$dataQuery,$id);
+
+                    /*if role data match then i will update role in user_id*/
+
+                    $userRoleUpdateResponse=$userRegister->update($table,$dataQuery,$id);
 
                 }else{
 
+                    /*if role data not match at hat time it add new records on role user table and set the role in user_id*/
+
                     $role_column='user_id,role_id';
                     $role_values="'".$_POST['user_id']."','".$_POST['role_id']."'";
-
-                    $roleUpdateRegisterResponse=$UserRegister->store($table,$role_column,$role_values);
+                    $roleUpdateRegisterResponse=$userRegister->store($table,$role_column,$role_values);
                 }
             }
-            $loginUserRole=$UserRegister->userRoleCheck(Auth::AuthUserId());
+
+            /*
+            * userRoleCheck method is usd to check login user role
+            * like login user is admin.super-admin ,etc
+            * it return role id
+            */
+            $loginUserRole=$userRegister->userRoleCheck(Auth::AuthUserId());
             if($loginUserRole==1){
-            header('Location:../../views/users/user-index.php?message='.$userUpdateResponse['message']);
+            header('Location:../../views/users/user-index.php?is_error=0&message='.$userUpdateResponse['message']);
             }else{
-                header('Location:../../views/users/user-dashboard.php?message='.$userUpdateResponse['message']);
+                header('Location:../../views/users/user-dashboard.php?is_error=0&message='.$userUpdateResponse['message']);
             }
         }else{
-            header('Location:../../views/users/user-index.php?message='.$userUpdateResponse['message']);
+            header('Location:../../views/users/user-index.php?is_error=1&message='.$userUpdateResponse['message']);
         }
 
         exit;
     }
 
-    $Registrationdetails=$UserRegister->userRegistration();
+    $Registrationdetails=$userRegister->userRegistration();
     $values=$Registrationdetails['values'];
     $column=$Registrationdetails['column'];
+
     /*
-    * chgeck the type in post request this means type of serach and call this form ajax request for serach the prodcut
-    * $_POST['serach_text']; get the string fors serach the check the  getProductDetails with like condtion
+    * check the type in post request this means type of user_date_filter and call this serach the user
+     *check the data ne between start and end date
     * return the result is found
-    * if recrods is found at that time crate html div in loop and greate the final html code
-    * and return this code on ajax reponse and set in view page
+    * if recrods is found at that time crate  users details
     */
 
     if(isset($_POST['type']) and $_POST['type']!="" and $_POST['type']=="user_date_filter"){
@@ -175,9 +231,9 @@ class UserRegisterController extends Helpercls{
      *  status 0 it means  Records Not Save Successfully'
      */
 
-    $UserRegisterResponse=$UserRegister->store($table,$column,$values);
+        $UserRegisterResponse=$userRegister->store($table,$column,$values);
 
-    if($UserRegisterResponse['status']==1){
+        if($UserRegisterResponse['status']==1){
 
 
 
@@ -186,6 +242,7 @@ class UserRegisterController extends Helpercls{
             $userdata=base64_encode($userdata);
             $links="http://vca.demoproject.aum/views/users/user-dashboard?user-data=".$userdata;
             $subject="User confirmation email For activate the account";
+            //html div for mail send in email
             $message="
                     <html>
                     <head>
@@ -206,18 +263,18 @@ class UserRegisterController extends Helpercls{
                     ";
 
 
-        /*
-       *sendMail  is used to send the mail to the user to helper class function to send mathod
-       * $email -email address to send the mail
-       * $name -name of user to send the mail
-       * $sbject -set the subject of mail send  lile password resert,account created etc.....
-       * $message -it body contect of mail to send to the user to action perpose
-       */
-        $userRegisterEamilResponse=$UserRegister->sendMail($email,$name,$message,$subject);
-        header('Location:../views/users/user-index.php?message='.$UserRegisterResponse['message']);
-    }else{
-        header('Location:../views/users/user-registration.php?message='.$UserRegisterResponse['message']);
-    }
+            /*
+           *sendMail  is used to send the mail to the user to helper class function to sendMail method
+           * $email -email address to send the mail
+           * $name -name of user to send the mail
+           * $subject -set the subject of mail send  lile password resert,account created etc.....
+           * $message -it body contect of mail to send to the user to action perpose
+           */
+        $userRegisterEamilResponse=$userRegister->sendMail($email,$name,$message,$subject);
+        header('Location:../views/users/user-index.php?is_error=0&message='.$userRegisterEamilResponse['message']);
+        }else{
+            header('Location:../views/users/user-registration.php?is_error=1&message='.$userRegisterEamilResponse['message']);
+        }
 
 
 ?>

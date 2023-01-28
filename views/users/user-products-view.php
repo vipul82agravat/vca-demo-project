@@ -10,21 +10,23 @@ $masterObject = new Helpercls();
 $id=$_GET['id'];
 $selectData="products.id as product_id,products.title as title,products.location as location,products.postcode as postcode,products.company_name as company_name,products.address as address,products.status as status,products.description as description,products.img as image,products.img_path as img_path,products.create_at as create_date,products.updated_at as update_date  ,categories.name as catgory_name,states.name as states_name,cities.city as city_name";
 $data=' WHERE products.id ='.$id;
+/*
+       * getProductDetails function used to get the product details with join data base on category,state,city
+       * $data pass and where condidtion if require
+       * $selectData select clounm list in response it pass alias name
+       * it return the resonsedata base on all three table
+ */
 
 $productData=$masterObject->getProductDetails($data,$selectData);
 $row="";
 if (mysqli_num_rows($productData['data']) > 0) {
     $row = mysqli_fetch_assoc($productData['data']);
-
 }
+
 $parameters = [
-    'is_error' => $is_error,
-    'status' =>$login_status,
-    'message'=>$message,
     'product'=>$row,
     'user_role'=>$loginUserRole,
     'product_id'=>$id
-
 ];
 
  // Render our view

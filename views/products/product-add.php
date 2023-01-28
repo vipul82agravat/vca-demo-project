@@ -8,32 +8,50 @@ $bootstrap_file=$_SERVER['DOCUMENT_ROOT'].'/views/bootstrap.php';;
 require_once $bootstrap_file;
 
     /*
-     * AuthUser method is chekck access the page before validate the Auth user have seesion is exits or nor
+     * AuthUser method is check access the page before validate the Auth user have session is exits or nor (login or not)
      * if session is  not  extis then  is not authorized then it will redirect to login page
      * if user session is valid and authorized then it will access the admin panel
-     * call the static class for checking
+     * call the static Auth class for checking
      */
 
     Auth::AuthUser();
 
     /*
-     * verifyAuthUserToken method is chekck access the page before validate the user is authorized or not
-     * it is validate the user id
-     * * it is validate the user token
+     * verifyAuthUserToken method is check access the page before validate the user is authorized or not
+     * it is validate the user id of login user
+     * * it is validate the user token of of login user
      * if user is not authorized then it will redirect to login page
      * if user is valid and authorized then it will access the admin panel
      */
+
+
     $masterObject = new Helpercls();
     $masterObject->verifyAuthUserToken();
-    $countries=$masterObject->ShowDetails('countries');
-    $states=$masterObject->ShowDetails('states');
-    $cities=$masterObject->ShowDetails('cities');
 
+    if(isset($_GET['server_error']) and $_GET['server_error']!=""){
+        $server_error=explode(',',$_GET['server_error']);
+    }
+
+    /*
+     * userRoleCheck method is usd to check login user role
+     * like login user is admin.super-admin ,etc
+     * it return role id
+     */
+    $loginUserRole=$masterObject->userRoleCheck(Auth::AuthUserId());
+
+    /*
+     * Auth::AuthUserId(); is used to get the current user login user_id
+     */
     $id=Auth::AuthUserId();
     $table='categories';
-    $data=" WHERE status='1' and user_id =".$id;
 
-    /*Get the category data base on user auth data
+    if($loginUserRole==1){
+         $data=" WHERE status='1'";
+    }else{
+        $data=" WHERE status='1' and user_id =".$id;
+    }
+
+    /*Get the category data base on user condtion
     $id user login id it return all  user added category
     $table - name of table for get the category data
     $data the condition of get data base in user id
@@ -63,6 +81,7 @@ require_once $bootstrap_file;
     *$countriesDataresult to get ShowDetails() master function to response data and store in variable
      *Process data in with id and name formate and push in array variable
     */
+    $countries=$masterObject->ShowDetails('countries');
     $countriesDataresult=array();
     if (mysqli_num_rows($countries['data']) >= 0) {
 
@@ -83,6 +102,7 @@ require_once $bootstrap_file;
     *$statesDataresult to get ShowDetails() master function to response data and store in variable
      *Process data in with id and name formate and push in array variable
     */
+    $states=$masterObject->ShowDetails('states');
     $statesDataresult=array();
     if (mysqli_num_rows($states['data']) >= 0) {
 
@@ -102,6 +122,7 @@ require_once $bootstrap_file;
     *$citiesDataresult to get ShowDetails() master function to response data and store in variable
      *Process data in with id and name formate and push in array variable
     */
+    $cities=$masterObject->ShowDetails('cities');
     $citiesDataresult=array();
     if (mysqli_num_rows($cities['data']) >= 0) {
 
@@ -118,17 +139,16 @@ require_once $bootstrap_file;
         }
 
     }
-    $loginUserRole=$masterObject->userRoleCheck(Auth::AuthUserId());
 
     $parameters = [
-            'is_error' => $is_error,
-            'status' =>$email,
-            'message'=>$message,
+            'is_error' => $_GET['is_error'],
+            'message'=>$_GET['message'],
             'categories'=>$categoriesDataresult,
             'countries'=>$countriesDataresult,
             'states'=>$statesDataresult,
             'cities'=>$citiesDataresult,
             'user_role'=>$loginUserRole,
+            'server_error'=>$server_error
         ];
      // Render our view
  echo $twig->render('/products/product-add.html.twig',$parameters);

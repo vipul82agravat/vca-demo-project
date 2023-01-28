@@ -4,7 +4,7 @@
 
 {% block head %}
     {{ parent() }}
-        <!-- DataTables CSS -->
+
         <link rel="stylesheet"
               href=
               "https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css">
@@ -21,15 +21,19 @@
     {%  endif %}
 
     {% include menuitem %}
+
 {% endblock %}
 
 {% block tableset %}
     {%  if(is_error==1) %}
+        <p style="color: red">{{ message }}</p>
+    {%  endif %}
+    {%  if(is_error==0) %}
         <p style="color: green">{{ message }}</p>
     {%  endif %}
     <div class="row">
         <div class="col-sm-6">
-            <a href="category-add.php" id="create" target="_blank">AddCategory</a>
+            <a href="category-add.php" id="create" >AddCategory</a>
         </div>
         <div class="col-sm-6" style="margin-left: 70%;">
             <form name="" action="../../Controller/Category/CategoryController.php" method="post">
@@ -62,7 +66,7 @@
             <td>{{ user.name }}</td>
             <td>{{ user.status }}</td>
             <td>{{ user.description }}</td>
-            <td><a href="category-edit.php?id={{ user.id }}">Edit</a> |<a href="category-view.php?id={{ user.id }}">View</a> |<a href="category-delete.php?id={{ user.id }}">Delete</a> </td>
+            <td><a href="category-edit.php?id={{ user.id }}">Edit</a> |<a href="category-view.php?id={{ user.id }}">View</a> |<a onclick="return confirm('Are you Sure  Want to Delete This Record?')"  href="category-delete.php?id={{ user.id }}">Delete</a> </td>
 
         </tr>
         {% endfor %}

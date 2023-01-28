@@ -15,6 +15,8 @@ include_once('../Helper/HelperClass.php');
          */
         public function userPasswrodResertDetails(){
 
+            $this->formValidation();
+
             $email=$_POST['email'];
             $token = bin2hex(random_bytes(16));
             $date= date("Y-m-d", strtotime("+ 1 day"));
@@ -28,12 +30,43 @@ include_once('../Helper/HelperClass.php');
             return $userpassDetails;
 
         }
+        /*
+    *formValidation is used to check the  require feild is not empty if it empty it return the back with error
+    * error is shwoing to user requre feild must be not left blank
+    */
+        public  function  formValidation(){
+
+
+            $email=$_POST['email'];
+
+              $is_error=0;
+
+
+            if(empty($email)){
+                $error_message[$is_error]="Please Enter Email";
+                $is_error++;
+            }
+            if(!empty($email)){
+
+                if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                    $error_message[$is_error] = "Invalid email format";
+                }
+            }
+
+            if( $is_error >=1) {
+                $error_string = implode(",", $error_message);
+                header('Location:../../views/users/user-forgot-password.php?is_error=0&server_error='.$error_string);
+                exit;
+            }
+            return true;
+
+        }
 
 
     }
-        $UserForgetPassword = new UserForgetPassowrdController;
-        $table=$UserForgetPassword->table;
-        $PasswrodResertDetails=$UserForgetPassword->userPasswrodResertDetails();
+        $userForgetPassword = new UserForgetPassowrdController;
+        $table=$userForgetPassword->table;
+        $PasswrodResertDetails=$userForgetPassword->userPasswrodResertDetails();
         $values=$PasswrodResertDetails['values'];
         $column=$PasswrodResertDetails['column'];
         $token=$PasswrodResertDetails['token'];
@@ -52,9 +85,9 @@ include_once('../Helper/HelperClass.php');
         *  status 0 it means  Records Not Save Successfully'
         */
 
-        $UserForgetPasswordResponse=$UserForgetPassword->store($table,$column,$values);
+        $userForgetPasswordResponse=$userForgetPassword->store($table,$column,$values);
 
-        if($UserForgetPasswordResponse['status']==1){
+        if($userForgetPasswordResponse['status']==1){
 
                 $userdata='token='.$token.'&email='.$email;
                 $userdata=base64_encode($userdata);
@@ -82,18 +115,19 @@ include_once('../Helper/HelperClass.php');
                 *sendMail  is used to send the mail to the user to helper class function to send mathod
                 * $email -email address to send the mail
                 * $name -name of user to send the mail
-                * $sbject -set the subject of mail send  lile password resert,account created etc.....
+                * $subject -set the subject of mail send  lile password resert,account created etc.....
                 * $message -it body contect of mail to send to the user to action perpose
                 */
-                $ForgetPasswordEamilResponse=$UserForgetPassword->sendMail($email,$name,$message,$subject);
 
-                if($ForgetPasswordEamilResponse['status']==1){
-                    header('Location:../views/users/user-registration.php?message='.$ForgetPasswordEamilResponse['message']);
+                $forgetPasswordEamilResponse=$userForgetPassword->sendMail($email,$name,$message,$subject);
+
+                if($forgetPasswordEamilResponse['status']==1){
+                    header('Location:../views/users/user-login.php?is_error=0&message='.$forgetPasswordEamilResponse['message']);
                 }else{
-                    header('Location:../views/users/user-registration.php?message='.$ForgetPasswordEamilResponse['message']);
+                    header('Location:../views/users/user-login.php?is_error=1&message='.$forgetPasswordEamilResponse['message']);
                 }
         }else{
-            header('Location:../views/users/user-forgot-password.php?message=Something Went Wrong');
+            header('Location:../views/users/user-forgot-password.php?is_error=1message=Something Went Wrong');
         }
 
 

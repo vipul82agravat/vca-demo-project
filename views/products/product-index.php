@@ -9,7 +9,7 @@ include_once('../../Helper/HelperClass.php');
 
 
     /*
-     * AuthUser method is chekck access the page before validate the Auth user have seesion is exits or nor
+     * AuthUser method is check access the page before validate the Auth user have seesion is exits or nor
      * if session is  not  extis then  is not authorized then it will redirect to login page
      * if user session is valid and authorized then it will access the admin panel
      * call the static class for checking
@@ -18,7 +18,7 @@ include_once('../../Helper/HelperClass.php');
     Auth::AuthUser();
 
     /*
-     * verifyAuthUserToken method is chekck access the page before validate the user is authorized or not
+     * verifyAuthUserToken method is check access the page before validate the user is authorized or not
      * it is validate the user id
      * * it is validate the user token
      * if user is not authorized then it will redirect to login page
@@ -26,7 +26,11 @@ include_once('../../Helper/HelperClass.php');
      */
     $masterObject = new Helpercls();
     $masterObject->verifyAuthUserToken();
-
+    /*
+     * userRoleCheck method is usd to check login user role
+     * like login user is admin.super-admin ,etc
+     * it return role id
+     */
     $loginUserRole=$masterObject->userRoleCheck(Auth::AuthUserId());
     $id=Auth::AuthUserId();
 
@@ -48,18 +52,14 @@ include_once('../../Helper/HelperClass.php');
         }
 
     }
-    //echo $data; exit;
 
-    /*Get the category data base on user auth data
-    $id user login id it return all  user added category
-    $table - name of table for get the category data
-    $data the condition of get data base in user id
+    /*Get $selectData id query string of get data form table base on clounm list
     */
     $selectData="products.id as product_id,products.title as title,products.location as location,products.postcode as postcode,products.company_name as company_name,products.address as address,products.status as status,products.description as description,products.img as image,products.img_path as img_path,products.create_at as create_date,products.updated_at as update_date  ,categories.name as catgory_name,states.name as states_name,cities.city as city_name";
-    //    $productData=$masterObject->rightJoinData($table1,$table2,'id','category_id',$data,$selectData);
+
     /*
     * getProductDetails function used to get the product details with join data base on category,state,city
-    * $data pass and where condidtion if require
+    * $data pass and where condition if require
     * $selectData select clounm list in response it pass alias name
     * it return the resonsedata base on all three table
     */
@@ -100,9 +100,8 @@ include_once('../../Helper/HelperClass.php');
 
     }
     $parameters = [
-        'is_error' => $is_error,
-        'status' =>1,
-        'message'=>$message,
+        'is_error' => $_GET['is_error'],
+        'message'=>$_GET['message'],
         'row'=>$result,
         'user_role'=>$loginUserRole,
         'start_date'=>($start_date) ? $start_date : "",

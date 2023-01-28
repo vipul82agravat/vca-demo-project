@@ -7,7 +7,7 @@ $bootstrap_file=$_SERVER['DOCUMENT_ROOT'].'/views/bootstrap.php';;
 require_once $bootstrap_file;
 
 /*
- * AuthUser method is chekck access the page before validate the Auth user have seesion is exits or nor
+ * AuthUser method is check access the page before validate the Auth user have seesion is exits or nor (user login or not)
  * if session is  not  extis then  is not authorized then it will redirect to login page
  * if user session is valid and authorized then it will access the admin panel
  * call the static class for checking
@@ -24,6 +24,11 @@ Auth::AuthUser();
  */
 $masterObject = new Helpercls();
 $masterObject->verifyAuthUserToken();
+/*
+* userRoleCheck method is usd to check login user role
+* like login user is admin.super-admin ,etc
+* it return role id
+*/
 $loginUserRole=$masterObject->userRoleCheck(Auth::AuthUserId());
 
 
@@ -38,9 +43,9 @@ if (mysqli_num_rows($userShowData['data']) > 0) {
 $table='role';
 $data=" WHERE status='1'";
 
-/*Get the category data base on user auth data
-$id user login id it return all  user added category
-$table - name of table for get the category data
+/*Get the role data base on user auth data
+$id user login id it return all  user added role
+$table - name of table for get the role data
 $data the condition of get data base in user id
 */
 $roleData=$masterObject->ShowConditionalBaseDetails($table,$data);
@@ -59,9 +64,8 @@ if (mysqli_num_rows($roleData['data']) > 0) {
 }
 
 $parameters = [
-    'is_error' => $is_error,
-    'status' =>$email,
-    'message'=>$message,
+    'is_error' => $_GET['is_error'],
+    'message'=>$_GET['message'],
     'data'=>$row,
     'role_data'=>$role_result,
     'user_role'=>$userRole,

@@ -4,12 +4,8 @@
 
 {% block head %}
     {{ parent() }}
-    <head>
-        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-        <meta charset="utf-8">
-        <title>ASPL HRM Registration | DEMO</title>
-        <meta name="generator" content="Bootply" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
         <link href="css/bootstrap.min.css" rel="stylesheet">
         <!--[if lt IE 9]>
         <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -51,7 +47,7 @@
 {% endblock %}
 
 {% block tableset %}
-    <a href="product-index.php" id="create" target="_blank">Back</a>
+    <a href="product-index.php" id="create">Back</a>
 
     <form name="insert" action="../../Controller/Products/ProductsController.php" method="post" enctype="multipart/form-data" id="myForm">
         <table width="100%"  border="0">
@@ -88,7 +84,7 @@
                 <td><select name="countries" class="form-control"  readonly onChange="getstate(this.value);">
                         <option value="">Select Countries</option>
                         {% for value in countries    %}
-                            {% if(value.id == data.countries) %}
+                            {% if(value.id == data.countries_id) %}
                                 <option value="{{ value.id }}" selected>{{ value.name }}</option>
                             {% else %}
                                 <option value="{{ value.id }}">{{ value.name }}</option>
@@ -102,7 +98,7 @@
                 <td><select name="state" class="form-control " id="statelist" readonly onChange="getcity(this.value);">
                         <option value="">Select State</option>
                         {% for value in states %}
-                            {% if(value.id == data.state) %}
+                            {% if(value.id == data.state_id) %}
                                 <option value="{{ value.id }}" selected>{{ value.name }}</option>
                             {% else %}
                                 <option value="{{ value.id }}">{{ value.name }}</option>
@@ -117,7 +113,7 @@
                         <option value="">Select City</option>
                         {% for value in cities %}
 
-                            {% if(value.id == data.city) %}
+                            {% if(value.id == data.city_id) %}
                                 <option value="{{ value.id }}" selected>{{ value.name }}</option>
                             {% else %}
                                 <option value="{{ value.id }}">{{ value.name }}</option>
@@ -134,11 +130,11 @@
             <tr>
                 <th height="60" scope="row" >Product Address :</th>
                 <td><textarea name= product_address class="form-control"  readonly>{{ data.address }}
-    </textarea></td>
+                </textarea></td>
             <tr>
                 <th width="26%" height="60" scope="row">Product Image
                 <td width="74%">
-
+                    <img class="img-thumbnail" src="http://vca.demoproject.aum/public/images/products/{{ data.img_path }}" alt="user avatar">
                 </td>
             </tr>
 
@@ -160,11 +156,7 @@
                 <td><textarea name= product_description class="form-control"  readonly>{{ data.description }}
     </textarea></td>
 
-            </tr><!--  <tr>
-        <th height="60" scope="row">Hobbies :</th>
-        <td><input type="checkbox" name="hobbies" value="Read" required /> Read  &nbsp;
-        <input type="checkbox" name="hobbies" value="traveling" required /> Traveling</td>
-      </tr>-->
+            </tr>
             <tr>
                 <th height="60" scope="row">&nbsp;</th>
 {#                <td><input type="submit" value="Update  " name="submit" class="btn-primary" /></td>#}

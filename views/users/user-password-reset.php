@@ -13,7 +13,7 @@ require_once $bootstrap_file;
      $masterObject = new Helpercls();
 
     /*
-     * resetPasswordLinksStatus check the password resert link is active or expire id exripre can not change the password
+     * resetPasswordLinksStatus check the password resert link is active or expire iF exripre can not change the password
      * $token -token whrn try to forget passowrd it return in paramter
      * $email - check the which user have require to change the password
      * $data is encode is we need to de code before send the paramters

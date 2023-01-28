@@ -37,17 +37,21 @@ $categoyShowData=$masterObject->ShowIdBaseDetails('categories',$id);
            $description= $row['description'];
 
     }
+if(isset($_GET['server_error']) and $_GET['server_error']!=""){
+    $server_error=explode(',',$_GET['server_error']);
+}
+
 
 $parameters = [
-    'is_error' => $is_error,
-    'status' =>$email,
-    'message'=>$message,
+    'is_error' => $_GET['is_error'],
+    'message'=>$_GET['message'],
     'id'=>$id,
     'name'=>$name,
     'status'=>$status,
     'description'=>$description,
     'data'=>$row,
-    'user_role'=>$loginUserRole
+    'user_role'=>$loginUserRole,
+    'server_error'=>$server_error
 ];
 
  // Render our view

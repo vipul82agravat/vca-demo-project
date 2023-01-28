@@ -77,13 +77,13 @@ $categoyData=$masterObject->ShowConditionalBaseDetails($table,$data);
         }
 }
 $parameters = [
-    'is_error' => $is_error,
-    'status' =>$email,
-    'message'=>$message,
+    'is_error' => $_GET['is_error'],
+    'message'=>$_GET['message'],
     'row'=>$result,
     'user_role'=>$loginUserRole,
     'start_date'=>($start_date) ? $start_date : "",
     'end_date'=>($end_date) ? $end_date : ""
 ];
+
  // Render our view
  echo $twig->render('/category/category-index.html.twig',$parameters);

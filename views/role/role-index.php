@@ -9,7 +9,7 @@ require_once $bootstrap_file;
 
 
 /*
- * AuthUser method is chekck access the page before validate the Auth user have seesion is exits or nor
+ * AuthUser method is check access the page before validate the Auth user have seesion is exits or nor (login or not)
  * if session is  not  extis then  is not authorized then it will redirect to login page
  * if user session is valid and authorized then it will access the admin panel
  * call the static class for checking
@@ -36,19 +36,19 @@ $masterObject->verifyAuthUserToken();
         $data=" WHERE role.create_at BETWEEN '".$start_date."' AND '".$end_date."'";
 
     }
-/*Get the category data base on user auth data
-$id user login id it return all  user added category
-$table - name of table for get the category data
+/*Get the $roleData data base on user auth condtion
+$id user login id it return all  user added role
+$table - name of table for get the role data
 $data the condition of get data base in user id
 */
 
-$categoyData=$masterObject->ShowConditionalBaseDetails($table,$data);
+$roleData=$masterObject->ShowConditionalBaseDetails($table,$data);
 
- if (mysqli_num_rows($categoyData['data']) > 0) {
+ if (mysqli_num_rows($roleData['data']) > 0) {
 
         $i=0;
         $result=array();
-        while ($row = mysqli_fetch_array($categoyData['data'])) {
+        while ($row = mysqli_fetch_array($roleData['data'])) {
 
                 $result[$i]['id']=$row['id'];
                 $result[$i]['name']=$row['name'];
@@ -63,10 +63,16 @@ $categoyData=$masterObject->ShowConditionalBaseDetails($table,$data);
 
 
 }
+    /*
+    * userRoleCheck method is usd to check login user role
+    * like login user is admin.super-admin ,etc
+    * it return role id
+    */
+$loginUserRole=$masterObject->userRoleCheck(Auth::AuthUserId());
 $parameters = [
-    'is_error' => $is_error,
-    'status' =>$email,
-    'message'=>$message,
+    'is_error' => $_GET['is_error'],
+    'message'=>$_GET['message'],
+    'user_role'=>$loginUserRole,
     'row'=>$result,
     'start_date'=>($start_date) ? $start_date : "",
     'end_date'=>($end_date) ? $end_date : ""

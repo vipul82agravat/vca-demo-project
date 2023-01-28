@@ -25,12 +25,12 @@ include_once('../Helper/HelperClass.php');
 
         }
     }
-    $UserResetPassword = new UserResetPasswordController;
-    $table=$UserResetPassword->table;
+    $userResetPassword = new UserResetPasswordController;
+    $table=$userResetPassword->table;
 
-    $ResetPasswprdDetails=$UserResetPassword->userPasswordData();
-    $email=$ResetPasswprdDetails['email'];
-    $updateData=$ResetPasswprdDetails['data'];
+    $resetPasswprdDetails=$userResetPassword->userPasswordData();
+    $email=$resetPasswprdDetails['email'];
+    $updateData=$resetPasswprdDetails['data'];
     $conditionData="email='$email'";
 
     /*
@@ -45,12 +45,12 @@ include_once('../Helper/HelperClass.php');
      *  status 0 it means  Records Not Update Successfully'
      */
 
-$UserPasswordResetResponse=$UserResetPassword->passwordUpdate($table,$updateData,$conditionData);
+    $userPasswordResetResponse=$userResetPassword->passwordUpdate($table,$updateData,$conditionData);
 
-    if($UserPasswordResetResponse['status']==1){
-        header('Location:../views/users/user-index.php?message='.$UserRegisterResponse['message']);
+    if($userPasswordResetResponse['status']==1){
+        header('Location:../views/users/user-index.php?is_error=0&message='.$userPasswordResetResponse['message']);
     }else{
-        header('Location:../views/users/user-login.php?message='.$UserRegisterResponse['message']);
+        header('Location:../views/users/user-login.php?is_error=1&message='.$userPasswordResetResponse['message']);
     }
 
 

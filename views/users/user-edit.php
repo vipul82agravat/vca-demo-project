@@ -60,9 +60,8 @@ if (mysqli_num_rows($roleData['data']) > 0) {
 }
 
 $parameters = [
-    'is_error' => $is_error,
-    'status' =>$email,
-    'message'=>$message,
+    'is_error' => $_GET['is_error'],
+    'message'=>$_GET['message'],
     'data'=>$row,
     'role_data'=>$role_result,
     'user_role'=>$userRole,

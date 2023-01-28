@@ -38,9 +38,8 @@ $categoyShowData=$masterObject->ShowIdBaseDetails('categories',$id);
     }
 
 $parameters = [
-    'is_error' => $is_error,
-    'status' =>$email,
-    'message'=>$message,
+    'is_error' => $_GET['is_error'],
+    'message'=>$_GET['message'],
     'id'=>$id,
     'name'=>$name,
     'status'=>$status,

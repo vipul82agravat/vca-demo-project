@@ -38,12 +38,13 @@ class GetStateCityController extends Helpercls{
     $getStateCity = new GetStateCityController;
     $table_states=$getStateCity->table_states;
     $table_city=$getStateCity->table_city;
+
     if(isset($_POST['coutry_id']) and $_POST['coutry_id']!=""){
         $getStateQuery=$getStateCity->getState();
 
-        /*
+        /* use ajax call for  state
       * ShowConditionalBaseDetails is used to get the data base Conditional like user_id=1, name = test etc...
-      * $table - name og table to get the data form table
+      * $table - name of table to get the data form table
       * $data is set the Condition when call this function
       * process data base on Condition and given the response
         return the state information base on country
@@ -67,9 +68,9 @@ class GetStateCityController extends Helpercls{
     if(isset($_POST['state_id']) and $_POST['state_id']!=""){
         $getCityQuery=$getStateCity->getCity();
 
-        /*
-      * ShowConditionalBaseDetails is used to get the data base Conditional like user_id=1, name = test etc...
-      * $table - name og table to get the data form table
+        /* use ajax call for get city
+       * ShowConditionalBaseDetails is used to get the data base Conditional like user_id=1, name = test etc...
+      * $table - name of table to get the data form table
       * $data is set the Condition when call this function
       * process data base on Condition and given the response
          *  return the city information base on state

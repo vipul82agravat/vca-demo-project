@@ -23,14 +23,14 @@ Auth::AuthUser();
  * if user is not authorized then it will redirect to login page
  * if user is valid and authorized then it will access the admin panel
  */
-$check_auth = new Helpercls();
-$check_auth->verifyAuthUserToken();
+$masterObject = new Helpercls();
+$masterObject->verifyAuthUserToken();
 $id=$_GET['id'];
-$categoyDeleteData=$check_auth->delete('categories',$id);
+$categoyDeleteData=$masterObject->delete('categories',$id);
 
     if($categoyDeleteData['status']==1){
 
-            header('Location:../../views/category/category-index.php?message='.$categoyDeleteData['message']);
+            header('Location:../../views/category/category-index.php?is_error=0&message='.$categoyDeleteData['message']);
     }else{
-            header('Location:../../views/category/category-index.php?message='.$categoyDeleteData['message']);
+            header('Location:../../views/category/category-index.php?is_error=1&message='.$categoyDeleteData['message']);
     }

@@ -1,4 +1,4 @@
-<?php
+ <?php
 
 use Helper\Master\HelperClass as Helpercls;
 use Helper\Auth\AuthCheck as Auth;
@@ -51,7 +51,7 @@ if(isset($_GET['user-data']) and $_GET['user-data']!=""){
 
 }
 /*
- * AuthUser method is chekck access the page before validate the Auth user have seesion is exits or nor
+ * AuthUser method is check access the page before validate the Auth user have seesion is exits or nor
  * if session is  not  extis then  is not authorized then it will redirect to login page
  * if user session is valid and authorized then it will access the admin panel
  * call the static class for checking
@@ -69,6 +69,12 @@ if(isset($_GET['user-data']) and $_GET['user-data']!=""){
     $masterObject = new Helpercls();
     $masterObject->verifyAuthUserToken();
 
+
+    /*
+    * userRoleCheck method is usd to check login user role
+    * like login user is admin.super-admin ,etc
+    * it return role id
+    */
     $loginUserRole=$masterObject->userRoleCheck(Auth::AuthUserId());
 
     $userData=$masterObject->ShowDetails('users');
@@ -141,8 +147,8 @@ if(isset($_GET['user-data']) and $_GET['user-data']!=""){
     }
 
 $parameters = [
-    'is_error' => $is_error,
-    'message'=>$message,
+    'is_error' => $_GET['is_error'],
+    'message'=>$_GET['message'],
     'totalUser'=>$totalUser,
     'activeUser'=>$activeUser,
     'inActiveUser'=>$inActiveUser,

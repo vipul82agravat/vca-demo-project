@@ -13,15 +13,30 @@
         <script src=
                 "https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js">
         </script>
+            <script>
+                function ConfirmDelete()
+                {
+                    if (confirm("Delete Account?")){
+                        return true;
+                    }else{
+                        return  false;
+                    }
+                }
+            </script>
+    {%  if(user_role==1) %}
+        {% set menuitem = 'users/menu.html.twig' %}
+    {% else %}
+        {% set menuitem = 'users/admin-menu.html.twig' %}
+    {%  endif %}
 
-    {% set menuitem = 'users/menu.html.twig' %}
     {% include menuitem %}
-
 
 {% endblock %}
 
 {% block tableset %}
     {%  if(is_error==1) %}
+        <p style="color: red">{{ message }}</p>
+    {% else %}
         <p style="color: green">{{ message }}</p>
     {%  endif %}
 
@@ -59,7 +74,7 @@
             <td>{{ user.name }}</td>
             <td>{{ user.status }}</td>
             <td>{{ user.description }}</td>
-            <td><a href="role-edit.php?id={{ user.id }}">Edit</a> |<a href="role-view.php?id={{ user.id }}">View</a> |<a href="role-delete.php?id={{ user.id }}">Delete</a> </td>
+            <td><a href="role-edit.php?id={{ user.id }}">Edit</a> |<a href="role-view.php?id={{ user.id }}">View</a> |<a onclick="return confirm('Are you Sure  Want to Delete This Record?')" href="role-delete.php?id={{ user.id }}">Delete</a> </td>
 
         </tr>
         {% endfor %}

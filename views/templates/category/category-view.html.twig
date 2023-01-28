@@ -4,17 +4,7 @@
 
 {% block head %}
 {{ parent() }}
-<head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <meta charset="utf-8">
-    <title>ASPL HRM Registration | DEMO</title>
-    <meta name="generator" content="Bootply" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <!--[if lt IE 9]>
-    <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <link href="css/styles.css" rel="stylesheet">
+
     {%  if(user_role==1) %}
     {% set menuitem = 'users/menu.html.twig' %}
     {% else %}
@@ -33,14 +23,6 @@
         <input type="hidden" name="category_id" value="{{id}}" class="form-control" required  />
         <td width="74%"><input type="text" name="category_name" value="{{name}}" class="form-control" required  readonly /></td>
     </tr>
-    <tr>
-        <th width="26%" height="60" scope="row">Category Image
-
-        <td width="74%">
-            <img class="img-thumbnail" src="http://www.jquery-az.com/html/images/banana.jpg" alt="user avatar">
-            <input type="file" name="category_img" value="" class="form-control" readonly /></td>
-    </tr>
-
     <tr>
         <th height="60" scope="row">Category Status :</th>
         <td><select name="category_status" class="form-control " readonly>

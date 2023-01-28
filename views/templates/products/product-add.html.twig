@@ -4,125 +4,7 @@
 
 {% block head %}
 {{ parent() }}
-<head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <meta charset="utf-8">
-    <title>ASPL HRM Registration | DEMO</title>
-    <meta name="generator" content="Bootply" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <!--[if lt IE 9]>
-    <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <link href="css/styles.css" rel="stylesheet">
-    <script>
-        function getstate(val) {
-
-            $.ajax({
-                type: "POST",
-                url: "http://vca.demoproject.aum/Controller/GetStateCityController.php",
-                data:'coutry_id='+val,
-                success: function(data){
-                    $("#statelist").html(data);
-                }
-            });
-        }
-        function getcity(val) {
-
-            $.ajax({
-                type: "POST",
-                url: "http://vca.demoproject.aum/Controller/GetStateCityController.php?type=city",
-                data:'state_id='+val,
-                success: function(data){
-                    $("#city").html(data);
-                }
-            });
-        }
-        function Validation(){
-
-            stat=1;
-            var product_category=$('#product_category').val();
-            var title=$('#title').val();
-            var location=$('#location').val();
-            var state=$('#statelist').val();
-            var city=$('#city').val();
-            var address=$('#address').val();
-            var status=$('#status').val();
-
-            $('#title_messge').hide();
-            $('#location_messge').hide();
-            $('#state_messge').hide();
-            $('#city_messge').hide();
-            $('#address_messge').hide();
-            $('#status_messge').hide();
-
-            $('#title').css('border-color', 'green');
-            $('#product_category').css('border-color', 'green');
-            $('#location').css('border-color', 'green');
-            $('#statelist').css('border-color', 'green');;
-            $('#city').css('border-color', 'green');;
-            $('#addres').css('border-color', 'green');
-            $('#status').css('border-color', 'green');;
-
-
-            if(product_category==""){
-                $('#product_category').css('border-color', 'red');
-                $("#category_messge").html("***Category is missing");
-                $('#category_messge').show();
-                stat=0;
-
-            }
-
-            if(title==""){
-                $('#title').css('border-color', 'red');
-                $("#title_messge").html("***Title is missing");
-                $('#title_messge').show();
-                stat=0;
-
-            }
-            if(location==""){
-                $('#location').css('border-color', 'red');
-                $("#location_messge").html("***Location is missing");
-                $('#location_messge').show();
-                stat=0;
-
-            }
-            if(state==""){
-                $('#statelist').css('border-color', 'red');
-                $("#state_messge").html("***State is missing");
-                $('#state_messge').show();
-                stat=0;
-
-            }
-            if(city==""){
-                $('#city').css('border-color', 'red');
-                $("#city_messge").html("***City is missing");
-                $('#city_messge').show();
-                stat=0;
-
-            }
-            if(address==""){
-                $('#name').css('border-color', 'red');
-                $("#usercheck").html("***Address is missing");
-                $('#usercheck').show();
-                stat=0;
-
-            }
-            if(status==""){
-                $('#status').css('border-color', 'red');
-                $("#status_messge").html("***Status is missing");
-                $('#status_messge').show();
-                stat=0;
-
-            }
-
-            if(stat==0){
-                console.log('aaa'+stat);
-                return false;
-            }
-
-        }
-    </script>
+    <script src="http://vca.demoproject.aum/public/js/products.js"></script>
     {%  if(user_role==1) %}
         {% set menuitem = 'users/menu.html.twig' %}
     {% else %}
@@ -133,15 +15,22 @@
 {% endblock %}
 
 {% block tableset %}
-<a href="product-index.php" id="create" target="_blank">Back</a>
-
+<a href="product-index.php" id="create">Back</a>
+    <br><br>
+    {% if server_error|length >= 1 %}
+        {% for error in server_error %}
+            <p style="color: red">{{error}}</h5> </p>
+        {% endfor %}
+    {% endif %}
         <h5 id="title_messge" style="color: red; display:none">
         <h5 id="location_messge" style="color: red; display:none">
-            <h5 id="state_messge" style="color: red; display:none">
-            <h5 id="city_messge" style="color: red; display:none">
-             <h5 id="address_messge" style="color: red; display:none">
-             <h5 id="status_messge" style="color: red; display:none">
-             <h5 id="category_messge" style="color: red; display:none">
+         <h5 id="state_messge" style="color: red; display:none">
+          <h5 id="city_messge" style="color: red; display:none">
+          <h5 id="address_messge" style="color: red; display:none">
+          <h5 id="status_messge" style="color: red; display:none">
+          <h5 id="category_messge" style="color: red; display:none">
+          <h5 id="img_messge" style="color: red; display:none">
+
 
     </h5>
 <form name="insert" action="../../Controller/Products/ProductsController.php" method="post"  onsubmit="return Validation()" enctype="multipart/form-data" id="myForm">
@@ -211,7 +100,7 @@
     </textarea></td>
     <tr>
         <th width="26%" height="60" scope="row">Product Image
-        <td width="74%"><input type="file" name="product_img" value="" class="form-control" /></td>
+        <td width="74%"><input type="file" name="product_img" id="product_img" value="" class="form-control" /></td>
     </tr>
 
     <tr>

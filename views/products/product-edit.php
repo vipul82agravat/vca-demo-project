@@ -8,13 +8,14 @@ $bootstrap_file=$_SERVER['DOCUMENT_ROOT'].'/views/bootstrap.php';;
 require_once $bootstrap_file;
 
 /*
- * AuthUser method is chekck access the page before validate the Auth user have seesion is exits or nor
+ * AuthUser method is check access the page before validate the Auth user have sesion is exits or nor
  * if session is  not  extis then  is not authorized then it will redirect to login page
  * if user session is valid and authorized then it will access the admin panel
- * call the static class for checking
+ * call the static  Auth class for checking
  */
 
 Auth::AuthUser();
+
 
 /*
  * verifyAuthUserToken method is chekck access the page before validate the user is authorized or not
@@ -23,17 +24,32 @@ Auth::AuthUser();
  * if user is not authorized then it will redirect to login page
  * if user is valid and authorized then it will access the admin panel
  */
+
 $masterObject = new Helpercls();
 $masterObject->verifyAuthUserToken();
-$countries=$masterObject->ShowDetails('countries');
-$states=$masterObject->ShowDetails('states');
-$cities=$masterObject->ShowDetails('cities');
 
-$id=1;
+if(isset($_GET['server_error']) and $_GET['server_error']!=""){
+    $server_error=explode(',',$_GET['server_error']);
+}
+
+
+    /*
+     * userRoleCheck method is usd to check login user role
+     * like login user is admin.super-admin ,etc
+     * it return role id
+     */
+
+$loginUserRole=$masterObject->userRoleCheck(Auth::AuthUserId());
+
+$id=Auth::AuthUserId();
 $table='categories';
-$data=' WHERE user_id ='.$id;
+if($loginUserRole==1){
+    $data=" WHERE status='1'";
+}else{
+    $data=" WHERE status='1' and user_id =".$id;
+}
 
-/*Get the category data base on user auth data
+/*Get the category data base on user auth Condition data
 $id user login id it return all  user added category
 $table - name of table for get the category data
 $data the condition of get data base in user id
@@ -63,81 +79,84 @@ if (mysqli_num_rows($categoriesData['data']) >= 0) {
 *$countriesDataresult to get ShowDetails() master function to response data and store in variable
  *Process data in with id and name formate and push in array variable
 */
-$countriesDataresult=array();
-if (mysqli_num_rows($countries['data']) >= 0) {
+    $countries=$masterObject->ShowDetails('countries');
+    $countriesDataresult=array();
+    if (mysqli_num_rows($countries['data']) >= 0) {
 
-    $i=0;
+        $i=0;
 
-    while ($row = mysqli_fetch_array($countries['data'])) {
+        while ($row = mysqli_fetch_array($countries['data'])) {
 
-        $countriesDataresult[$i]['id']=$row['id'];
-        $countriesDataresult[$i]['name']=$row['name'];
-        $countriesDataresult[$i]['countryCode']=$row['countryCode'];
-        $i++;
+            $countriesDataresult[$i]['id']=$row['id'];
+            $countriesDataresult[$i]['name']=$row['name'];
+            $countriesDataresult[$i]['countryCode']=$row['countryCode'];
+            $i++;
+
+        }
 
     }
-
-}
 
 /*Get the states data
 *$statesDataresult to get ShowDetails() master function to response data and store in variable
  *Process data in with id and name formate and push in array variable
 */
-$statesDataresult=array();
-if (mysqli_num_rows($states['data']) >= 0) {
+    $states=$masterObject->ShowDetails('states');
+    $statesDataresult=array();
+    if (mysqli_num_rows($states['data']) >= 0) {
 
-    $i=0;
+        $i=0;
 
-    while ($row = mysqli_fetch_array($states['data'])) {
+        while ($row = mysqli_fetch_array($states['data'])) {
 
-        $statesDataresult[$i]['id']=$row['id'];
-        $statesDataresult[$i]['name']=$row['name'];
-        $statesDataresult[$i]['countryCode']=$row['countryCode'];
-        $i++;
+            $statesDataresult[$i]['id']=$row['id'];
+            $statesDataresult[$i]['name']=$row['name'];
+            $statesDataresult[$i]['countryCode']=$row['countryCode'];
+            $i++;
+
+        }
 
     }
-
-}
 /*Get the cities data
 *$citiesDataresult to get ShowDetails() master function to response data and store in variable
  *Process data in with id and name formate and push in array variable
 */
-$citiesDataresult=array();
-if (mysqli_num_rows($cities['data']) >= 0) {
+    $cities=$masterObject->ShowDetails('cities');
+    $citiesDataresult=array();
+    if (mysqli_num_rows($cities['data']) >= 0) {
 
-    $i=0;
+        $i=0;
 
-    while ($row = mysqli_fetch_array($cities['data'])) {
+        while ($row = mysqli_fetch_array($cities['data'])) {
 
-        $citiesDataresult[$i]['id']=$row['id'];
-        $citiesDataresult[$i]['name']=$row['city'];
-        $citiesDataresult[$i]['state_id']=$row['state_id'];
+            $citiesDataresult[$i]['id']=$row['id'];
+            $citiesDataresult[$i]['name']=$row['city'];
+            $citiesDataresult[$i]['state_id']=$row['state_id'];
 
-        $i++;
+            $i++;
+
+        }
 
     }
 
-}
+    $id=$_GET['id'];
+    $row="";
+    $ProductShowData=$masterObject->ShowIdBaseDetails('products',$id);
+    if (mysqli_num_rows($ProductShowData['data']) > 0) {
+        $row = mysqli_fetch_assoc($ProductShowData['data']);
 
-$id=$_GET['id'];
-$row="";
-$ProductShowData=$masterObject->ShowIdBaseDetails('products',$id);
-if (mysqli_num_rows($ProductShowData['data']) > 0) {
-    $row = mysqli_fetch_assoc($ProductShowData['data']);
+    }
+    $parameters = [
+        'is_error' => $_GET['is_error'],
+        'message'=>$_GET['message'],
+        'categories'=>$categoriesDataresult,
+        'countries'=>$countriesDataresult,
+        'states'=>$statesDataresult,
+        'cities'=>$citiesDataresult,
+        'data'=>$row,
+        'user_role'=>$loginUserRole,
+        'server_error'=>$server_error
 
-}
-$loginUserRole=$masterObject->userRoleCheck(Auth::AuthUserId());
-$parameters = [
-    'is_error' => $is_error,
-    'status' =>$email,
-    'message'=>$message,
-    'categories'=>$categoriesDataresult,
-    'countries'=>$countriesDataresult,
-    'states'=>$statesDataresult,
-    'cities'=>$citiesDataresult,
-    'data'=>$row,
-    'user_role'=>$loginUserRole
-];
+    ];
 
  // Render our view
- echo $twig->render('/products/product-edit.html.twig',$parameters);
+     echo $twig->render('/products/product-edit.html.twig',$parameters);

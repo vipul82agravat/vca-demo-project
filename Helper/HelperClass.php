@@ -180,12 +180,18 @@ class HelperClass {
                 $connection=$this->connection;
 
                 $query='UPDATE '.$table.' SET '. $data .'  WHERE id='.$id;
-
-                $save=mysqli_query($connection,$query);
-
+                //echo $query;exit;
+                $update=mysqli_query($connection,$query);
+                if($update){
                 return $arr=['status'=>1,
                             'message'=>'Records Updated Successfully'
                             ];
+                }else{
+                    return $arr=['status'=>0,
+                        'message'=>'Records Not Updated Successfully'
+                    ];
+
+                }
 
             }
             catch(Exception $e){
@@ -484,7 +490,7 @@ class HelperClass {
         try {
 
             $connection=$this->connection;
-            $query="SELECT $selectData FROM `categories` RIGHT JOIN  products ON products.category_id=categories.id LEFT JOIN  states ON products.state=states.id LEFT JOIN  cities ON products.city=cities.id".$data;
+            $query="SELECT $selectData FROM `categories` RIGHT JOIN  products ON products.category_id=categories.id LEFT JOIN  states ON products.state_id=states.id LEFT JOIN  cities ON products.city_id=cities.id".$data;
             $res=mysqli_query($connection,$query);
             if(mysqli_num_rows($res) >1 ){
 
@@ -585,11 +591,11 @@ class HelperClass {
         public function sendMail($email,$name,$message,$subject){
             //Create an instance; passing `true` enables exceptions
 
-            $mail = new PHPMailer(true);
+            $mail = new PHPMailer(false);
 
             try {
                 //Server settings
-                $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+                $mail->SMTPDebug = SMTP::DEBUG_OFF;                      //Enable verbose debug output
                 $mail->isSMTP();                                            //Send using SMTP
                 $mail->Host       = 'smtp.mailtrap.io';                     //Set the SMTP server to send through
                 $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
@@ -607,11 +613,17 @@ class HelperClass {
                 $mail->Body    = $message;
                 $mail->AltBody = 'Mail Send';
 
-                $mail->send();
-
+                //$mail->send();
+                if($mail->send()){
                 return $mailresponse=['status'=>1,
                                       'message'=>'Eamil Message has been sent'
                                      ];
+                }
+                else{
+                    return $mailresponse=['status'=>0,
+                        'message'=>'Eamil Message has been not sent'
+                    ];
+                }
             } catch (Exception $e) {
                 //echo "Email Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
             }
@@ -633,7 +645,7 @@ namespace Helper\Auth;
             session_start();
             if(!isset($_SESSION['username']) and $_SESSION['username']==null){
 
-                header("Location: user-login.php?message=Must be Login first");
+                header("Location: user-login.php?is_error=1&message=Must be Login first to access the account");
                 exit();
 
             }

@@ -6,9 +6,10 @@ include_once('../../Helper/HelperClass.php');
 
 $bootstrap_file=$_SERVER['DOCUMENT_ROOT'].'/views/bootstrap.php';;
 require_once $bootstrap_file;
-$login_status=1;
+
+    $login_status=1;
     /*
-     * AuthUser method is chekck access the page before validate the Auth user have seesion is exits or nor
+     * AuthUser method is checl access the page before validate the Auth user have seesion is exits or nor user is login or not
      * if session is  not  extis then  is not authorized then it will redirect to login page
      * if user session is valid and authorized then it will access the admin panel
      * call the static class for checking
@@ -25,6 +26,11 @@ $login_status=1;
     */
     $masterObject = new Helpercls();
     $masterObject->verifyAuthUserToken();
+    /*
+* userRoleCheck method is usd to check login user role
+* like login user is admin.super-admin ,etc
+* it return role id
+*/
     $loginUserRole=$masterObject->userRoleCheck(Auth::AuthUserId());
     $data=null;
     if(isset($_GET['start_date']) and  $_GET['start_date'] !=""){
@@ -55,9 +61,9 @@ $login_status=1;
         }
     }
     $parameters = [
-        'is_error' => $is_error,
+        'is_error' => $_GET['is_error'],
         'status' =>$login_status,
-        'message'=>$message,
+        'message'=>$_GET['message'],
         'row'=>$result,
         'user_role'=>$loginUserRole,
         'start_date'=>($start_date) ? $start_date : "",
