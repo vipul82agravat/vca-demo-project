@@ -200,14 +200,9 @@ class UserRegisterController extends Helpercls{
 
         exit;
     }
-
-    $Registrationdetails=$userRegister->userRegistration();
-    $values=$Registrationdetails['values'];
-    $column=$Registrationdetails['column'];
-
     /*
     * check the type in post request this means type of user_date_filter and call this serach the user
-     *check the data ne between start and end date
+    *check the data ne between start and end date
     * return the result is found
     * if recrods is found at that time crate  users details
     */
@@ -219,6 +214,11 @@ class UserRegisterController extends Helpercls{
         header('Location:../../views/users/user-index.php?start_date='.$start_date.'&end_date='.$end_date);
         exit;
     }
+    $Registrationdetails=$userRegister->userRegistration();
+    $values=$Registrationdetails['values'];
+    $column=$Registrationdetails['column'];
+
+
     /*
      * call the helper class Store method for save the records in table
      * $table - name of the table which store the records

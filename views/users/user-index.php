@@ -67,7 +67,8 @@ require_once $bootstrap_file;
         'row'=>$result,
         'user_role'=>$loginUserRole,
         'start_date'=>($start_date) ? $start_date : "",
-        'end_date'=>($end_date) ? $end_date : ""
+        'end_date'=>($end_date) ? $end_date : "",
+        'menu_status_user'=>'active'
 
     ];
         // Render our view

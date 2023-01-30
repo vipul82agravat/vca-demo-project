@@ -75,7 +75,8 @@ $parameters = [
     'user_role'=>$loginUserRole,
     'row'=>$result,
     'start_date'=>($start_date) ? $start_date : "",
-    'end_date'=>($end_date) ? $end_date : ""
+    'end_date'=>($end_date) ? $end_date : "",
+    'menu_status_role' => 'active'
 ];
  // Render our view
  echo $twig->render('/role/role-index.html.twig',$parameters);

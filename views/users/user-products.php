@@ -9,7 +9,7 @@ require_once $bootstrap_file;
 $masterObject = new Helpercls();
 
 $selectData="products.id as product_id,products.title as title,products.location as location,products.postcode as postcode,products.company_name as company_name,products.address as address,products.status as status,products.description as description,products.img as image,products.img_path as img_path,products.create_at as create_date,products.updated_at as update_date  ,categories.name as catgory_name,states.name as states_name,cities.city as city_name";
-$data=" ORDER BY products.create_at DESC;";
+$data=" where products.status='1' ORDER BY products.create_at DESC;";
         /*
         * getProductDetails function used to get the product details with join data base on category,state,city
         * $data pass and where condidtion if require

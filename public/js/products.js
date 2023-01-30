@@ -1,52 +1,56 @@
 
-        $( document ).ready(function() {
-            $('#search_pro_data').focusout(function(){
-                var search_text = $(this).val();
+    $(document).ready(function(){
 
-                $.ajax({
-                    method:"POST",
-                    url: "http://vca.demoproject.aum/Controller/Products/ProductsController.php",
-                    data:{search_text:search_text, type:'serach'},
-                    success: function(data){
-                            $('#search_messge').html('Serach Data');
-                            $('.product_list').hide();
-                            $('#hr_id').css("display","none"));
-                            $('.product_add').html(data);
-                    }
-                });
+        $('#search_pro_data').focusout(function(){
+            var search_text = $(this).val();
 
-            });
-
-        });
-         $(document).ready(function(){
-            $('#product_img').change(function(){
-                var memberImgfl = $("#product_img");
-                var lg = memberImgfl[0].files.length; // get Files length
-                var memberProfiles = memberImgfl[0].files;
-                var totalflsize = 0;
-                var ext = $('#product_img').val().split('.').pop().toLowerCase();
-                var validFileExtensions = ['jpeg', 'jpg', 'png'];
-                $('#img_messge').hide();
-                if ($.inArray(ext, validFileExtensions) == -1) {
-                    $("#img_messge").html("Ony allow this Extensions 'jpeg', 'jpg', 'png'!");
-                    $('#img_messge').show();
-                    $(':input[type="submit"]').prop('disabled', true);
-                }
-                if (lg > 0) {
-
-                    var picsize = (this.files[0].size);
-
-                    $(':input[type="submit"]').prop('disabled', false);
-                    if (picsize > 50768){
-                        $("#img_messge").html("Sorry!! Max allowed image size is 32 kb");
-                        $('#img_messge').show();
-                        $(':input[type="submit"]').prop('disabled', true);
-                    }
-
+            $.ajax({
+                method:"POST",
+                url: "http://vca.demoproject.aum/Controller/Products/ProductsController.php",
+                data:{search_text:search_text, type:'serach'},
+                success: function(data){
+                    $('#search_messge').html('Serach Data');
+                    $('.product_list').hide();
+                    $('#hr_id').css("display","none");
+                    $('.product_add').html(data);
                 }
             });
         });
 
+
+
+        $('#product_img').change(function(){
+        var memberImgfl = $("#product_img");
+        var lg = memberImgfl[0].files.length; // get Files length
+        var memberProfiles = memberImgfl[0].files;
+        var totalflsize = 0;
+        var ext = $('#product_img').val().split('.').pop().toLowerCase();
+        var validFileExtensions = ['jpeg', 'jpg', 'png'];
+        $('#img_messge').hide();
+        if ($.inArray(ext, validFileExtensions) == -1) {
+            $("#img_messge").html("Ony allow this Extensions 'jpeg', 'jpg', 'png'!");
+            $('#img_messge').show();
+            $(':input[type="submit"]').prop('disabled', true);
+        }
+        if (lg > 0) {
+
+            var picsize = (this.files[0].size);
+
+            $(':input[type="submit"]').prop('disabled', false);
+            if (picsize > 50768){
+                $("#img_messge").html("Sorry!! Max allowed image size is 32 kb");
+                $('#img_messge').show();
+                $(':input[type="submit"]').prop('disabled', true);
+            }
+
+        }
+        });
+    });
+        function checkLength(el) {
+            if (el.value.length != 6) {
+                alert("length must be exactly 6 characters")
+            }
+        }
         function getstate(val) {
 
             $.ajax({

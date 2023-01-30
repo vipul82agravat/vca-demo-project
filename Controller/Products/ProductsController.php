@@ -60,7 +60,7 @@ class ProductsController extends Helpercls {
     */
     public function productsUpdateQueryData(){
 
-        $this->formValidation();
+        //$this->formValidation();
 
         $fileName = basename($_FILES["product_img"]["name"]);
         $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
@@ -115,7 +115,6 @@ class ProductsController extends Helpercls {
         $city=$_POST['city'];
         $status=$_POST['product_status'];
 
-
         $error_message=[];
         $is_error=0;
 
@@ -149,7 +148,6 @@ class ProductsController extends Helpercls {
             $is_error++;
         }
 
-
         if( $is_error >=1) {
             $error_string = implode(",", $error_message);
             header('Location:../../views/products/product-add.php?is_error=0&server_error='.$error_string);
@@ -168,7 +166,7 @@ class ProductsController extends Helpercls {
      */
     if(isset($_POST['product_id']) and $_POST['product_id']!=""){
 
-        //print_r($_POST);exit;
+
         $id=$_POST['product_id'];
         $productUpdatedetails=$productsObj->productsUpdateQueryData();
         $dataQuery=$productUpdatedetails['dataQuery'];
@@ -258,6 +256,7 @@ class ProductsController extends Helpercls {
         $end_date=$_POST['end_date'];
 
         header('Location:../../views/products/product-index.php?start_date='.$start_date.'&end_date='.$end_date);
+        exit;
     }
 
     $productdetails=$productsObj->productsQueryData();

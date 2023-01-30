@@ -82,7 +82,8 @@ $parameters = [
     'row'=>$result,
     'user_role'=>$loginUserRole,
     'start_date'=>($start_date) ? $start_date : "",
-    'end_date'=>($end_date) ? $end_date : ""
+    'end_date'=>($end_date) ? $end_date : "",
+    'menu_status_category' => 'active'
 ];
 
  // Render our view

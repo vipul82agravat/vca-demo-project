@@ -5,6 +5,7 @@
 {% block head %}
 {{ parent() }}
     <script src="http://vca.demoproject.aum/public/js/products.js"></script>
+
     {%  if(user_role==1) %}
         {% set menuitem = 'users/menu.html.twig' %}
     {% else %}
@@ -113,7 +114,7 @@
     </tr>
     <tr>
         <th height="60" scope="row" >Product Description :</th>
-        <td><textarea name= product_description id="description" class="form-control" >
+        <td><textarea onblur="checkLength(this)" name= product_description id="description" class="form-control" >
     </textarea></td>
 
     </tr><!--  <tr>

@@ -159,7 +159,9 @@ $parameters = [
     'status'=>($row['status']==1) ? "Active" : "InActive",
     'role'=>$role_name,
     'user_role'=>$loginUserRole,
-    'id'=>$id
+    'id'=>$id,
+    'menu_status_dashboard'=>'active',
+
 ];
 
  // Render our view
