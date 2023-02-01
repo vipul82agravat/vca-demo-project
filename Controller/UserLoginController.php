@@ -46,10 +46,6 @@ class UserLoginController extends Helpercls {
       $responseData=$userLoginresponse['data'];
 
         if (mysqli_num_rows($responseData) > 0) {
-            session_start();
-             $token = bin2hex(random_bytes(16));
-             $_SESSION['username'] = $_POST['email'];
-             $_SESSION['token'] = $token;
 
                   if (mysqli_num_rows($responseData) > 0) {
                         $row = mysqli_fetch_assoc($responseData);
@@ -57,6 +53,10 @@ class UserLoginController extends Helpercls {
                             header('Location:../views/users/user-login.php?is_error=1&message=You need to Active You Account First Please check you Mail Box');
                             exit;
                         }
+                      session_start();
+                      $token = bin2hex(random_bytes(16));
+                      $_SESSION['username'] = $_POST['email'];
+                      $_SESSION['token'] = $token;
                         $username=$row['name'];
                         $id=$row['id'];
                         $_SESSION['user_id'] = $id;
@@ -71,7 +71,7 @@ class UserLoginController extends Helpercls {
                     * $table - tabe name to process the data
                     * $tokendata - it string for auth token information this detail will update
                     * $id - this login user id so function check this token  for which user and update token in table
-                    * this funcion call shen user is try to login
+                    * this funcion call when user is try to login
                     */
                   $tokenResponse=$userLogin->updateUserSessionToken($table,$tokendata,$id);
 

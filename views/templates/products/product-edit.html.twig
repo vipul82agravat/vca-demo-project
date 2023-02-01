@@ -120,8 +120,10 @@
                                         <th width="26%" height="60" scope="row">Product Image
                                         <td width="74%">
                                             <img class="img-thumbnail" src="http://vca.demoproject.aum/public/images/products/{{ data.img_path }}" alt="user avatar">
-                                            <input type="file" name="product_img" id="product_img" value="" class="form-control" /></td>
+{#                                            <input type="file" name="product_img[]" id="product_img" value="" multiple class="form-control" /></td>#}
+                                            <input type="file" name="product_img" id="product_img" value=""  class="form-control" /></td>
                                     </tr>
+
 
                                     <tr>
                                         <th height="60" scope="row">Product Status :</th>
@@ -139,7 +141,8 @@
                                         <th height="60" scope="row" >Product Description :</th>
                                         <td><textarea name= product_description id="description" class="form-control" >{{ data.description }}</textarea></td>
 
-                                    </tr><!--  <tr>
+                                    </tr>
+                                    <!--  <tr>
         <th height="60" scope="row">Hobbies :</th>
         <td><input type="checkbox" name="hobbies" value="Read" required /> Read  &nbsp;
         <input type="checkbox" name="hobbies" value="traveling" required /> Traveling</td>

@@ -1,0 +1,97 @@
+{% extends "master_layout.html" %}
+
+{% block title %}{% endblock %}
+
+{% block head %}
+{{ parent() }}
+
+    <script src="http://vca.demoproject.aum/public/js/role.js"></script>
+    {% set menuitem = 'users/menu.html.twig' %}
+    {% include menuitem %}
+{% endblock %}
+
+{% block tableset %}
+    <a href="ads-index.php" id="create" target="_blank">Back</a>
+    <br>
+    {% if server_error|length >= 1 %}
+        {% for error in server_error %}
+            <p style="color: red">{{error}}</h5> </p>
+        {% endfor %}
+    {% endif %}
+    <h5 id="status_messge" style="color: red; display:none"></h5>
+        <h5 id="name_messge" style="color: red; display:none"></h5>
+
+<form name="insert" action="../../Controller/ads/AdsController.php"  onsubmit="return Validation()"  method="post" enctype="multipart/form-data" id="myForm">
+<table width="100%"  border="0">
+    <tr>
+
+        <th height="60" scope="row">Select  Ads Product:</th>
+        <td><select name="product_id" id="product_id" class="form-control ">
+                <option value="">Select Product</option>
+                {% for value in products %}
+                    <option value="{{ value.id }}">{{ value.name }}</option>
+              {% endfor %}
+            </select> </td>
+    </tr>
+    <tr>
+        <th height="60" scope="row">Ads Position :</th>
+        <td><select name="ads_position"  id="ads_position" class="form-control ">
+                <option value="" selected> Select Position</option>
+                {% for value in ads_position %}
+
+                    <option value="{{ value }}" >{{ value }}</option>
+                {% endfor %}
+            </select> </td>
+    </tr>
+     <tr>
+        <th height="60" scope="row">AdsSort Number :</th>
+        <td><select name="ads_sort_number"  id="ads_sort_number" class="form-control ">
+                <option value="" selected> Select Sort Number</option>
+                {% for value in ads_sort_number %}
+
+                        <option value="{{ value }}" >{{ value }}</option>
+                {% endfor %}
+                </select> </td>
+    </tr>
+    <tr>
+        <th width="26%" height="60" scope="row">Ads Start-Date:</th>
+        <td width="74%"><input type="date" name="start_date" id="start_date" value="" class="form-control"  /></td>
+    </tr>
+    <tr>
+        <th width="26%" height="60" scope="row">Ads End-Date:</th>
+        <td width="74%"><input type="date" name="end_date" id="end_date" value="" class="form-control"  /></td>
+    </tr>
+
+    <tr>
+        <th height="60" scope="row">Ads Status :</th>
+        <td><select name="ads_status"  id="status" class="form-control ">
+            <option value="">Select</option>
+            <option value="1" selected>Active</option>
+            <option value="0" >InActive</option>
+        </select> </td>
+    </tr>
+    <tr>
+        <th height="60" scope="row" >Ads Description :</th>
+        <td><textarea name="ads_description" class="form-control" >
+        </textarea></td>
+    </tr><!--  <tr>
+        <th height="60" scope="row">Hobbies :</th>
+        <td><input type="checkbox" name="hobbies" value="Read" required /> Read  &nbsp;
+        <input type="checkbox" name="hobbies" value="traveling" required /> Traveling</td>
+      </tr>-->
+    <tr>
+        <th height="60" scope="row">&nbsp;</th>
+        <td><input type="submit" value="Submit" name="submit" class="btn-primary" /></td>
+    </tr>
+</table>
+</form>
+<!-- card.// -->
+{% endblock %}
+
+
+{% block left_teaser %}
+<h1>Index1</h1>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}

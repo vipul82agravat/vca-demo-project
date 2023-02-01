@@ -26,7 +26,7 @@ Auth::AuthUser();
  */
 $masterObject = new Helpercls();
 $masterObject->verifyAuthUserToken();
-$loginUserRole=$masterObject->userRoleCheck(Auth::AuthUserId());
+
 /*
  * check userRoleCheck  this function what is the role of given user id
  * it return the number or  id  of role
@@ -53,6 +53,7 @@ $loginUserRole=$masterObject->userRoleCheck(Auth::AuthUserId());
         }
 
     }
+    //echo $data;
 /*Get the category data base on user auth data
 $id user login id it return all  user added category
 $table - name of table for get the category data
@@ -60,7 +61,7 @@ $data the condition of get data base in user id
 */
 
 $categoyData=$masterObject->ShowConditionalBaseDetails($table,$data);
-
+  //print_r($categoyData);exit;
  if (mysqli_num_rows($categoyData['data']) > 0) {
 
         $i=0;

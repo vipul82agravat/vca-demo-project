@@ -1,10 +1,10 @@
-{% extends "master_layout.html" %}
+    {% extends "master_layout.html" %}
 
 {% block title %}{% endblock %}
 
 {% block head %}
     {{ parent() }}
-
+        <!-- DataTables CSS -->
         <link rel="stylesheet"
               href=
               "https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css">
@@ -21,54 +21,49 @@
     {%  endif %}
 
     {% include menuitem %}
-
 {% endblock %}
 
 {% block tableset %}
     {%  if(is_error==1) %}
         <p style="color: red">{{ message }}</p>
-    {%  endif %}
-    {%  if(is_error==0) %}
-        <p style="color: green">{{ message }}</p>
+     {% else %}
+         <p style="color: green">{{ message }}</p>
     {%  endif %}
     <div class="row">
         <div class="col-sm-6">
-            <a href="category-add.php" id="create" >AddCategory</a>
+{#            <a href="product-add.php" id="create" target="_blank">AddProducts</a>#}
         </div>
         <div class="col-sm-6" style="margin-left: 70%;">
-            <form name="" action="../../Controller/Category/CategoryController.php" method="post">
-                StartDate: <input type="date" name="start_date" value={{ start_date }} minlength="6"  required />
-                EndDate: <input type="date" name="end_date"  value={{ end_date }} = minlength="6"  required />
-                <input type="hidden" name="type"  value="category_date_filter" minlength="6" class="form-control" required />
-                <input type="submit" value="Search" name="submit" class="btn-primary" />
+            <form name="" action="../../Controller/Products/ProductsController.php" method="post">
+            StartDate: <input type="date" name="start_date" value={{ start_date }} minlength="6"  required />
+            EndDate: <input type="date" name="end_date"  value={{ end_date }} = minlength="6"  required />
+            <input type="hidden" name="type"  value="product_comment_date_filter" minlength="6" class="form-control" required />
+            <input type="submit" value="Search" name="submit" class="btn-primary" />
             </form>
         </div>
 
     </div>
     <br>
-
-    <table id="tableID" class="display nowrap">
+       <table id="tableID" class="display nowrap">
         <thead>
         <tr>
             <th>ID</th>
-            <th>Name</th>
-            <th>status</th>
-            <th>Description</th>
-            <th>Action</th>
+            <th>ProductName</th>
+            <th>comments</th>
+          <th>Action</th>
 
         </tr>
         </thead>
         <tbody>
-        {% for key, user in row %}
+        {% for key, comment in row %}
 
-             <tr>
-              <td>{{ user.id }}</td>
-            <td>{{ user.name }}</td>
-            <td>{{ user.status }}</td>
-            <td>{{ user.description }}</td>
-            <td><a href="category-edit.php?id={{ user.id }}">Edit</a> |<a href="category-view.php?id={{ user.id }}">View</a> |<a onclick="return confirm('Are you Sure  Want to Delete This Record?')"  href="category-delete.php?id={{ user.id }}">Delete</a> </td>
+                     <tr>
+                         <td>{{ comment.number }}</td>
+                         <td>{{ comment.product_name }}</td>
+                         <td>{{ comment.comments }}</td>
+                        <td><a href="product-comment-view.php?id={{comment.id}}">View</a> |<a onclick="return confirm('Are you Sure  Want to Delete This Record?')"  href="product-comment-delete.php?id={{comment.id}}">Delete</a> </td>
 
-        </tr>
+                     </tr>
         {% endfor %}
 
         </tbody>
@@ -89,6 +84,10 @@
     <!-- card.// -->
 {% endblock %}
 
+
+{% block left_teaser %}
+    <h1>Index1</h1>
+{% endblock %}
 
 {% block footer %}
     <br>

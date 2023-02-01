@@ -14,7 +14,7 @@ require_once $bootstrap_file;
  * call the static class for checking
  */
 
-Auth::AuthUser();
+    //Auth::AuthUser();
 
 /*
  * verifyAuthUserToken method is chekck access the page before validate the user is authorized or not
@@ -25,6 +25,9 @@ Auth::AuthUser();
  */
 $masterObject = new Helpercls();
 $masterObject->verifyAuthUserToken();
+/*
+ * Get the current user login role like it adimin,superadmin ,user,etc..
+ */
 $loginUserRole=$masterObject->userRoleCheck(Auth::AuthUserId());
 
 $id=$_GET['id'];

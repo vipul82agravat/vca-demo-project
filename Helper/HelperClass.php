@@ -58,6 +58,10 @@ class HelperClass {
                 return $e."error on get details form table ".$table;
             }
         }
+        /*
+         * ShowDetails function is used to  get the all records form the given table
+         * $table -name of the table to get the records
+         */
         public function ShowDetails($table){
             try{
             $connection=$this->connection;
@@ -74,6 +78,11 @@ class HelperClass {
                 return $e."error on save time";
             }
         }
+        /*
+       * ShowIdBaseDetails function is used to  get the all records form the given table base on id or condtion
+       * $table -name of the table to get the records
+       * $id  pass the id of where condtion
+       */
         public function ShowIdBaseDetails($table,$id){
             try{
             $connection=$this->connection;
@@ -172,6 +181,12 @@ class HelperClass {
                 return $e."error on save time";
             }
         }
+        /*
+         * update function is used to  update records in table
+         * $table -name of the table to update records
+         * $data -set the update clounm name and value for update
+         * $id - pass id for update the this id records is update with new records
+         */
         public function update($table,$data,$id){
             try{
 
@@ -180,7 +195,6 @@ class HelperClass {
                 $connection=$this->connection;
 
                 $query='UPDATE '.$table.' SET '. $data .'  WHERE id='.$id;
-                //echo $query;exit;
                 $update=mysqli_query($connection,$query);
                 if($update){
                 return $arr=['status'=>1,
@@ -198,6 +212,11 @@ class HelperClass {
                 return $e."error on update time";
             }
         }
+        /* passwordUpdate upadte the password when resert new password
+         *table -name of table for update the password
+         * $data for new password details
+         * $condition for update the which email have update the password in line condtion
+         */
         public function passwordUpdate($table,$data,$condition){
             try{
 
@@ -352,6 +371,10 @@ class HelperClass {
                 return $e."error on update time";
             }
         }
+        /*resetPasswordLinksStatus  function is used to check the password reset lins is active or expire for update password
+        $email - email for check
+        $token token is return form email it check the token is expire or not
+         */
          public function resetPasswordLinksStatus($email,$token){
 
             try {
@@ -419,11 +442,21 @@ class HelperClass {
                 return $role_id;
 
         }
+        /*
+         * leftJoinData function is used to left join with diffrent two table
+         * $table first table  name
+         * $table-2 second table  name
+         * $tab1key -same  key for table one
+         * $tab2key same key for table two
+         * $data where condtion data if need
+         * $selectData select clounm when we get
+         */
         public function leftJoinData($table1,$table2,$tab1key,$tab2key,$data,$selectData){
             try {
 
             $connection=$this->connection;
             $query='SELECT '.$selectData.' FROM '.$table1.' LEFT JOIN '.$table2.' ON '.$table1.'.'.$tab1key.'='.$table2.'.'.$tab2key.' '.$data;
+            //echo  $query;exit;
 //             $query='SELECT * FROM '.$table1.' INNER JOIN '.$table2.' ON '.$table1.'.'.$tab1key.'='.$table2.'.'.$tab2key.' '.$data;
             $res=mysqli_query($connection,$query);
             if(mysqli_num_rows($res) >1 ){
@@ -449,7 +482,15 @@ class HelperClass {
 
             }
         }
-
+        /*
+        * rightJoinData function is used to right join with diffrent two table
+        * $table first table  name
+        * $table-2 second table  name
+        * $tab1key -same  key for table one
+        * $tab2key same key for table two
+        * $data where condtion data if need
+        * $selectData select clounm when we get
+        */
         public function rightJoinData($table1,$table2,$tab1key,$tab2key,$data,$selectData){
             try {
 
@@ -515,6 +556,15 @@ class HelperClass {
 
         }
     }
+        /*
+       * crossJoinData function is used to cores join with diffrent two table
+       * $table first table  name
+       * $table-2 second table  name
+       * $tab1key -same  key for table one
+       * $tab2key same key for table two
+       * $data where condtion data if need
+       * $selectData select clounm when we get
+       */
         public function crossJoinData($table1,$table2,$tab1key,$tab2key,$data,$selectData){
             try {
 
@@ -545,6 +595,15 @@ class HelperClass {
 
             }
         }
+            /*
+        * InnerJoinData function is used to cores Inner diffrent two table
+        * $table first table  name
+        * $table-2 second table  name
+        * $tab1key -same  key for table one
+        * $tab2key same key for table two
+        * $data where condtion data if need
+        * $selectData select clounm when we get
+        */
         public function InnerJoinData($table1,$table2,$tab1key,$tab2key,$data,$selectData){
             try {
 

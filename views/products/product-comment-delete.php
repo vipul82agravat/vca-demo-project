@@ -39,11 +39,11 @@ require_once $bootstrap_file;
      * 0 Not delete
      */
 
-    $productDeleteData=$masterObject->delete('products',$id);
+    $productCommentDeleteData=$masterObject->delete('products_comments',$id);
 
-    if($productDeleteData['status']==1){
+    if($productCommentDeleteData['status']==1){
 
-            header('Location:../../views/products/product-index.php?is_error=0&message='.$productDeleteData['message']);
+            header('Location:../../views/products/product-comment-index.php?is_error=0&message='.$productCommentDeleteData['message']);
     }else{
-            header('Location:../../views/products/product-index.php?is_error=1&message='.$productDeleteData['message']);
+            header('Location:../../views/products/product-comment-index.php?is_error=1&message='.$productCommentDeleteData['message']);
     }

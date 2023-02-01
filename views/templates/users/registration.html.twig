@@ -16,6 +16,7 @@
             <p style="color: red">{{error}}</h5> </p>
         {% endfor %}
     {% endif %}
+
 <h5 id="usercheck" style="color: red; display:none">
 </h5>
 <h5 id="emailcheck" style="color: red; display:none">
@@ -35,14 +36,14 @@
     {% include menuitem %}
 
     <div id="pswd_info">
-   <h4>Password must meet the following requirements:</h4>
-   <ul>
-      <li id="letter" class="invalid">At least <strong>one letter</strong></li>
-      <li id="capital" class="invalid">At least <strong>one capital letter</strong></li>
-      <li id="number" class="invalid">At least <strong>one number</strong></li>
-      <li id="length" class="invalid">Be at least <strong>8 characters</strong></li>
-   </ul>
-</div>
+       <h5>Password must meet the following requirements:</h5>
+       <ul>
+          <li id="letter" class="invalid">At least <strong>one letter</strong></li>
+          <li id="capital" class="invalid">At least <strong>one capital letter</strong></li>
+          <li id="number" class="invalid">At least <strong>one number</strong></li>
+          <li id="length" class="invalid">Be at least <strong>8 characters</strong></li>
+        </ul>
+    </div>
 
 <div class="card bg-light">
    <article class="card-body mx-auto" style="max-width: 400px;">
@@ -92,10 +93,6 @@
 <!-- card.// -->
 {% endblock %}
 
-
-{% block left_teaser %}
-<h1>Index1</h1>
-{% endblock %}
 
 {% block footer %}
 {% endblock %}

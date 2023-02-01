@@ -32,21 +32,24 @@ if(isset($_GET['user-data']) and $_GET['user-data']!=""){
 
         $masterObject = new Helpercls();
         $checkEmailReponse=$masterObject->userEmailExists($table,$data);
-        $row = mysqli_fetch_assoc($checkEmailReponse['data']);
+        if($checkEmailReponse[status]==1){
 
-            session_start();
-            $token = bin2hex(random_bytes(16));
-            $_SESSION['token'] = $token;
-            $username=$row['name'];
-            $id=$row['id'];
-            $_SESSION['user_id'] = $id;
-            $_SESSION['username'] = $username;
-            $status=1;
-            $tokendata="status =  '".$status."', auth_token =  '".$token."'";
-            $tokenResponse=$masterObject->updateUserSessionToken($table,$tokendata,$id);
-            $message="Welcome to Admin Protal now your account was successfully activated.";
-            $status=1;
-            $is_error=0;
+            $row = mysqli_fetch_assoc($checkEmailReponse['data']);
+
+                session_start();
+                $token = bin2hex(random_bytes(16));
+                $_SESSION['token'] = $token;
+                $username=$row['name'];
+                $id=$row['id'];
+                $_SESSION['user_id'] = $id;
+                $_SESSION['username'] = $username;
+                $status=1;
+                $tokendata="status =  '".$status."', auth_token =  '".$token."'";
+                $tokenResponse=$masterObject->updateUserSessionToken($table,$tokendata,$id);
+                $message="Welcome to Admin Protal now your account is successfully activated.";
+                $status=1;
+                $is_error=0;
+        }
     }
 
 }
@@ -71,7 +74,7 @@ if(isset($_GET['user-data']) and $_GET['user-data']!=""){
 
 
     /*
-    * userRoleCheck method is usd to check login user role
+    * userRoleCheck method is used to check login user role
     * like login user is admin.super-admin ,etc
     * it return role id
     */
@@ -95,6 +98,8 @@ if(isset($_GET['user-data']) and $_GET['user-data']!=""){
 
     $status="'0'";
     $data=' WHERE status ='.$status;
+     /* get All InActive User for admin user
+    */
     $useInActiverData=$masterObject->ShowConditionalBaseDetails($table,$data);
     $inActiveUser=mysqli_num_rows($useInActiverData['data']);
 
@@ -105,6 +110,8 @@ if(isset($_GET['user-data']) and $_GET['user-data']!=""){
         $id=Auth::AuthUserId();
         $data=' WHERE  user_id ='.$id;
     }
+    /* get All product form admin user
+    */
     $productData=$masterObject->ShowConditionalBaseDetails('products',$data);
     $totalProduct=mysqli_num_rows($productData['data']);
 
@@ -117,8 +124,9 @@ if(isset($_GET['user-data']) and $_GET['user-data']!=""){
     }else{
     $data=' WHERE status='.$status.' and user_id ='.$id;
     }
-
-    $productActiverData=$masterObject->ShowConditionalBaseDetails($table,$data);
+     /* get All Active product for admin user
+    */
+ $productActiverData=$masterObject->ShowConditionalBaseDetails($table,$data);
     $activeProduct=mysqli_num_rows($productActiverData['data']);
 
     $status="'0'";
@@ -128,11 +136,15 @@ if(isset($_GET['user-data']) and $_GET['user-data']!=""){
     }else{
         $data=' WHERE status='.$status.' and user_id ='.$id;
     }
+     /* get All InActive product for admin user
+    */
     $productInActiverData=$masterObject->ShowConditionalBaseDetails($table,$data);
     $inActiveProduct=mysqli_num_rows($productInActiverData['data']);
 
 
     $id=Auth::AuthUserId();
+     /* get All  Users for admin user
+    */
     $userShowData=$masterObject->ShowIdBaseDetails('users',$id);
     if (mysqli_num_rows($userShowData['data']) > 0) {
         $row = mysqli_fetch_assoc($userShowData['data']);
@@ -148,7 +160,7 @@ if(isset($_GET['user-data']) and $_GET['user-data']!=""){
 
 $parameters = [
     'is_error' => $_GET['is_error'],
-    'message'=>$_GET['message'],
+    'message'=>($_GET['message'])  ? $_GET['message'] : 'Welcome to Admin Panel',
     'totalUser'=>$totalUser,
     'activeUser'=>$activeUser,
     'inActiveUser'=>$inActiveUser,

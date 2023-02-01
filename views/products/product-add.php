@@ -14,7 +14,7 @@ require_once $bootstrap_file;
      * call the static Auth class for checking
      */
 
-    Auth::AuthUser();
+        //Auth::AuthUser();
 
     /*
      * verifyAuthUserToken method is check access the page before validate the user is authorized or not

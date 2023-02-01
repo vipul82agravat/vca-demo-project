@@ -1,0 +1,89 @@
+<?php
+
+use Helper\Master\HelperClass as Helpercls;
+use Helper\Auth\AuthCheck as Auth;
+include_once('../../Helper/HelperClass.php');
+
+$bootstrap_file=$_SERVER['DOCUMENT_ROOT'].'/views/bootstrap.php';;
+require_once $bootstrap_file;
+
+
+/*
+ * AuthUser method is check access the page before validate the Auth user have seesion is exits or nor (login or not)
+ * if session is  not  extis then  is not authorized then it will redirect to login page
+ * if user session is valid and authorized then it will access the admin panel
+ * call the static class for checking
+ */
+
+//Auth::AuthUser();
+
+/*
+ * verifyAuthUserToken method is chekck access the page before validate the user is authorized or not
+ * it is validate the user id
+ * * it is validate the user token
+ * if user is not authorized then it will redirect to login page
+ * if user is valid and authorized then it will access the admin panel
+ */
+$masterObject = new Helpercls();
+$masterObject->verifyAuthUserToken();
+
+    $id=Auth::AuthUserId();
+    $table='products_ads';
+    $data="";
+    if(isset($_GET['start_date']) and  $_GET['start_date'] !=""){
+        $start_date=$_GET['start_date'];
+        $end_date=$_GET['end_date'];
+        $data=" WHERE products_ads.create_at BETWEEN '".$start_date."' AND '".$end_date."'";
+
+    }
+/*Get the $roleData data base on user auth condtion
+$id user login id it return all  user added role
+$table - name of table for get the role data
+$data the condition of get data base in user id
+*/
+$table2="products";
+$tab1key="product_id";
+$tab2key="id";
+$data="";
+$selectData="products.id as product_id,products.title as product_name,products.img_path as img_path,products_ads.ads_position as ads_position,products_ads.sort_number as sort_number,products_ads.start_date as start_date,products_ads.end_date as end_date,products_ads.status as status,products_ads.description as description,products_ads.id as id";
+$adsData=$masterObject->leftJoinData($table,$table2,$tab1key,$tab2key,$data,$selectData);
+
+ if (mysqli_num_rows($adsData['data']) > 0) {
+
+        $i=0;
+        $result=array();
+        while ($row = mysqli_fetch_array($adsData['data'])) {
+
+                $result[$i]['id']=$row['id'];
+                $result[$i]['product_id']=$row['product_id'];
+                $result[$i]['product_name']=$row['product_name'];
+                $result[$i]['product_img']=$row['img_path'];
+                $result[$i]['ads_position']=$row['ads_position'];
+                $result[$i]['sort_number']=$row['sort_number'];
+                $result[$i]['start_date']=$row['start_date'];
+                $result[$i]['end_date']=$row['end_date'];
+                $result[$i]['status']=$row['status']==1 ? "Active" :"InActive"   ;
+                $result[$i]['description']=$row['description'];
+                $i++;
+
+        }
+
+}
+    /*
+    * userRoleCheck method is usd to check login user role
+    * like login user is admin.super-admin ,etc
+    * it return role id
+    */
+$loginUserRole=$masterObject->userRoleCheck(Auth::AuthUserId());
+$parameters = [
+    'is_error' => $_GET['is_error'],
+    'message'=>$_GET['message'],
+    'user_role'=>$loginUserRole,
+    'row'=>$result,
+    'start_date'=>($start_date) ? $start_date : "",
+    'end_date'=>($end_date) ? $end_date : "",
+    'menu_status_ads' => 'active'
+];
+
+ // Render our view
+ echo $twig->render('/ads/ads-index.html.twig',$parameters);

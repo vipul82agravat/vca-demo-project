@@ -5,7 +5,6 @@
 {% block head %}
 {{ parent() }}
     <script src="http://vca.demoproject.aum/public/js/products.js"></script>
-
     {%  if(user_role==1) %}
         {% set menuitem = 'users/menu.html.twig' %}
     {% else %}
@@ -101,7 +100,9 @@
     </textarea></td>
     <tr>
         <th width="26%" height="60" scope="row">Product Image
-        <td width="74%"><input type="file" name="product_img" id="product_img" value="" class="form-control" /></td>
+
+        <td width="74%">
+            <input type="file" name="product_img" id="product_img" value="" class="form-control" /></td>
     </tr>
 
     <tr>

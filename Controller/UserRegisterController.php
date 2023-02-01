@@ -214,6 +214,8 @@ class UserRegisterController extends Helpercls{
         header('Location:../../views/users/user-index.php?start_date='.$start_date.'&end_date='.$end_date);
         exit;
     }
+
+
     $Registrationdetails=$userRegister->userRegistration();
     $values=$Registrationdetails['values'];
     $column=$Registrationdetails['column'];
@@ -241,12 +243,12 @@ class UserRegisterController extends Helpercls{
             $userdata='type=Active&email='.$email;
             $userdata=base64_encode($userdata);
             $links="http://vca.demoproject.aum/views/users/user-dashboard?user-data=".$userdata;
-            $subject="User confirmation email For activate the account";
+            $subject="User Confirmation Email For Activate the Account";
             //html div for mail send in email
             $message="
                     <html>
                     <head>
-                    <title>User Password Reset email</title>
+                    <title>Activate User  Account</title>
                     </head>
                     <body>
                     <p>Hello $email,</p>
@@ -273,7 +275,7 @@ class UserRegisterController extends Helpercls{
         $userRegisterEamilResponse=$userRegister->sendMail($email,$name,$message,$subject);
         header('Location:../views/users/user-index.php?is_error=0&message='.$userRegisterEamilResponse['message']);
         }else{
-            header('Location:../views/users/user-registration.php?is_error=1&message='.$userRegisterEamilResponse['message']);
+            header('Location:../views/users/user-registration.php?is_error=1&message=Fail to send mail');
         }
 
 

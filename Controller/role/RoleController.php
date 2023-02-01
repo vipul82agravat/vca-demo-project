@@ -67,12 +67,12 @@ class  RoleController extends Helpercls {
             $error_message[$is_error]="Please Enter Role Name";
             $is_error++;
         }
-        if(empty($status_code)){
-            $error_message[$is_error]="Please Select Role Status";
+        if(!isset($status_code)){
+            $error_message[$is_error]="Please Enter Role Status code";
             $is_error++;
         }
-        if(empty($role_status)){
-            $error_message[$is_error]="Please Select Role Code";
+        if(!isset($role_status)){
+            $error_message[$is_error]="Please Select Role Status";
             $is_error++;
         }
 

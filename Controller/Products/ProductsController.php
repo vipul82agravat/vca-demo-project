@@ -67,6 +67,25 @@ class ProductsController extends Helpercls {
         $allowTypes = array('jpg','png','jpeg','gif');
         $imgContent ='';
 
+//          foreach($_FILES['files']['name'] as $key=>$val){
+//            // File upload path
+//            $fileName = basename($_FILES['files']['name'][$key]);
+//            $targetFilePath = $targetDir . $fileName;
+//
+//            // Check whether file type is valid
+//            $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
+//            if(in_array($fileType, $allowTypes)){
+//                // Upload file to server
+//                if(move_uploaded_file($_FILES["files"]["tmp_name"][$key], $targetFilePath)){
+//                    // Image db insert sql
+//                    $insertValuesSQL .= "('".$fileName."', NOW()),";
+//                }else{
+//                    $errorUpload .= $_FILES['files']['name'][$key].' | ';
+//                }
+//            }else{
+//                $errorUploadType .= $_FILES['files']['name'][$key].' | ';
+//            }
+
         $uploads_dir =$_SERVER['DOCUMENT_ROOT']."/public/images/products/";
         $fileDestination = $uploads_dir.$fileName;
         if($fileName!=""){
@@ -160,7 +179,6 @@ class ProductsController extends Helpercls {
 }
     $productsObj = new ProductsController;
     $table=$productsObj->table;
-
     /*
      * check if product_id is set it at that time update record using productsUpdateQueryData
      */
@@ -203,16 +221,24 @@ class ProductsController extends Helpercls {
 
     if(isset($_POST['type']) and $_POST['type']!="" and $_POST['type']=="serach"){
 
-        $serach_text=$_POST['search_text'];
-        $selectData="products.id as product_id,products.title as title,products.location as location,products.postcode as postcode,products.company_name as company_name,products.address as address,products.status as status,products.description as description,products.img as image,products.img_path as img_path,products.create_at as create_date,products.updated_at as update_date  ,categories.name as catgory_name,states.name as states_name,cities.city as city_name";
-        $data=" WHERE products.title LIKE '%$serach_text%'";
 
+        if($_POST['search_category_id']){
+
+            $search_category_id=$_POST['search_category_id'];
+            $selectData="products.id as product_id,products.title as title,products.location as location,products.postcode as postcode,products.company_name as company_name,products.address as address,products.status as status,products.description as description,products.img as image,products.img_path as img_path,products.create_at as create_date,products.updated_at as update_date  ,categories.name as catgory_name,states.name as states_name,cities.city as city_name";
+            $data=" WHERE products.category_id= $search_category_id";
+
+        }else{
+            $serach_text=$_POST['search_text'];
+            $selectData="products.id as product_id,products.title as title,products.location as location,products.postcode as postcode,products.company_name as company_name,products.address as address,products.status as status,products.description as description,products.img as image,products.img_path as img_path,products.create_at as create_date,products.updated_at as update_date  ,categories.name as catgory_name,states.name as states_name,cities.city as city_name";
+            $data=" WHERE products.title LIKE '%$serach_text%'";
+        }
         $productsUpdateResponse=$productsObj->getProductDetails($data,$selectData);
 
         $html="Result Not Found...";
         if (mysqli_num_rows($productsUpdateResponse['data']) > 0) {
 
-            $html='<div class="row product_list">';
+            $html='<div class="row product_list" style="background-color: white">';
             while ($row = mysqli_fetch_array($productsUpdateResponse['data'])) {
 
                     $title=$row['title'];
@@ -234,8 +260,7 @@ class ProductsController extends Helpercls {
                     <p class="w3-opacity">Company Name:: '.$catgory_name.'</p>
                     <p>Description::'.$description.'</p>
                     <p>Address::'.$address.'-'.$state.'-'.$city.'-'.$postcode.'</p>
-                    <a href="user-products-view.php?id='.$id.'" id="create" class="btn btn-primary" target="_blank">ViewDetails</a></div>
-                <hr>
+                    <a href="user-products-view.php?id='.$id.'" id="create" class="btn btn-primary" target="_blank">ViewDetails</a><br><hr></div>
                 ';
             }
             $html.="</div><hr>";
@@ -245,7 +270,7 @@ class ProductsController extends Helpercls {
         exit;
     }
     /*
-    * check the type in post request this means type of product_date_filter and call this serach the products
+     * check the type in post request this means type of product_date_filter and call this serach the products
     *check the data ne between start and end date
     * return the result is found
     * if recrods is found at that time crate  products details
@@ -258,6 +283,45 @@ class ProductsController extends Helpercls {
         header('Location:../../views/products/product-index.php?start_date='.$start_date.'&end_date='.$end_date);
         exit;
     }
+
+    /*
+    * check the type in post request this means type of product_date_filter and call this serach the products comment
+    *check the data ne between start and end date
+    * return the result is found
+    * if recrods is found at that time create  products commentdetails
+    */
+
+    if(isset($_POST['type']) and $_POST['type']!="" and $_POST['type']=="product_comment_date_filter"){
+        $start_date=$_POST['start_date'];
+        $end_date=$_POST['end_date'];
+
+        header('Location:../../views/products/product-comment-index.php?start_date='.$start_date.'&end_date='.$end_date);
+        exit;
+    }
+
+    /*
+    * check the type in post request this means type of prduct_id_comment and call this store the comment of products
+    * it will return the response when given parameters
+    *  status 1 it means get store comment Records  Successfully'
+    *  status 0 it means   Records Not Store...'
+    */
+
+    if(isset($_POST['prduct_id_comment']) and $_POST['prduct_id_comment']!=""){
+
+        $table="products_comments";
+        $column="product_id,comments";
+        $values="'".$_POST['prduct_id_comment']."','".$_POST['product_comment']."'";
+        $productCommentStoreResponse=$productsObj->store($table,$column,$values);
+
+        if($productCommentStoreResponse['status']==1){
+
+            header('Location:../../views//users/user-products-view.php?id='.$_POST['prduct_id_comment'].'&is_error=0&message='.$productCommentStoreResponse['message']);
+        }else{
+            header('Location:../../views//users/user-products-view.php?id='.$_POST['prduct_id_comment'].'&is_error=0&message='.$productCommentStoreResponse['message']);
+        }
+        exit;
+    }
+
 
     $productdetails=$productsObj->productsQueryData();
     $values=$productdetails['values'];

@@ -1,0 +1,51 @@
+{% extends "master_layout.html" %}
+
+{% block title %}{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+
+
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <!--[if lt IE 9]>
+        <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+        <link href="css/styles.css" rel="stylesheet">
+
+        {%  if(user_role==1) %}
+            {% set menuitem = 'users/menu.html.twig' %}
+        {% else %}
+            {% set menuitem = 'users/admin-menu.html.twig' %}
+        {%  endif %}
+
+        {% include menuitem %}
+{% endblock %}
+
+{% block tableset %}
+    <a href="product-comment-index.php" id="create">Back</a>
+
+        <table width="100%"  border="0">
+            <tr>
+
+            <tr>
+                <th height="60" scope="row" >Product Comment :</th>
+                <td><textarea name= product_description class="form-control"  readonly>{{ data.comments }}
+    </textarea></td>
+
+            </tr>
+            <tr>
+                <th height="60" scope="row">&nbsp;</th>
+{#                <td><input type="submit" value="Update  " name="submit" class="btn-primary" /></td>#}
+            </tr>
+        </table>
+
+    <!-- card.// -->
+{% endblock %}
+
+
+{% block left_teaser %}
+    <h1>Index1</h1>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}

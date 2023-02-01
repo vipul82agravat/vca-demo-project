@@ -5,9 +5,33 @@
 {% block head %}
     {{ parent() }}
 
+{#    <style>#}
+{#        .left {#}
+{#            border-style: solid;#}
+{#            border-color: red;#}
+{#            animation-name: example;#}
+{#            animation-duration: 3s;#}
+{#        }#}
+
+{#        @keyframes example {#}
+{#            from {border-color: red;}#}
+{#            to {border-color: yellow;}#}
+{#        }#}
+{#    </style>#}
+    <script>
+
+        function CommentCall(){
+            $('.comment').show();
+        }
+    </script>
 {% endblock %}
 
 {% block container %}
+    {%  if(is_error==1) %}
+        <p style="color: red">{{ message }}</p>
+    {% else %}
+        <p style="color: green">{{ message }}</p>
+    {%  endif %}
 
     <h5 id="usercheck" style="color: red; display:none">
     </h5>
@@ -38,9 +62,10 @@
                 <div class="col-sm-7">
                     <img src="http://vca.demoproject.aum/public/images/products/{{ product.img_path }}"/>
                     <hr>
-            </div><div class="row">
+                </div>
+                <div class="row">
                 <br>
-                <div class="col-sm-5"><h4>Title : {{ product.title }}</h4>
+                <div class="col-sm-12"><h4>Title : {{ product.title }}</h4>
                     <p class="w3-opacity"><b>Company Name</b>: {{ product.company_name }}</p>
                     <p><b>Catgory Name</b> : {{ product.catgory_name }}</p>
                     <p><b>Location</b> : {{ product.location }}</p>
@@ -49,18 +74,75 @@
                     <p><b>State</b> : {{ product.states_name }}</p>
                     <p><b>City</b> : {{ product.city_name }} </p>
                     <p><b>PostCode</b> : {{ product.postcode }}</p>
-                   </div>
-           </div>
+                    <hr>
+                    <div style="padding-left: 55%;">
+                        <p style="text-align: center"><p><a href="#" onclick="CommentCall();">Commets</a>|<a href="" target="_blank">Share</a></p>
+                    </div>
+                    <hr>
+                    <div class="comment" style="display: none">
+                        {% if productCommentData|length >= 1 %}
 
+                            {% for value in productCommentData %}
+                                    {{ value.number }}
+                                    {{ value.comments }}<br>
+                                    <hr>
+
+                                {% endfor %}
+
+                        {% endif %}
+                        <form action="../../../Controller/Products/ProductsController.php"  method="post">
+                            <table width="100%"  border="0">
+                                <tr>
+                                    <th height="60" scope="row" >Comment:</th>
+                                    <input type="hidden" value="{{ product.product_id }}" name="prduct_id_comment">
+                                    <td><textarea name="product_comment" class="form-control"  cols="55" rows="3" >
+                                    </textarea></td>
+                                </tr>
+                                <tr>
+                                    <th height="60" scope="row">&nbsp;</th>
+                                    <td><input type="submit" value="submit" name="submit" class="btn-primary" /></td>
+                                </tr>
+
+                            </table>
+                            </form>
+                    </div>
+                </div>
+                </div>
+            </div>
          </article>
     </div>
     <!-- card.// -->
 {% endblock %}
 
+ {% block left %}
+     {% if adsleftDataresult|length >= 1 %}
+     <div class="left" style="margin-left: 85%;margin-top: -40%;">
 
-{% block left_teaser %}
-    <h1>Index1</h1>
-{% endblock %}
+         {% for value in adsleftDataresult %}
+
+             <div class="next-prev-title"><a href="http://vca.demoproject.aum/views/users/user-products-view.php?id={{ value.product_id }}">
+                     <img class="img-thumbnail" src="http://vca.demoproject.aum/public/images/products/{{ value.product_img }}" alt="user avatar" style="width: 65%;"></a>
+                 <br><br>
+             </div>
+         {% endfor %}
+     </div>
+    {% endif %}
+     {% if adsrightDataresult|length >= 1 %}
+         <div class="left" style="margin-left: 5%;margin-top: -35%;">
+
+             {% for value in adsrightDataresult %}
+
+                 <div class="next-prev-title"><a href="http://vca.demoproject.aum/views/users/user-products-view.php?id={{ value.product_id }}">
+                         <img class="img-thumbnail" src="http://vca.demoproject.aum/public/images/products/{{ value.product_img }}" alt="user avatar" style="width: 10%;"></a>
+                     <br><br>
+                 </div>
+             {% endfor %}
+         </div>
+     {% endif %}
+
+</div>
+ {% endblock %}
+
 
 {% block footer %}
 {% endblock %}

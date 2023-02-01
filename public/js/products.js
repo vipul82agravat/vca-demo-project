@@ -9,7 +9,23 @@
                 url: "http://vca.demoproject.aum/Controller/Products/ProductsController.php",
                 data:{search_text:search_text, type:'serach'},
                 success: function(data){
-                    $('#search_messge').html('Serach Data');
+                    $('#search_messge').html('Serach Records....');
+                    $('.product_list').hide();
+                    $('#hr_id').css("display","none");
+                    $('.product_add').html(data);
+                }
+            });
+        });
+
+        $('#search_product_category').change(function(){
+            var search_product_category = $(this).val();
+
+            $.ajax({
+                method:"POST",
+                url: "http://vca.demoproject.aum/Controller/Products/ProductsController.php",
+                data:{search_category_id:search_product_category, type:'serach'},
+                success: function(data){
+                    $('#search_messge').html('Serach Records....');
                     $('.product_list').hide();
                     $('#hr_id').css("display","none");
                     $('.product_add').html(data);
@@ -46,11 +62,7 @@
         }
         });
     });
-        function checkLength(el) {
-            if (el.value.length != 6) {
-                alert("length must be exactly 6 characters")
-            }
-        }
+
         function getstate(val) {
 
             $.ajax({

@@ -8,13 +8,13 @@ $bootstrap_file=$_SERVER['DOCUMENT_ROOT'].'/views/bootstrap.php';;
 require_once $bootstrap_file;
 
 /*
- * AuthUser method is check access the page before validate the Auth user have seesion is exits or nor (login or nor)
+ * AuthUser method is check access the page before validate the Auth user have seesion is exits or nor
  * if session is  not  extis then  is not authorized then it will redirect to login page
  * if user session is valid and authorized then it will access the admin panel
- * call the static class for checking
+ * call the static Auth class for checking
  */
 
-//Auth::AuthUser();
+Auth::AuthUser();
 
 /*
  * verifyAuthUserToken method is check access the page before validate the user is authorized or not
@@ -26,15 +26,12 @@ require_once $bootstrap_file;
 $masterObject = new Helpercls();
 $masterObject->verifyAuthUserToken();
 
-if(isset($_GET['server_error']) and $_GET['server_error']!=""){
-    $server_error=explode(',',$_GET['server_error']);
-}
+    $id=$_GET['id'];
+    $roleDeleteData=$masterObject->delete('products_ads',$id);
 
-$parameters = [
-    'is_error' => $_GET['is_error'],
-    'message'=>$_GET['message'],
-    'server_error'=>$server_error
-];
+    if($roleDeleteData['status']==1){
 
- // Render our view
- echo $twig->render('/role/role-add.html.twig',$parameters);
+            header('Location:../../views/ads/ads-index.php?is_error=0&message='.$roleDeleteData['message']);
+    }else{
+            header('Location:../../views/ads/ads-index.php?is_error=1&message='.$roleDeleteData['message']);
+    }
